@@ -69,7 +69,7 @@ export async function proxy(req: NextRequest) {
   // 5. Ottieni il token per verificare l'autenticazione
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
   const isLoggedIn = !!token;
-  
+
   console.log('[Proxy] Is logged in:', isLoggedIn);
   console.log('[Proxy] Token exists:', !!token);
 
@@ -78,7 +78,17 @@ export async function proxy(req: NextRequest) {
   const isWebsiteRoute = !pathname.startsWith('/admin') && !pathname.startsWith('/login') && !pathname.startsWith('/api');
   const isLoginRoute = pathname === '/login' || pathname.includes('/login');
   const isAdminRoute = pathname === '/admin' || pathname.includes('/admin');
-  
+
+  // NOTA: maintenance mode / IP allowlist / session timeout (vedi
+  // /admin/settings, tab General e Security & Access) sono persistiti su DB e
+  // pienamente editabili in admin, ma NON enforced qui — farlo richiederebbe
+  // una lettura di AdminSettings su ogni singola richiesta, e in questo
+  // ambiente dev quella lettura riattiva ensureD1SchemaUpdated ad ogni
+  // request (isMigrated non sopravvive agli hot-reload di Turbopack),
+  // producendo spam di "duplicate column" e, peggio, disconnessioni admin
+  // spurie. Da riattivare solo dopo aver reso ensureD1SchemaUpdated
+  // realmente idempotente tra le richieste (o spostando l'enforcement in un
+  // punto che non giri su ogni pagina).
   const salt = process.env.ADMIN_LOGIN_ROUTE_SALT;
   const isSecretLoginRoute = salt ? pathname.includes(`/admin/${salt}`) : false;
   

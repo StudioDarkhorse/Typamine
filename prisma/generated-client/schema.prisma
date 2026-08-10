@@ -206,9 +206,10 @@ model AdminSettings {
   // true (default) = infinite loop; false = one full pass through all fonts,
   // then the animation stops on the last one.
   heroWordmarkLoop      Boolean @default(true)
-  // Animation speed multiplier, 1 (default) - 10, 0.1 steps. Divides
-  // intervalMs/flipDurationMs in HeroWordmark, keeping the flip/hold ratio.
-  heroWordmarkLoopSpeed Float   @default(1)
+  // Animation speed, -5 (slowest) to 5 (fastest), 0.1 steps, 0 = normal
+  // (default). Converted to an intervalMs/flipDurationMs multiplier in
+  // HeroWordmark, keeping the flip/hold ratio.
+  heroWordmarkLoopSpeed Float   @default(0)
 
   // Promo Website Communication — Homepage Marquee
   marqueeActive    Boolean @default(false)
@@ -236,6 +237,11 @@ model AdminSettings {
   gmailSenderName     String?
   gmailConnected      Boolean @default(false)
   gmailConnectedEmail String?
+  // Refresh token OAuth2 ottenuto dopo il consenso Google (scope gmail.send)
+  // — mai esposto al client, letto solo server-side da lib/services/email.ts
+  // per ottenere un access token fresco ad ogni invio. Non fa parte del tipo
+  // pubblico AdminSettings in types/index.ts per lo stesso motivo.
+  gmailRefreshToken   String?
   // JSON array of {id, label, value} — generic API key/credential vault.
   credentialsVault    String?
 

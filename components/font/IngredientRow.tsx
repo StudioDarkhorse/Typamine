@@ -1,0 +1,127 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { MoveRight } from "lucide-react";
+import { Ingredient } from "@/types";
+import { FontFaceInjector } from "@/components/common/LivePreview";
+import { getPublicCreatorLabel } from "@/components/font/IngredientCard";
+
+interface FontRowProps {
+  font: Ingredient;
+  idx: number;
+  linklabel?: string;
+  fontSize?: number;
+  className?: string;
+}
+
+const MIN_SIZE = 24;
+const MAX_SIZE = 140;
+
+// Vista "riga" alternativa a IngredientCard — stesso pattern del list view di
+// Fontshare (nome + meta in alto, preview grande sull'intera larghezza,
+// autore + CTA in basso) invece della card a griglia con lo "chemical
+// element" box. Sempre a larghezza piena (vedi IngredientsResults: usa
+// `grid-cols-1` invece della griglia multi-colonna quando questa vista è attiva).
+//
+// In hover mostra un range per ingrandire/rimpicciolire la preview al volo.
+// Il testo è renderizzato qui direttamente (niente <LivePreview>, che tiene
+// il proprio size in uno state interno separato) — passare la dimensione come
+// prop e farla risincronizzare nel figlio ad ogni tick di drag introduceva un
+// giro in più che rendeva il trascinamento a scatti. Un solo state, un solo
+// componente che lo legge: stesso meccanismo (fluido) dello slider interno di
+// LivePreview per sé stesso.
+//
+// Lo slider vive FUORI dal <Link> (sibling assoluto sopra, non figlio) invece
+// che dentro: qualunque cosa annidata in un <a> finisce per contare come click
+// sulla card prima o poi (drag-release, bubbling, o comportamento del router
+// di questo fork Next.js) — tenerlo strutturalmente fuori dall'anchor è l'unica
+// garanzia solida, indipendente da come Link intercetta i click internamente.
+export const IngredientRow: React.FC<FontRowProps> = ({ font, idx, linklabel = "Test Now", fontSize, className = "" }) => {
+  const [size, setSize] = useState(fontSize || 64);
+  const variantsCount = font.variants?.length || 0;
+
+  const fontUrl = font.variants?.[0]?.woff2Url;
+  const fontFamilyName = font.variants?.[0]?.fontFamilyName || font.name;
+  // Family name stabile per riga (basata sull'id, non sulla size) — l'iniezione
+  // del @font-face non deve mai ripetersi mentre trascini lo slider.
+  const dynamicFamily = `Row_${font.id.replace(/[^a-zA-Z0-9]/g, "")}`;
+
+  return (
+    <div className={"group relative rounded-lg overflow-hidden " + className}>
+      <Link
+        href={"/ingredients/" + font.slug}
+        className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/20 group-hover:border-zinc-400 dark:group-hover:border-zinc-700 group-hover:bg-zinc-50 dark:group-hover:bg-zinc-900/40 transition-all p-4 sm:p-6 block"
+      >
+        {/* Header: nome + meta (varianti, licenza) */}
+        <div className="flex items-center justify-between gap-4 font-haas">
+          <h3 className="font-bold text-sm text-foreground truncate">{font.name.replaceAll("_", " ")}</h3>
+          <div className="flex items-center gap-4 shrink-0 text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+            <span>
+              {variantsCount} style{variantsCount === 1 ? "" : "s"}
+            </span>
+            <span className="hidden sm:inline">{font.licenseType || "UNKNOWN"}</span>
+          </div>
+        </div>
+
+        {/* Preview grande, sempre a larghezza piena della riga — stesso chrome
+            (bordo, shadow-2xl, scanlines, altezza fissa) del box non-compact
+            di LivePreview, replicato qui invece di usare il componente per
+            tenere il font-size a singolo hop (vedi commento sopra). */}
+        <div className="relative my-4 rounded-md border border-zinc-200 dark:border-zinc-900 bg-white dark:bg-black shadow-2xl overflow-hidden flex items-center justify-center p-8 h-[260px]">
+          {fontUrl && <FontFaceInjector fontFamily={dynamicFamily} url={fontUrl} />}
+
+          {/* Scanlines, stesso effetto di LivePreview in modalità non-compact */}
+          <div
+            className="absolute inset-0 z-0 pointer-events-none opacity-[0.04] dark:opacity-[0.04]"
+            style={{
+              backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 6px, currentColor 6px, currentColor 7px)",
+              backgroundAttachment: "fixed",
+            }}
+          />
+
+          <p
+            className="relative z-10 text-center text-black dark:text-white whitespace-pre-wrap leading-tight"
+            style={{
+              fontFamily: fontUrl ? `'${dynamicFamily}', sans-serif` : `'${fontFamilyName}', sans-serif`,
+              fontSize: `${size}px`,
+            }}
+          >
+            {font.name.replaceAll("_", " ")}
+          </p>
+        </div>
+
+        {/* Footer: autore + CTA */}
+        <div className="pt-3 flex justify-between items-center border-t border-zinc-400/50 font-haas">
+          <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
+            DESIGNED BY <span className="text-foreground font-bold">{getPublicCreatorLabel(font)}</span>
+          </span>
+          <span className="flex flex-row items-center gap-2 text-sm text-red hover:underline transition-colors">
+            {linklabel}
+            <MoveRight size={12} className="icon-altalenante" />
+          </span>
+        </div>
+      </Link>
+
+      {/* Range dimensione — sibling assoluto sopra il Link, non un suo
+          discendente: nascosto finché non passi sopra la riga, e mai
+          interpretabile come un click sulla card qualunque cosa tu ci faccia. */}
+      <div className="absolute inset-x-0 bottom-3 flex justify-center opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-20">
+        <div className="flex items-center gap-2.5 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-full px-3.5 py-1.5 shadow-lg">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Size</span>
+          <input
+            type="range"
+            min={MIN_SIZE}
+            max={MAX_SIZE}
+            value={size}
+            onChange={(e) => setSize(Number(e.target.value))}
+            className="w-32 sm:w-44 h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red"
+          />
+          <span className="text-[10px] font-bold text-black dark:text-white w-8 text-right tabular-nums">{size}px</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default IngredientRow;

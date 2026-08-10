@@ -7,6 +7,7 @@ import { useThemeStore } from "@/store/themeStore";
 import { Cta } from "@/components/common/Cta";
 import { Button } from "@/components/common/Button";
 import { SearchSortFilter } from "@/components/common/SearchSortFilter";
+import { ViewModeToggle } from "@/components/common/ViewModeToggle";
 import { useListScrollRestoration } from "@/lib/hooks/useListScrollRestoration";
 
 const CATEGORY_OPTIONS = [
@@ -61,14 +62,19 @@ export default function IngredientsClient({ tags, children }: IngredientsClientP
         }}
       />
 
-      <SearchSortFilter
-        searchPlaceholder="Search fonts by name..."
-        sortOptions={SORT_OPTIONS}
-        categoryOptions={CATEGORY_OPTIONS}
-        ratingOptions={RATING_OPTIONS}
-        tags={tags}
-        filtersModalTitle="Filters"
-      />
+      <div className="flex items-center gap-3">
+        <div className="flex-1 min-w-0">
+          <SearchSortFilter
+            searchPlaceholder="Search fonts by name..."
+            sortOptions={SORT_OPTIONS}
+            categoryOptions={CATEGORY_OPTIONS}
+            ratingOptions={RATING_OPTIONS}
+            tags={tags}
+            filtersModalTitle="Filters"
+          />
+        </div>
+        <ViewModeToggle />
+      </div>
 
       {children}
 

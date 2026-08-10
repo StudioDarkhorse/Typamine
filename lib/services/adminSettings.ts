@@ -12,6 +12,7 @@ import {
 } from "@/types";
 import { withSafeDbQuery } from "./dbMigration";
 import { CACHE_TAGS } from "@/lib/cacheTags";
+import { NON_REAL_FONT_AUTHOR_SLUGS } from "@/lib/constants/placeholderFontAuthors";
 
 export const ADMIN_SETTINGS_ID = "singleton";
 
@@ -133,14 +134,31 @@ async function resolveLetterTFont(fontId: string | undefined): Promise<AdminSett
   const font = await withSafeDbQuery(() =>
     prisma.ingredient.findUnique({
       where: { id: fontId },
-      select: { id: true, name: true, variants: { take: 1, select: { woff2Url: true } } },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        variants: { take: 1, select: { woff2Url: true } },
+        author: { select: { name: true, slug: true } },
+      },
     })
   );
 
   const woff2Url = font?.variants?.[0]?.woff2Url;
   if (!font || !woff2Url) return undefined;
 
-  return { id: font.id, name: font.name, woff2Url };
+  // Mai un credito "by {placeholder}" in footer — stesso filtro pubblico
+  // usato da IngredientCard (NON_REAL_FONT_AUTHOR_SLUGS) per non mostrare mai
+  // un autore sintetico d'import o il terminale "unknown after AI check".
+  const hasRealAuthor = font.author && !NON_REAL_FONT_AUTHOR_SLUGS.includes(font.author.slug);
+
+  return {
+    id: font.id,
+    name: font.name,
+    slug: font.slug,
+    woff2Url,
+    author: hasRealAuthor ? { name: font.author!.name, slug: font.author!.slug } : undefined,
+  };
 }
 
 // Stesso principio di resolveLetterTFont ma per l'intera sequenza
@@ -156,7 +174,7 @@ async function resolveHeroWordmarkFonts(
   const fonts = await withSafeDbQuery(() =>
     prisma.ingredient.findMany({
       where: { id: { in: configs.map((c) => c.fontId) } },
-      select: { id: true, name: true, variants: { take: 1, select: { woff2Url: true } } },
+      select: { id: true, name: true, slug: true, variants: { take: 1, select: { woff2Url: true } } },
     })
   );
   const byId = new Map(fonts.map((f) => [f.id, f]));
@@ -166,7 +184,10 @@ async function resolveHeroWordmarkFonts(
     const font = byId.get(config.fontId);
     const woff2Url = font?.variants?.[0]?.woff2Url;
     if (!font || !woff2Url) continue;
-    resolved.push({ font: { id: font.id, name: font.name, woff2Url }, fontSizePercent: config.fontSizePercent });
+    resolved.push({
+      font: { id: font.id, name: font.name, slug: font.slug, woff2Url },
+      fontSizePercent: config.fontSizePercent,
+    });
   }
   return resolved;
 }

@@ -7,7 +7,8 @@ export type PlaceholderFontAuthorKey =
   | "localSingleImport"
   | "localBulkImport"
   | "googleFonts"
-  | "fontshare";
+  | "fontshare"
+  | "dafont";
 
 interface PlaceholderFontAuthorDef {
   slug: string;
@@ -35,6 +36,11 @@ export const PLACEHOLDER_FONT_AUTHORS: Record<PlaceholderFontAuthorKey, Placehol
     slug: "fontshare-placeholder-author",
     name: "Fontshare Placeholder Author",
     email: "fontshare@placeholder.typamine.internal",
+  },
+  dafont: {
+    slug: "dafont-placeholder-author",
+    name: "Dafont Placeholder Author",
+    email: "dafont@placeholder.typamine.internal",
   },
 };
 

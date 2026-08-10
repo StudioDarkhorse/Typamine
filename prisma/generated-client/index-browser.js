@@ -275,6 +275,7 @@ exports.Prisma.AdminSettingsScalarFieldEnum = {
   gmailSenderName: 'gmailSenderName',
   gmailConnected: 'gmailConnected',
   gmailConnectedEmail: 'gmailConnectedEmail',
+  gmailRefreshToken: 'gmailRefreshToken',
   credentialsVault: 'credentialsVault',
   integrationsConfig: 'integrationsConfig',
   notificationChannels: 'notificationChannels',

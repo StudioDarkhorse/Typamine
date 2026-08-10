@@ -1,7 +1,6 @@
 ############ HARD TASKS ################
 
 
-scraper di da-font selettivo che ciclicamente cerca risorse sulle pagine di categoria e scarica font [CANCELLED - CORS ISSUES]
 
 tool ai che genera i pairign basandosi sui fonT aggionrati e viene triggerato se lo scraper ha trovato nuovi font [fattibile, bisogna aggiornare il data model con colori etc]
 
@@ -34,18 +33,24 @@ ________________________________
 [[aggiungere pagina fotn author. tipo pagina di una persona con una griglia che mostra tutti i suoi font. inserisci una breve bio etc... ]] -> DONE
 
 [[contorllare licenze per font ch uso nel sito tipo star avenue. ]] -> DONE
+
+[[integrare tutti i nuovi campi di admin/settings]] -> DONE
+
+[[
+scraper di da-font selettivo che ciclicamente cerca risorse sulle pagine di categoria e scarica font [CANCELLED - CORS ISSUES] invece lo sto facendo]] -> DONE
  __________________________________
 
 uniformare ux/ui colri di admin, margini, padding... colori [90%]
 
-
-integrare tutti i nuovi campi di admin/settings, pulire alcuni form. controllare il data model di font author 
-
+pulire alcuni form. controllare il data model di font author 
 
 brandmark e logo, polish finale [99%]
 
-mobile ui polish finale (tipo pageheaders nn serve, alcuni effetti)
+mobile ui polish finale (tipo pageheaders nn serve, alcuni effetti) [20%]
 
 migliorare mobile menu trigger etc 
 
 security checks 
+
+Modifica modal dowmload non aurtorizzato mostrando il nome dell'author se presente, creazione bot invio mail agli author cxon mail che infgoram chi siamo e cosa facciamo. spuegagli che se accettano gli dai acesso al loro admin panel etc. 
+

@@ -2,8 +2,10 @@ import { Suspense } from "react";
 import IngredientsClient from "./IngredientsClient";
 import IngredientsResults from "./IngredientsResults";
 import { IngredientCardSkeleton } from "@/components/font/skeletons/IngredientCardSkeleton";
+import { IngredientRowSkeleton } from "@/components/font/skeletons/IngredientRowSkeleton";
 import { getTags } from "@/lib/services/tag";
 import { IngredientSort } from "@/lib/services/font";
+import type { ViewMode } from "@/components/common/ViewModeToggle";
 
 const PER_PAGE = 12;
 
@@ -15,18 +17,27 @@ interface IngredientsPageProps {
     tags?: string;
     search?: string;
     sort?: string;
+    view?: string;
   }>;
 }
 
-function ResultsSkeleton() {
+function ResultsSkeleton({ view }: { view: ViewMode }) {
   return (
     <>
       <div className="h-3 w-40 rounded bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-0">
-        {Array.from({ length: PER_PAGE }).map((_, idx) => (
-          <IngredientCardSkeleton key={idx} />
-        ))}
-      </div>
+      {view === "row" ? (
+        <div className="flex flex-col gap-4 relative z-0">
+          {Array.from({ length: PER_PAGE }).map((_, idx) => (
+            <IngredientRowSkeleton key={idx} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-0">
+          {Array.from({ length: PER_PAGE }).map((_, idx) => (
+            <IngredientCardSkeleton key={idx} />
+          ))}
+        </div>
+      )}
     </>
   );
 }
@@ -39,6 +50,7 @@ export default async function IngredientsPage({ searchParams }: IngredientsPageP
   const tagNames = (resolved.tags || "").split(",").filter(Boolean);
   const search = resolved.search || "";
   const sort = (resolved.sort || "recent") as IngredientSort;
+  const view: ViewMode = resolved.view === "row" ? "row" : "card";
 
   const tags = await getTags();
   // L'URL usa il nome del tag (human-readable) — conversione a id qui,
@@ -47,7 +59,7 @@ export default async function IngredientsPage({ searchParams }: IngredientsPageP
 
   return (
     <IngredientsClient tags={tags}>
-      <Suspense key={`${page}-${category}-${rating}-${tagIds.join(",")}-${search}-${sort}`} fallback={<ResultsSkeleton />}>
+      <Suspense key={`${page}-${category}-${rating}-${tagIds.join(",")}-${search}-${sort}-${view}`} fallback={<ResultsSkeleton view={view} />}>
         <IngredientsResults
           page={page}
           category={category}
@@ -56,6 +68,7 @@ export default async function IngredientsPage({ searchParams }: IngredientsPageP
           search={search}
           sort={sort}
           perPage={PER_PAGE}
+          view={view}
         />
       </Suspense>
     </IngredientsClient>

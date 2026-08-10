@@ -16,7 +16,6 @@ import PromoWebsiteCommunicationTab from "@/components/admin/settings/tabs/Promo
 import AdminCommunicationTab from "@/components/admin/settings/tabs/AdminCommunicationTab";
 import IntegrationsTab from "@/components/admin/settings/tabs/IntegrationsTab";
 import NotificationsTab from "@/components/admin/settings/tabs/NotificationsTab";
-import SecurityTab from "@/components/admin/settings/tabs/SecurityTab";
 import LegalTab from "@/components/admin/settings/tabs/LegalTab";
 import { AdminSettings } from "@/types";
 
@@ -26,7 +25,6 @@ const SECTIONS: { value: string; label: string; icon: any; Component: any }[] = 
   { value: "admin-communication", label: "Admin Communication", icon: Mail, Component: AdminCommunicationTab },
   { value: "integrations", label: "Integrations", icon: Plug, Component: IntegrationsTab },
   { value: "notifications", label: "Notifications", icon: Bell, Component: NotificationsTab },
-  { value: "security", label: "Security & Access", icon: ShieldCheck, Component: SecurityTab },
   { value: "legal", label: "Legal & Compliance", icon: Scale, Component: LegalTab },
 ];
 

@@ -186,10 +186,10 @@ export default function GeneralTab({ initialSettings }: { initialSettings: Admin
 
         <SettingsSubCard
           title="Brand Identity"
-          description={'Customize the initial "T" in the Typamine wordmark, shown in the site header and footer.'}
+          description={'Customize the initial "T" in the Typamine wordmark, shown in the site footer.'}
         >
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-start">
-            <div className="sm:col-span-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start mb-16">
+            <div className="">
               <FontPicker
                 label='Letter "T" Font'
                 value={letterTFontFamily}
@@ -207,9 +207,7 @@ export default function GeneralTab({ initialSettings }: { initialSettings: Admin
               onChange={setLetterTFontSizePercent}
             />
           </div>
-          <p className="text-[10px] text-zinc-500 dark:text-zinc-400 -mt-4">
-            E.g. 150% makes the &quot;T&quot; larger than the rest of the wordmark — applied proportionally in both the header and the footer.
-          </p>
+        
           <input type="hidden" name="letterTFontFamily" value={letterTFontFamily} />
           <input type="hidden" name="letterTFontSizePercent" value={letterTFontSizePercent} />
 
@@ -227,9 +225,7 @@ export default function GeneralTab({ initialSettings }: { initialSettings: Admin
               onChange={setLogoDarkModeColor}
             />
           </div>
-          <p className="text-[10px] text-zinc-500 dark:text-zinc-400">
-            Color of the small square indicator next to the wordmark (not the letters themselves).
-          </p>
+     
           <input type="hidden" name="logoLightModeColor" value={logoLightModeColor} />
           <input type="hidden" name="logoDarkModeColor" value={logoDarkModeColor} />
         </SettingsSubCard>
@@ -254,7 +250,7 @@ export default function GeneralTab({ initialSettings }: { initialSettings: Admin
               : "Plays through the fonts once, then stops on the last one."}
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             <CustomRange
               label="Loop Speed"
               min={-5}

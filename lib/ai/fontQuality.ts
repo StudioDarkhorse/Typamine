@@ -47,7 +47,8 @@ function clampRating(value: number): number {
 
 export async function generateFontQualityWithGemini(
   rawFontFamily: string,
-  availableTagNames: string[] = []
+  availableTagNames: string[] = [],
+  authorName?: string
 ): Promise<FontQualityResult> {
   // Stessa convenzione DB di fontIdentity.ts: il nome e' salvato con
   // underscore al posto degli spazi, Gemini deve giudicare il nome vero.
@@ -59,10 +60,17 @@ export async function generateFontQualityWithGemini(
    Pick ONLY the ones that accurately describe this typeface (style, mood, use case, era, etc.). Pick as many as genuinely fit, or none at all if nothing in the list applies well — do not force a match. Never invent a tag that isn't in the list.`
     : "";
 
+  // Passato dal chiamante solo quando il font ha gia' un autore reale (non un
+  // placeholder d'import/AI "unknown") — vedi rateFontQualityWithAI in
+  // lib/actions/font.ts. Conoscere designer/fonderia aiuta Gemini a giudicare
+  // con piu' contesto (stile riconoscibile, reputazione, periodo) invece di
+  // valutare il font isolato dal solo nome.
+  const authorLine = authorName ? `\nDesigner / Foundry: "${authorName}"` : "";
+
   const prompt = `
 You are a typography expert with deep knowledge of type design history and the type design community.
 
-Font family: "${fontFamily}"
+Font family: "${fontFamily}"${authorLine}
 
 Tasks:
 1. Rate this typeface from 6.0 to 10.0, using steps of 0.2 (e.g. 6.0, 6.2, 6.4, 6.6, ... 10.0), based on how expert graphic/type designers and the broader typography community generally perceive it (craftsmanship, versatility, legibility, popularity, influence).

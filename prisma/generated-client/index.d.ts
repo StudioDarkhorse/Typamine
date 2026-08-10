@@ -12999,6 +12999,7 @@ export namespace Prisma {
     gmailSenderName: string | null
     gmailConnected: boolean | null
     gmailConnectedEmail: string | null
+    gmailRefreshToken: string | null
     credentialsVault: string | null
     integrationsConfig: string | null
     notificationChannels: string | null
@@ -13048,6 +13049,7 @@ export namespace Prisma {
     gmailSenderName: string | null
     gmailConnected: boolean | null
     gmailConnectedEmail: string | null
+    gmailRefreshToken: string | null
     credentialsVault: string | null
     integrationsConfig: string | null
     notificationChannels: string | null
@@ -13097,6 +13099,7 @@ export namespace Prisma {
     gmailSenderName: number
     gmailConnected: number
     gmailConnectedEmail: number
+    gmailRefreshToken: number
     credentialsVault: number
     integrationsConfig: number
     notificationChannels: number
@@ -13164,6 +13167,7 @@ export namespace Prisma {
     gmailSenderName?: true
     gmailConnected?: true
     gmailConnectedEmail?: true
+    gmailRefreshToken?: true
     credentialsVault?: true
     integrationsConfig?: true
     notificationChannels?: true
@@ -13213,6 +13217,7 @@ export namespace Prisma {
     gmailSenderName?: true
     gmailConnected?: true
     gmailConnectedEmail?: true
+    gmailRefreshToken?: true
     credentialsVault?: true
     integrationsConfig?: true
     notificationChannels?: true
@@ -13262,6 +13267,7 @@ export namespace Prisma {
     gmailSenderName?: true
     gmailConnected?: true
     gmailConnectedEmail?: true
+    gmailRefreshToken?: true
     credentialsVault?: true
     integrationsConfig?: true
     notificationChannels?: true
@@ -13398,6 +13404,7 @@ export namespace Prisma {
     gmailSenderName: string | null
     gmailConnected: boolean
     gmailConnectedEmail: string | null
+    gmailRefreshToken: string | null
     credentialsVault: string | null
     integrationsConfig: string | null
     notificationChannels: string | null
@@ -13466,6 +13473,7 @@ export namespace Prisma {
     gmailSenderName?: boolean
     gmailConnected?: boolean
     gmailConnectedEmail?: boolean
+    gmailRefreshToken?: boolean
     credentialsVault?: boolean
     integrationsConfig?: boolean
     notificationChannels?: boolean
@@ -13515,6 +13523,7 @@ export namespace Prisma {
     gmailSenderName?: boolean
     gmailConnected?: boolean
     gmailConnectedEmail?: boolean
+    gmailRefreshToken?: boolean
     credentialsVault?: boolean
     integrationsConfig?: boolean
     notificationChannels?: boolean
@@ -13564,6 +13573,7 @@ export namespace Prisma {
     gmailSenderName?: boolean
     gmailConnected?: boolean
     gmailConnectedEmail?: boolean
+    gmailRefreshToken?: boolean
     credentialsVault?: boolean
     integrationsConfig?: boolean
     notificationChannels?: boolean
@@ -13613,6 +13623,7 @@ export namespace Prisma {
     gmailSenderName?: boolean
     gmailConnected?: boolean
     gmailConnectedEmail?: boolean
+    gmailRefreshToken?: boolean
     credentialsVault?: boolean
     integrationsConfig?: boolean
     notificationChannels?: boolean
@@ -13630,7 +13641,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AdminSettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteLanguage" | "siteTimezone" | "maintenanceActive" | "maintenanceMessage" | "letterTFontFamily" | "letterTFontSizePercent" | "logoLightModeColor" | "logoDarkModeColor" | "heroWordmarkFonts" | "heroWordmarkLoop" | "heroWordmarkLoopSpeed" | "marqueeActive" | "marqueeText" | "marqueeType" | "marqueeTextColor" | "marqueeBgColor" | "popupActive" | "popupImageUrl" | "popupHeadline" | "popupMessage" | "popupCtaLabel" | "popupCtaLink" | "popupFrequency" | "popupFrequencyDays" | "emailProvider" | "gmailClientId" | "gmailClientSecret" | "gmailSenderName" | "gmailConnected" | "gmailConnectedEmail" | "credentialsVault" | "integrationsConfig" | "notificationChannels" | "slackWebhookUrl" | "require2fa" | "sessionTimeoutMinutes" | "ipAllowlist" | "auditRetentionDays" | "cookieBannerActive" | "cookieBannerText" | "privacyPolicyUrl" | "termsOfServiceUrl" | "gdprRequestEmail" | "createdAt" | "updatedAt", ExtArgs["result"]["adminSettings"]>
+  export type AdminSettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteLanguage" | "siteTimezone" | "maintenanceActive" | "maintenanceMessage" | "letterTFontFamily" | "letterTFontSizePercent" | "logoLightModeColor" | "logoDarkModeColor" | "heroWordmarkFonts" | "heroWordmarkLoop" | "heroWordmarkLoopSpeed" | "marqueeActive" | "marqueeText" | "marqueeType" | "marqueeTextColor" | "marqueeBgColor" | "popupActive" | "popupImageUrl" | "popupHeadline" | "popupMessage" | "popupCtaLabel" | "popupCtaLink" | "popupFrequency" | "popupFrequencyDays" | "emailProvider" | "gmailClientId" | "gmailClientSecret" | "gmailSenderName" | "gmailConnected" | "gmailConnectedEmail" | "gmailRefreshToken" | "credentialsVault" | "integrationsConfig" | "notificationChannels" | "slackWebhookUrl" | "require2fa" | "sessionTimeoutMinutes" | "ipAllowlist" | "auditRetentionDays" | "cookieBannerActive" | "cookieBannerText" | "privacyPolicyUrl" | "termsOfServiceUrl" | "gdprRequestEmail" | "createdAt" | "updatedAt", ExtArgs["result"]["adminSettings"]>
 
   export type $AdminSettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AdminSettings"
@@ -13667,6 +13678,7 @@ export namespace Prisma {
       gmailSenderName: string | null
       gmailConnected: boolean
       gmailConnectedEmail: string | null
+      gmailRefreshToken: string | null
       credentialsVault: string | null
       integrationsConfig: string | null
       notificationChannels: string | null
@@ -14136,6 +14148,7 @@ export namespace Prisma {
     readonly gmailSenderName: FieldRef<"AdminSettings", 'String'>
     readonly gmailConnected: FieldRef<"AdminSettings", 'Boolean'>
     readonly gmailConnectedEmail: FieldRef<"AdminSettings", 'String'>
+    readonly gmailRefreshToken: FieldRef<"AdminSettings", 'String'>
     readonly credentialsVault: FieldRef<"AdminSettings", 'String'>
     readonly integrationsConfig: FieldRef<"AdminSettings", 'String'>
     readonly notificationChannels: FieldRef<"AdminSettings", 'String'>
@@ -17133,6 +17146,7 @@ export namespace Prisma {
     gmailSenderName: 'gmailSenderName',
     gmailConnected: 'gmailConnected',
     gmailConnectedEmail: 'gmailConnectedEmail',
+    gmailRefreshToken: 'gmailRefreshToken',
     credentialsVault: 'credentialsVault',
     integrationsConfig: 'integrationsConfig',
     notificationChannels: 'notificationChannels',
@@ -18089,6 +18103,7 @@ export namespace Prisma {
     gmailSenderName?: StringNullableFilter<"AdminSettings"> | string | null
     gmailConnected?: BoolFilter<"AdminSettings"> | boolean
     gmailConnectedEmail?: StringNullableFilter<"AdminSettings"> | string | null
+    gmailRefreshToken?: StringNullableFilter<"AdminSettings"> | string | null
     credentialsVault?: StringNullableFilter<"AdminSettings"> | string | null
     integrationsConfig?: StringNullableFilter<"AdminSettings"> | string | null
     notificationChannels?: StringNullableFilter<"AdminSettings"> | string | null
@@ -18138,6 +18153,7 @@ export namespace Prisma {
     gmailSenderName?: SortOrderInput | SortOrder
     gmailConnected?: SortOrder
     gmailConnectedEmail?: SortOrderInput | SortOrder
+    gmailRefreshToken?: SortOrderInput | SortOrder
     credentialsVault?: SortOrderInput | SortOrder
     integrationsConfig?: SortOrderInput | SortOrder
     notificationChannels?: SortOrderInput | SortOrder
@@ -18190,6 +18206,7 @@ export namespace Prisma {
     gmailSenderName?: StringNullableFilter<"AdminSettings"> | string | null
     gmailConnected?: BoolFilter<"AdminSettings"> | boolean
     gmailConnectedEmail?: StringNullableFilter<"AdminSettings"> | string | null
+    gmailRefreshToken?: StringNullableFilter<"AdminSettings"> | string | null
     credentialsVault?: StringNullableFilter<"AdminSettings"> | string | null
     integrationsConfig?: StringNullableFilter<"AdminSettings"> | string | null
     notificationChannels?: StringNullableFilter<"AdminSettings"> | string | null
@@ -18239,6 +18256,7 @@ export namespace Prisma {
     gmailSenderName?: SortOrderInput | SortOrder
     gmailConnected?: SortOrder
     gmailConnectedEmail?: SortOrderInput | SortOrder
+    gmailRefreshToken?: SortOrderInput | SortOrder
     credentialsVault?: SortOrderInput | SortOrder
     integrationsConfig?: SortOrderInput | SortOrder
     notificationChannels?: SortOrderInput | SortOrder
@@ -18296,6 +18314,7 @@ export namespace Prisma {
     gmailSenderName?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
     gmailConnected?: BoolWithAggregatesFilter<"AdminSettings"> | boolean
     gmailConnectedEmail?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    gmailRefreshToken?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
     credentialsVault?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
     integrationsConfig?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
     notificationChannels?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
@@ -19461,6 +19480,7 @@ export namespace Prisma {
     gmailSenderName?: string | null
     gmailConnected?: boolean
     gmailConnectedEmail?: string | null
+    gmailRefreshToken?: string | null
     credentialsVault?: string | null
     integrationsConfig?: string | null
     notificationChannels?: string | null
@@ -19510,6 +19530,7 @@ export namespace Prisma {
     gmailSenderName?: string | null
     gmailConnected?: boolean
     gmailConnectedEmail?: string | null
+    gmailRefreshToken?: string | null
     credentialsVault?: string | null
     integrationsConfig?: string | null
     notificationChannels?: string | null
@@ -19559,6 +19580,7 @@ export namespace Prisma {
     gmailSenderName?: NullableStringFieldUpdateOperationsInput | string | null
     gmailConnected?: BoolFieldUpdateOperationsInput | boolean
     gmailConnectedEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    gmailRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     credentialsVault?: NullableStringFieldUpdateOperationsInput | string | null
     integrationsConfig?: NullableStringFieldUpdateOperationsInput | string | null
     notificationChannels?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19608,6 +19630,7 @@ export namespace Prisma {
     gmailSenderName?: NullableStringFieldUpdateOperationsInput | string | null
     gmailConnected?: BoolFieldUpdateOperationsInput | boolean
     gmailConnectedEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    gmailRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     credentialsVault?: NullableStringFieldUpdateOperationsInput | string | null
     integrationsConfig?: NullableStringFieldUpdateOperationsInput | string | null
     notificationChannels?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19657,6 +19680,7 @@ export namespace Prisma {
     gmailSenderName?: string | null
     gmailConnected?: boolean
     gmailConnectedEmail?: string | null
+    gmailRefreshToken?: string | null
     credentialsVault?: string | null
     integrationsConfig?: string | null
     notificationChannels?: string | null
@@ -19706,6 +19730,7 @@ export namespace Prisma {
     gmailSenderName?: NullableStringFieldUpdateOperationsInput | string | null
     gmailConnected?: BoolFieldUpdateOperationsInput | boolean
     gmailConnectedEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    gmailRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     credentialsVault?: NullableStringFieldUpdateOperationsInput | string | null
     integrationsConfig?: NullableStringFieldUpdateOperationsInput | string | null
     notificationChannels?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19755,6 +19780,7 @@ export namespace Prisma {
     gmailSenderName?: NullableStringFieldUpdateOperationsInput | string | null
     gmailConnected?: BoolFieldUpdateOperationsInput | boolean
     gmailConnectedEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    gmailRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     credentialsVault?: NullableStringFieldUpdateOperationsInput | string | null
     integrationsConfig?: NullableStringFieldUpdateOperationsInput | string | null
     notificationChannels?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20730,6 +20756,7 @@ export namespace Prisma {
     gmailSenderName?: SortOrder
     gmailConnected?: SortOrder
     gmailConnectedEmail?: SortOrder
+    gmailRefreshToken?: SortOrder
     credentialsVault?: SortOrder
     integrationsConfig?: SortOrder
     notificationChannels?: SortOrder
@@ -20787,6 +20814,7 @@ export namespace Prisma {
     gmailSenderName?: SortOrder
     gmailConnected?: SortOrder
     gmailConnectedEmail?: SortOrder
+    gmailRefreshToken?: SortOrder
     credentialsVault?: SortOrder
     integrationsConfig?: SortOrder
     notificationChannels?: SortOrder
@@ -20836,6 +20864,7 @@ export namespace Prisma {
     gmailSenderName?: SortOrder
     gmailConnected?: SortOrder
     gmailConnectedEmail?: SortOrder
+    gmailRefreshToken?: SortOrder
     credentialsVault?: SortOrder
     integrationsConfig?: SortOrder
     notificationChannels?: SortOrder

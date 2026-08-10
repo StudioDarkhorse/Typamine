@@ -237,6 +237,11 @@ model AdminSettings {
   gmailSenderName     String?
   gmailConnected      Boolean @default(false)
   gmailConnectedEmail String?
+  // Refresh token OAuth2 ottenuto dopo il consenso Google (scope gmail.send)
+  // — mai esposto al client, letto solo server-side da lib/services/email.ts
+  // per ottenere un access token fresco ad ogni invio. Non fa parte del tipo
+  // pubblico AdminSettings in types/index.ts per lo stesso motivo.
+  gmailRefreshToken   String?
   // JSON array of {id, label, value} — generic API key/credential vault.
   credentialsVault    String?
 

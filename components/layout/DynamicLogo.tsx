@@ -113,68 +113,74 @@ export const DynamicLogo: React.FC<DynamicLogoProps> = ({
         }
       `}</style>
 
-      {/* Brand Name: mostra 'T' + 'ypamine' su desktop, solo 'T' su mobile */}
       <span
         className="font-rezland text-black dark:text-white tracking-wide leading-none relative inline-block"
         style={{
           fontSize: `${normalFontSize}px`,
-          opacity: collapsed ? 0 : 1,
-          transform: collapsed ? "scale(0.8) translateX(-15px)" : "scale(1) translateX(0)",
-          pointerEvents: collapsed ? "none" : "auto",
-          transition: collapsed
-            ? "opacity 0s, transform 0s"
-            : "opacity 0.4s ease-in-out 0.15s, transform 0.4s ease-in-out 0.15s",
         }}
       >
         <span
+          className="inline-block transition-all duration-500 ease-in-out"
           style={{
-            fontSize: hasCustomTSize ? `${letterTFontSizePercent}%` : undefined,
+            opacity: collapsed ? 0 : 1,
+            transform: collapsed ? "scale(0.8) translateX(-15px)" : "scale(1) translateX(0)",
+            pointerEvents: collapsed ? "none" : "auto",
+            maxWidth: collapsed ? "0px" : "300px",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            verticalAlign: "bottom",
           }}
         >
-          T
-        </span>
-        {!iconOnly && (
-          <span className={hideWordmarkMobile ? "hidden sm:inline" : ""}>
-            ypamine
+          <span
+            style={{
+              fontSize: hasCustomTSize ? `${letterTFontSizePercent}%` : undefined,
+            }}
+          >
+            T
           </span>
-        )}
+          {!iconOnly && (
+            <span className={hideWordmarkMobile ? "hidden sm:inline" : ""}>
+              ypamine
+            </span>
+          )}
+        </span>
 
-        {/* Quadratino "chimico" proporzionale con aura neon (unito alla parola) */}
-        {!collapsed && (
-          squareIsButton ? (
-            <button
-              type="button"
-              onClick={squareButtonAction}
-              className={`absolute bottom-[0.15em] right-[-0.5em] w-[0.4em] h-[0.4em] transition-all duration-500 ease-in-out cursor-pointer hover:scale-110 active:scale-95 dyn-bg dyn-text rounded-xs inline-block ${squareColorClasses} ${glowClasses}`}
-              style={squareDynStyle}
-              title="Collapse sidebar"
-            />
-          ) : (
-            <div
-              className={`absolute bottom-[0.15em] right-[-0.5em] w-[0.4em] h-[0.4em] transition-all duration-500 ease-in-out dyn-bg dyn-text rounded-xs inline-block ${squareColorClasses} ${glowClasses}`}
-              style={squareDynStyle}
-            />
-          )
-        )}
-      </span>
-
-      {/* Quadratino "chimico" proporzionale con aura neon (collassato al centro) */}
-      {collapsed && (
-        squareIsButton ? (
+        {/* Quadratino "chimico" proporzionale con aura neon (unito alla parola o collassato al centro) */}
+        {squareIsButton ? (
           <button
             type="button"
             onClick={squareButtonAction}
-            className={`dyn-logo-square absolute transition-all duration-500 ease-in-out cursor-pointer hover:scale-110 active:scale-95 dyn-bg dyn-text ${squareColorClasses} ${glowClasses} rotate-[360deg] rounded-sm`}
-            style={squareDynStyle}
-            title="Expand sidebar"
+            className={`absolute transition-all duration-500 ease-in-out cursor-pointer hover:scale-110 active:scale-95 dyn-bg dyn-text ${squareColorClasses} ${glowClasses}`}
+            style={{
+              ...squareDynStyle,
+              left: "100%",
+              bottom: collapsed ? "50%" : "0.15em",
+              width: collapsed ? "28px" : "0.4em",
+              height: collapsed ? "28px" : "0.4em",
+              transform: collapsed
+                ? "translate(-50%, 50%) rotate(360deg)"
+                : "translate(0.1em, 0) rotate(0deg)",
+              borderRadius: collapsed ? "6px" : "2px",
+            }}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           />
         ) : (
           <div
-            className={`dyn-logo-square absolute transition-all duration-500 ease-in-out dyn-bg dyn-text ${squareColorClasses} ${glowClasses}`}
-            style={squareDynStyle}
+            className={`absolute transition-all duration-500 ease-in-out dyn-bg dyn-text ${squareColorClasses} ${glowClasses}`}
+            style={{
+              ...squareDynStyle,
+              left: "100%",
+              bottom: collapsed ? "50%" : "0.15em",
+              width: collapsed ? "28px" : "0.4em",
+              height: collapsed ? "28px" : "0.4em",
+              transform: collapsed
+                ? "translate(-50%, 50%) rotate(360deg)"
+                : "translate(0.1em, 0) rotate(0deg)",
+              borderRadius: collapsed ? "6px" : "2px",
+            }}
           />
-        )
-      )}
+        )}
+      </span>
     </div>
   );
 };

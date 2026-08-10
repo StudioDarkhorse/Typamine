@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import PairingForm from "@/components/admin/pairings/PairingForm";
 import { getAdminPairingById } from "@/lib/actions/pairing";
-import { getFonts } from "@/lib/actions/font";
 import { getAdminTags } from "@/lib/actions/tag";
 import TabHeading from "@/components/admin/common/TabHeading";
 
@@ -13,10 +12,11 @@ interface EditPairingPageProps {
 
 export default async function EditPairingPage({ params }: EditPairingPageProps) {
   const { id } = await params;
-  
-  const [pairing, fonts, tags] = await Promise.all([
+
+  // Niente più getFonts() qui: FontPicker in PairingForm è self-fetching
+  // (30 alla volta via getFontsPage), l'intero catalogo non serve più.
+  const [pairing, tags] = await Promise.all([
     getAdminPairingById(id),
-    getFonts(),
     getAdminTags(),
   ]);
 
@@ -30,7 +30,7 @@ export default async function EditPairingPage({ params }: EditPairingPageProps) 
         title="Edit Pairing"
         showButton={false}
       />
-      <PairingForm initialData={pairing} fonts={fonts} tags={tags} />
+      <PairingForm initialData={pairing} tags={tags} />
     </div>
   );
 }

@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import { Type, UserPlus, MessageSquare, CalendarClock } from "lucide-react";
+import { useState, useTransition, type ReactNode } from "react";
+import { Type, UserPlus, MessageSquare, CalendarClock, Send, Loader2 } from "lucide-react";
 import { Input } from "@/components/common/Input";
 import { Select } from "@/components/common/Select";
+import { Button } from "@/components/common/Button";
 import { SettingsSection, SettingsSubCard } from "@/components/admin/settings/SettingsSection";
 import { SaveBar } from "@/components/admin/settings/SaveBar";
 import { useSettingsForm } from "@/components/admin/settings/useSettingsForm";
-import { saveNotificationsSettings } from "@/lib/actions/adminSettings";
+import { saveNotificationsSettings, sendTestSlackNotification } from "@/lib/actions/adminSettings";
 import { AdminSettings, NotificationChannel, NotificationChannels } from "@/types";
 
 const CHANNEL_OPTIONS = [
@@ -57,6 +58,16 @@ export default function NotificationsTab({ initialSettings }: { initialSettings:
 
   const { errorMessage, dispatch, isPending, justSaved } = useSettingsForm(saveNotificationsSettings);
 
+  const [testing, startTest] = useTransition();
+  const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const handleSendTest = () => {
+    setTestResult(null);
+    startTest(async () => {
+      const result = await sendTestSlackNotification();
+      setTestResult(result);
+    });
+  };
+
   const usesSlack = Object.values(channels).some((v) => v === "slack" || v === "both");
   const notificationChannelsJson = JSON.stringify(channels);
 
@@ -97,6 +108,25 @@ export default function NotificationsTab({ initialSettings }: { initialSettings:
               value={slackWebhook}
               onChange={setSlackWebhook}
             />
+            <div className="flex items-center gap-3">
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                disabled={testing || !slackWebhook.trim()}
+                onClick={handleSendTest}
+                className="flex items-center gap-2"
+              >
+                {testing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                Send Test Notification
+              </Button>
+              {testResult && (
+                <p className={`text-xs font-haas ${testResult.ok ? "text-green-500" : "text-red-500"}`}>{testResult.message}</p>
+              )}
+            </div>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-haas">
+              Test sends against the last <em>saved</em> webhook URL — save first if you just changed it.
+            </p>
           </SettingsSubCard>
         )}
 

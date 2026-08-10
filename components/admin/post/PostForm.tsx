@@ -36,11 +36,13 @@ import { isAnyModuleImageCompressing } from "@/components/admin/common/content-m
 interface PostFormProps {
   postType: PostType;
   initialData?: any;
-  fonts: any[];
   tags: any[];
 }
 
-export default function PostForm({ postType, initialData, fonts, tags }: PostFormProps) {
+// Font picker sempre self-fetching (FontMultiPicker senza prop `fonts`, 30
+// alla volta via getFontsPage) — niente più bisogno di passare l'intero
+// catalogo da qui, vedi anche i due page.tsx che montano questo form.
+export default function PostForm({ postType, initialData, tags }: PostFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -472,7 +474,6 @@ export default function PostForm({ postType, initialData, fonts, tags }: PostFor
               {postType !== "BLOG" && (
                 <FontMultiPicker
                   label="Featured Fonts"
-                  fonts={fonts}
                   value={selectedFontIds}
                   onChange={setSelectedFontIds}
                   emptyLabel="No fonts available."

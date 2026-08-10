@@ -80,7 +80,7 @@ export default function FillMissingAuthorsCard({ count }: { count: number }) {
               {count} font{count !== 1 ? "s" : ""} without an author
             </p>
             <p className="text-md text-center uppercase tracking-widest font-bold text-indigo-600 dark:text-indigo-400 truncate">
-              Fill Now
+              Fill with Gemini
             </p>
           </div>
         </div>

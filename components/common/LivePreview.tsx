@@ -11,7 +11,7 @@ import BaseModal from "@/components/common/BaseModal";
  * Iniettore di font sicuro: usa i children per evitare XSS.
  * React esegue automaticamente l'escaping dei contenuti inseriti tra i tag <style>.
  */
-const FontFaceInjector = React.memo(({ fontFamily, url }: { fontFamily: string; url: string }) => {
+export const FontFaceInjector = React.memo(({ fontFamily, url }: { fontFamily: string; url: string }) => {
   if (!url) return null;
   // Aggiungiamo un ID al tag style basato sull'URL per evitare duplicazioni
   const styleId = `font-${btoa(url).slice(0, 16)}`;
@@ -164,209 +164,129 @@ export default function LivePreview({
           rounded ? " rounded-t-md" : ""
         )}>
           {showControls && (() => {
-            const mobileControlsGroups = (
-              <div className="flex flex-col gap-3.5 w-full">
-                {/* Size */}
-                <div className="flex flex-col gap-2 w-full p-3 rounded-xl bg-zinc-100/70 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-800/80">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">Size</span>
-                    <span className="text-xs text-black dark:text-white font-bold px-2 py-0.5 rounded bg-white dark:bg-zinc-700 min-w-[36px] text-center shadow-xs">{size}px</span>
-                  </div>
+            // Layout a griglia allineata (colonne uguali, come una tabella)
+            // dentro un unico pannello condiviso — nessun bordo/sfondo per
+            // singolo controllo (quello sì tolto), nessun numero di valore
+            // accanto alla label, label più piccola.
+            const rangeClassName =
+              "w-full h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red touch-pan-x";
+            const controlLabelClassName =
+              "text-[9px] mb-2 text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black";
+            const controlWrapClassName = "flex flex-col gap-1.5";
+
+            // Due righe separate come prima (range da un lato, colori
+            // dall'altro) invece di un unico wrap misto — solo senza bordi
+            // e senza i numeri di valore accanto a ciascuna label.
+            const rangeCards: React.ReactNode[] = [
+              <div key="size" className={controlWrapClassName}>
+                <span className={controlLabelClassName}>Size</span>
+                <input
+                  type="range"
+                  min={minSize}
+                  max={maxSize}
+                  value={size}
+                  onChange={(e) => setSize(Number(e.target.value))}
+                  className={rangeClassName}
+                />
+              </div>,
+            ];
+            const colorCards: React.ReactNode[] = [];
+
+            if (hasWeightGroup) {
+              rangeCards.push(
+                <div key="weight" className={controlWrapClassName}>
+                  <span className={controlLabelClassName}>Weight</span>
                   <input
                     type="range"
-                    min={minSize}
-                    max={maxSize}
-                    value={size}
-                    onChange={(e) => setSize(Number(e.target.value))}
-                    className="w-full h-3 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red touch-pan-x"
+                    min="100"
+                    max="900"
+                    step="100"
+                    value={weight}
+                    onChange={(e) => setWeight(Number(e.target.value))}
+                    className={rangeClassName}
                   />
                 </div>
+              );
+            }
 
-                {/* Weight */}
-                {hasWeightGroup && (
-                  <div className="flex flex-col gap-2 w-full p-3 rounded-xl bg-zinc-100/70 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-800/80">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">Weight</span>
-                      <span className="text-xs text-black dark:text-white font-bold px-2 py-0.5 rounded bg-white dark:bg-zinc-700 min-w-[36px] text-center shadow-xs">{weight}</span>
-                    </div>
-                    <input
-                      type="range"
-                      min="100"
-                      max="900"
-                      step="100"
-                      value={weight}
-                      onChange={(e) => setWeight(Number(e.target.value))}
-                      className="w-full h-3 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red touch-pan-x"
+            if (hasTrackingGroup) {
+              rangeCards.push(
+                <div key="tracking" className={controlWrapClassName}>
+                  <span className={controlLabelClassName}>Tracking</span>
+                  <input
+                    type="range"
+                    min={-4}
+                    max={12}
+                    value={letterSpacing}
+                    onChange={(e) => setLetterSpacing(Number(e.target.value))}
+                    className={rangeClassName}
+                  />
+                </div>
+              );
+            }
+
+            if (hasLeadingGroup) {
+              rangeCards.push(
+                <div key="leading" className={controlWrapClassName}>
+                  <span className={controlLabelClassName}>Leading</span>
+                  <input
+                    type="range"
+                    min={0.8}
+                    max={2.2}
+                    step={0.05}
+                    value={lineHeight}
+                    onChange={(e) => setLineHeight(Number(e.target.value))}
+                    className={rangeClassName}
+                  />
+                </div>
+              );
+            }
+
+            if (hasTextColorGroup) {
+              colorCards.push(
+                <div key="text-color" className="flex items-center justify-between gap-2">
+                  <span className={controlLabelClassName}>Text</span>
+                  <HexColorPickerPopover color={textColor} onChange={setTextColor} title="Text color">
+                    <span
+                      className="h-5 w-5 block rounded-md border border-zinc-300 dark:border-zinc-700 cursor-pointer shadow-xs"
+                      style={{ backgroundColor: textColor }}
                     />
-                  </div>
-                )}
+                  </HexColorPickerPopover>
+                </div>
+              );
+            }
 
-                {/* Tracking */}
-                {hasTrackingGroup && (
-                  <div className="flex flex-col gap-2 w-full p-3 rounded-xl bg-zinc-100/70 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-800/80">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">Tracking</span>
-                      <span className="text-xs text-black dark:text-white font-bold px-2 py-0.5 rounded bg-white dark:bg-zinc-700 min-w-[36px] text-center shadow-xs">{letterSpacing}px</span>
-                    </div>
-                    <input
-                      type="range"
-                      min={-4}
-                      max={12}
-                      value={letterSpacing}
-                      onChange={(e) => setLetterSpacing(Number(e.target.value))}
-                      className="w-full h-3 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red touch-pan-x"
+            if (hasBgColorGroup) {
+              colorCards.push(
+                <div key="bg-color" className="flex items-center justify-between gap-2">
+                  <span className={controlLabelClassName}>BG</span>
+                  <HexColorPickerPopover color={bgColor} onChange={setBgColor} title="Background color">
+                    <span
+                      className="h-5 w-5 block rounded-md border border-zinc-300 dark:border-zinc-700 cursor-pointer shadow-xs"
+                      style={{ backgroundColor: bgColor }}
                     />
-                  </div>
-                )}
+                  </HexColorPickerPopover>
+                </div>
+              );
+            }
 
-                {/* Leading */}
-                {hasLeadingGroup && (
-                  <div className="flex flex-col gap-2 w-full p-3 rounded-xl bg-zinc-100/70 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-800/80">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">Leading</span>
-                      <span className="text-xs text-black dark:text-white font-bold px-2 py-0.5 rounded bg-white dark:bg-zinc-700 min-w-[36px] text-center shadow-xs">{lineHeight.toFixed(2)}</span>
-                    </div>
-                    <input
-                      type="range"
-                      min={0.8}
-                      max={2.2}
-                      step={0.05}
-                      value={lineHeight}
-                      onChange={(e) => setLineHeight(Number(e.target.value))}
-                      className="w-full h-3 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red touch-pan-x"
-                    />
-                  </div>
-                )}
-
-                {/* Color pickers */}
-                {(hasTextColorGroup || hasBgColorGroup) && (
-                  <div className="grid grid-cols-2 gap-3 w-full">
-                    {hasTextColorGroup && (
-                      <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-100/70 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-800/80">
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">Text</span>
-                        <HexColorPickerPopover color={textColor} onChange={setTextColor} title="Text color">
-                          <span
-                            className="h-7 w-7 block rounded-md border border-zinc-300 dark:border-zinc-700 cursor-pointer shadow-xs"
-                            style={{ backgroundColor: textColor }}
-                          />
-                        </HexColorPickerPopover>
-                      </div>
-                    )}
-                    {hasBgColorGroup && (
-                      <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-100/70 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-800/80">
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">BG</span>
-                        <HexColorPickerPopover color={bgColor} onChange={setBgColor} title="Background color">
-                          <span
-                            className="h-7 w-7 block rounded-md border border-zinc-300 dark:border-zinc-700 cursor-pointer shadow-xs"
-                            style={{ backgroundColor: bgColor }}
-                          />
-                        </HexColorPickerPopover>
-                      </div>
-                    )}
-                  </div>
-                )}
+            // Grid a colonne allineate (non flex-wrap): stessa larghezza per
+            // ogni controllo della riga, come una tabella — Size/Weight/
+            // Tracking/Leading sulla prima riga, Text/BG sulla seconda,
+            // dentro un unico pannello condiviso (bordo/sfondo qui, non sui
+            // singoli controlli).
+            const groups = (
+              <div className="flex flex-col gap-4 w-full p-3 rounded-xl bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800/80 backdrop-blur-sm">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-4">{rangeCards}</div>
+                {colorCards.length > 0 && <div className="grid grid-cols-2 gap-x-4 gap-y-4 mt-8">{colorCards}</div>}
               </div>
             );
-
-            const desktopControlsGroups = (
-              <>
-                <div className={cn("flex items-center gap-2.5 px-3 py-1", (hasWeightGroup || hasTrackingGroup || hasLeadingGroup || hasTextColorGroup || hasBgColorGroup) && "border-r border-zinc-200 dark:border-zinc-800")}>
-                  <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">Size</span>
-                  <input
-                    type="range"
-                    min={minSize}
-                    max={maxSize}
-                    value={size}
-                    onChange={(e) => setSize(Number(e.target.value))}
-                    className="w-24 md:w-28 h-2 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red"
-                  />
-                  <span className="text-[11px] text-black dark:text-white font-bold w-7 text-right">{size}</span>
-                </div>
-
-                {hasWeightGroup && (
-                  <div className={cn("flex items-center gap-2.5 px-3 py-1", (hasTrackingGroup || hasLeadingGroup || hasTextColorGroup || hasBgColorGroup) && "border-r border-zinc-200 dark:border-zinc-800")}>
-                    <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">Weight</span>
-                    <input
-                      type="range"
-                      min="100"
-                      max="900"
-                      step="100"
-                      value={weight}
-                      onChange={(e) => setWeight(Number(e.target.value))}
-                      className="w-24 md:w-28 h-2 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red"
-                    />
-                    <span className="text-[11px] text-black dark:text-white font-bold w-7 text-right">{weight}</span>
-                  </div>
-                )}
-
-                {hasTrackingGroup && (
-                  <div className={cn("flex items-center gap-2.5 px-3 py-1", (hasLeadingGroup || hasTextColorGroup || hasBgColorGroup) && "border-r border-zinc-200 dark:border-zinc-800")}>
-                    <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">Tracking</span>
-                    <input
-                      type="range"
-                      min={-4}
-                      max={12}
-                      value={letterSpacing}
-                      onChange={(e) => setLetterSpacing(Number(e.target.value))}
-                      className="w-24 md:w-28 h-2 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red"
-                    />
-                    <span className="text-[11px] text-black dark:text-white font-bold w-7 text-right">{letterSpacing}</span>
-                  </div>
-                )}
-
-                {hasLeadingGroup && (
-                  <div className={cn("flex items-center gap-2.5 px-3 py-1", (hasTextColorGroup || hasBgColorGroup) && "border-r border-zinc-200 dark:border-zinc-800")}>
-                    <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">Leading</span>
-                    <input
-                      type="range"
-                      min={0.8}
-                      max={2.2}
-                      step={0.05}
-                      value={lineHeight}
-                      onChange={(e) => setLineHeight(Number(e.target.value))}
-                      className="w-24 md:w-28 h-2 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red"
-                    />
-                    <span className="text-[11px] text-black dark:text-white font-bold w-8 text-right">{lineHeight.toFixed(2)}</span>
-                  </div>
-                )}
-
-                {hasTextColorGroup && (
-                  <div className={cn("flex items-center gap-2.5 px-3 py-1", hasBgColorGroup && "border-r border-zinc-200 dark:border-zinc-800")}>
-                    <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">Text</span>
-                    <HexColorPickerPopover color={textColor} onChange={setTextColor} title="Text color">
-                      <span
-                        className="h-6 w-6 block rounded-md border border-zinc-200 dark:border-zinc-800 cursor-pointer shadow-xs"
-                        style={{ backgroundColor: textColor }}
-                      />
-                    </HexColorPickerPopover>
-                  </div>
-                )}
-
-                {hasBgColorGroup && (
-                  <div className="flex items-center gap-2.5 px-3 py-1">
-                    <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black">BG</span>
-                    <HexColorPickerPopover color={bgColor} onChange={setBgColor} title="Background color">
-                      <span
-                        className="h-6 w-6 block rounded-md border border-zinc-200 dark:border-zinc-800 cursor-pointer shadow-xs"
-                        style={{ backgroundColor: bgColor }}
-                      />
-                    </HexColorPickerPopover>
-                  </div>
-                )}
-              </>
-            );
-
-            const desktopControlsPanelClassName = "justify-center items-center flex-wrap gap-x-2 gap-y-2 bg-white/80 dark:bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 backdrop-blur-sm";
 
             if (!mobileControlsInModal) {
               return (
                 <div className="w-full">
-                  <div className="block md:hidden w-full p-2 bg-white/80 dark:bg-zinc-900/80 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 backdrop-blur-sm">
-                    {mobileControlsGroups}
-                  </div>
-                  <div className={cn("hidden md:flex", desktopControlsPanelClassName)}>
-                    {desktopControlsGroups}
-                  </div>
+                  <div className="block md:hidden">{groups}</div>
+                  <div className="hidden md:block">{groups}</div>
                 </div>
               );
             }
@@ -381,13 +301,13 @@ export default function LivePreview({
                   <SlidersHorizontal className="h-4 w-4 text-blue dark:text-red" />
                   Tweak
                 </button>
-                <div className={cn("hidden md:flex", desktopControlsPanelClassName)}>{desktopControlsGroups}</div>
+                <div className="hidden md:block w-full">{groups}</div>
                 <BaseModal isOpen={isControlsModalOpen} onClose={() => setIsControlsModalOpen(false)} size="md">
                   <BaseModal.Header onClose={() => setIsControlsModalOpen(false)}>
                     <h2 className="text-lg font-rezland text-black dark:text-white">Customize Preview</h2>
                   </BaseModal.Header>
                   <BaseModal.Body className="!p-4 !sm:p-6">
-                    {mobileControlsGroups}
+                    {groups}
                   </BaseModal.Body>
                 </BaseModal>
               </>

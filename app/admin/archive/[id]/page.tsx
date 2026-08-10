@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import PostForm from "@/components/admin/post/PostForm";
 import { getAdminPostById } from "@/lib/actions/post";
-import { getFonts } from "@/lib/actions/font";
 import { getAdminTags } from "@/lib/actions/tag";
 import TabHeading from "@/components/admin/common/TabHeading";
 
@@ -14,9 +13,10 @@ interface EditArchivePostPageProps {
 export default async function EditArchivePostPage({ params }: EditArchivePostPageProps) {
   const { id } = await params;
 
-  const [post, fonts, tags] = await Promise.all([
+  // Niente più getFonts() qui: il picker in PostForm (FontMultiPicker) è
+  // self-fetching, 30 alla volta — l'intero catalogo non serve mai a questa pagina.
+  const [post, tags] = await Promise.all([
     getAdminPostById(id),
-    getFonts(),
     getAdminTags(),
   ]);
 
@@ -30,7 +30,7 @@ export default async function EditArchivePostPage({ params }: EditArchivePostPag
         title="Edit Archive Post"
         showButton={false}
       />
-      <PostForm postType="ARCHIVE" initialData={post} fonts={fonts} tags={tags} />
+      <PostForm postType="ARCHIVE" initialData={post} tags={tags} />
     </div>
   );
 }

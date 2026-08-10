@@ -83,7 +83,7 @@ export default function FillMissingLicensesCard({ count }: { count: number }) {
               {count} font{count !== 1 ? "s" : ""} without a license
             </p>
             <p className="text-md text-center uppercase tracking-widest font-bold text-amber-600 dark:text-amber-400 truncate">
-              Fill Now
+              Fill with Gemini
             </p>
           </div>
         </div>

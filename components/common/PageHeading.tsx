@@ -23,7 +23,7 @@ export const PageHeading: React.FC<PageHeadingProps> = ({
   grainientOptions = {},
 }) => {
   return (
-    <div className={`mt-4 relative overflow-hidden border border-zinc-200 dark:border-zinc-800 rounded-lg ${className}`}>
+    <div className={`mt-4 hidden lg:block relative overflow-hidden border border-zinc-200 dark:border-zinc-800 rounded-lg ${className}`}>
       
       {useGrainient && (
         <div className="absolute inset-0 z-0 pointer-events-none">

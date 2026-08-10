@@ -114,7 +114,7 @@ export default function PillDetailClient({ post }: PillDetailClientProps) {
         ) : null}
 
         {/* Byline autore — in fondo, dopo il contenuto */}
-        <div className="flex items-center gap-3 border-t border-black/10 dark:border-white/10 pt-6">
+        <div className="flex justify-center items-center gap-3 border-t border-black/10 dark:border-white/10 pt-6">
           <div className="h-10 w-10 shrink-0 rounded-full bg-blue/20 dark:bg-red/20 flex items-center justify-center overflow-hidden">
             {post.author?.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element

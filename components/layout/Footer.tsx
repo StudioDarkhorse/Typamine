@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import GlyphTypeface from "@/components/layout/GlyphTypeface";
 import { ResolvedBrandFont } from "@/types";
 
@@ -36,7 +37,7 @@ export const Footer: React.FC<FooterProps> = ({
 
   return (
     <footer className="relative min-h-[100dvh] w-full flex flex-col border-t border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-[#09090b]/40 font-haas text-[10px] text-zinc-500 dark:text-zinc-400 transition-colors duration-300">
-      <div className="flex-1 flex items-center justify-center px-4 overflow-hidden">
+      <div className="relative flex-1 flex items-center justify-center px-4 overflow-hidden">
         <div className="relative inline-block text-[clamp(3rem,14vw,14rem)] text-blue dark:text-red">
           {hasCustomTFont && (
             <style>{`@font-face { font-family: '${tFontFamily}'; src: url('${letterTFont!.woff2Url}') format('woff2'); font-display: swap; }`}</style>
@@ -65,6 +66,37 @@ export const Footer: React.FC<FooterProps> = ({
             className="absolute bottom-[0.15em] right-[-0.72em] w-[0.57em] h-[0.57em] dyn-bg dyn-text shadow-[0_0_15px_currentColor] blur-[1px] brightness-110 rounded-xs [animation:spin_4s_linear_infinite] [animation-play-state:paused] hover:[animation-play-state:running]"
             style={squareDynStyle}
           />
+
+          {/* Credito del font della "T" del mese, appena sotto la scritta
+              TYPAMINE — right-0 allinea al bordo destro del testo (dove
+              finisce la "E"), non al quadratino chimico che sporge oltre
+              (right:-0.72em). Link solo se la pagina esiste davvero (font
+              sempre, autore solo se non è un placeholder d'import/AI, vedi
+              resolveLetterTFont in lib/services/adminSettings.ts). */}
+          {letterTFont && (
+            <div className="absolute flex gap-x-1 items-baseline top-full right-0 mt-2 sm:mt-3 text-blue-600 dark:text-red text-right text-[10px] sm:text-sm leading-relaxed whitespace-nowrap">
+              <p>
+                This month&apos;s font:{" "}
+                <Link
+                  href={`/ingredients/${letterTFont.slug}`}
+                  className="font-bold uppercase text-md text-black dark:text-white hover:text-blue dark:hover:text-red transition-colors"
+                >
+                  {letterTFont.name.replace('_', " ")}
+                </Link>
+              </p>
+              {letterTFont.author && (
+                <p>
+                  by{" "}
+                  <Link
+                    href={`/author/${letterTFont.author.slug}`}
+                    className="font-bold uppercase text-md text-black dark:text-white hover:text-blue dark:hover:text-red transition-colors"
+                  >
+                    {letterTFont.author.name}
+                  </Link>
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

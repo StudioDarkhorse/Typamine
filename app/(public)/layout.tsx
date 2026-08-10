@@ -4,6 +4,8 @@ import { headers } from "next/headers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import MarqueeBar from "@/components/layout/MarqueeBar";
+import ThirdPartyScripts from "@/components/layout/ThirdPartyScripts";
+import CookieBanner from "@/components/layout/CookieBanner";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { getAdminSettings } from "@/lib/services/adminSettings";
@@ -90,6 +92,18 @@ export default async function PublicRootLayout({
           logoDarkModeColor={adminSettings.logoDarkModeColor}
         />
 
+        {adminSettings.cookieBannerActive && (
+          <CookieBanner
+            text={adminSettings.cookieBannerText}
+            privacyPolicyUrl={adminSettings.privacyPolicyUrl}
+            termsOfServiceUrl={adminSettings.termsOfServiceUrl}
+          />
+        )}
+
+        <ThirdPartyScripts
+          integrationsConfig={adminSettings.integrationsConfig}
+          cookieBannerActive={adminSettings.cookieBannerActive}
+        />
       </body>
     </html>
   );

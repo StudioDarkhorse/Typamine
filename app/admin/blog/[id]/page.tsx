@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import PostForm from "@/components/admin/post/PostForm";
 import { getAdminPostById } from "@/lib/actions/post";
-import { getFonts } from "@/lib/actions/font";
 import { getAdminTags } from "@/lib/actions/tag";
 import TabHeading from "@/components/admin/common/TabHeading";
 
@@ -14,9 +13,11 @@ interface EditBlogPostPageProps {
 export default async function EditBlogPostPage({ params }: EditBlogPostPageProps) {
   const { id } = await params;
 
-  const [post, fonts, tags] = await Promise.all([
+  // Niente più getFonts() qui: i post BLOG non hanno font picker (vedi
+  // PostForm), e ARCHIVE usa FontMultiPicker self-fetching — l'intero
+  // catalogo non serve mai a questa pagina.
+  const [post, tags] = await Promise.all([
     getAdminPostById(id),
-    getFonts(),
     getAdminTags(),
   ]);
 
@@ -30,7 +31,7 @@ export default async function EditBlogPostPage({ params }: EditBlogPostPageProps
         title="Edit Blog Post"
         showButton={false}
       />
-      <PostForm postType="BLOG" initialData={post} fonts={fonts} tags={tags} />
+      <PostForm postType="BLOG" initialData={post} tags={tags} />
     </div>
   );
 }

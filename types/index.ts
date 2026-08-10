@@ -37,6 +37,7 @@ export interface IntegrationConfig {
 // colonna per provider/campo, così un nuovo provider non richiede migration.
 export interface IntegrationsConfig {
   analytics?: IntegrationConfig & { measurementId?: string };
+  tagManager?: IntegrationConfig & { containerId?: string };
   pixel?: IntegrationConfig & { pixelId?: string };
   recaptcha?: IntegrationConfig & { siteKey?: string; secretKey?: string };
   maps?: IntegrationConfig & { apiKey?: string };
@@ -49,7 +50,12 @@ export interface IntegrationsConfig {
 export interface ResolvedBrandFont {
   id: string;
   name: string;
+  slug: string;
   woff2Url: string;
+  // Presente solo quando l'autore del font è reale (non un placeholder
+  // d'import/AI "unknown", vedi NON_REAL_FONT_AUTHOR_SLUGS) — usato dal
+  // footer per il credito "by {author}" sotto "This month's font".
+  author?: { name: string; slug: string };
 }
 
 // Vedi AdminSettings.heroWordmarkFonts (JSON) — un frame della sequenza che
@@ -181,7 +187,7 @@ export interface Tag {
 // Stringhe libere a livello DB/tipo (stessa convenzione di `category`) — le
 // opzioni ammesse in UI sono vincolate dalla select in FontForm, non da un
 // enum Prisma.
-export type ImportedFrom = 'Google Fonts' | 'Fontshare' | 'Local Single Upload' | 'Local Bulk Upload';
+export type ImportedFrom = 'Google Fonts' | 'Fontshare' | 'Local Single Upload' | 'Local Bulk Upload' | 'Dafont';
 export type LicenseType =
   | 'Free'
   | 'Free for Personal Use'

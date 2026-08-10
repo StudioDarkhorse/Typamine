@@ -12,6 +12,31 @@ async function addCol(table: string, col: string, type: string) {
   }
 }
 
+// Stessi due indici che Prisma genera automaticamente per ogni join table
+// implicita many-to-many quando la tabella nasce da `prisma db push`/migrate
+// (unique su A,B + indice su B) — necessari a mano qui perché queste 4 join
+// table (_IngredientTags, _FormulaTags, _PostTags, _PostFonts) sono create
+// via CREATE TABLE raw sopra, non da Prisma stesso.
+async function addJoinTableIndexes(table: string) {
+  try {
+    await prisma.$executeRawUnsafe(`CREATE UNIQUE INDEX IF NOT EXISTS "${table}_AB_unique" ON "${table}"("A","B")`);
+  } catch {}
+  try {
+    await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "${table}_B_index" ON "${table}"("B")`);
+  } catch {}
+}
+
+// Colonne FK/filtro su tabelle create a mano (mai passate da `prisma
+// db push`, quindi mai indicizzate automaticamente da Prisma) ma filtrate
+// spesso: FontVariant.ingredientId ad ogni caricamento di un font con le sue
+// varianti, Ingredient.authorId/licenseType in tutte le query "candidati"
+// (Fill Missing Authors/Licenses, AI Identity, Dafont scrape).
+async function addIndex(table: string, column: string) {
+  try {
+    await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "${table}_${column}_idx" ON "${table}"("${column}")`);
+  } catch {}
+}
+
 export async function ensureD1SchemaUpdated(force = false) {
   if (isMigrated && !force) return;
 
@@ -90,6 +115,13 @@ export async function ensureD1SchemaUpdated(force = false) {
         )
       `);
     } catch {}
+    // A differenza delle join table create da un vero `prisma db push`
+    // (_UserRoles, _FormulaIngredients, ecc — con indici auto-generati da
+    // Prisma), questa e' CREATE TABLE a mano: senza questi due indici ogni
+    // query `{ tags: { none: {} } }` (es. hasFontsNeedingQualityReview) fa
+    // uno scan completo di _IngredientTags per ogni Ingredient — misurato
+    // 88% del runtime di quella query prima di questa fix.
+    await addJoinTableIndexes("_IngredientTags");
 
     // 6. Add columns safely to Formula (rinominato da href/code a slug/fontCategory/updatedAt)
     await addCol("Formula", "slug", "TEXT");
@@ -137,6 +169,7 @@ export async function ensureD1SchemaUpdated(force = false) {
         )
       `);
     } catch {}
+    await addJoinTableIndexes("_FormulaTags");
 
     // 8. Post table (generalizzato da ArchivePost, serve sia /archive che
     // /blog via la colonna postType) + le sue join table many-to-many.
@@ -181,6 +214,7 @@ export async function ensureD1SchemaUpdated(force = false) {
         )
       `);
     } catch {}
+    await addJoinTableIndexes("_PostTags");
     try {
       await prisma.$executeRawUnsafe(`
         CREATE TABLE IF NOT EXISTS _PostFonts (
@@ -189,6 +223,7 @@ export async function ensureD1SchemaUpdated(force = false) {
         )
       `);
     } catch {}
+    await addJoinTableIndexes("_PostFonts");
     await addCol("Post", "postType", "TEXT");
     try {
       await prisma.$executeRawUnsafe(`UPDATE Post SET postType = 'ARCHIVE' WHERE postType IS NULL`);
@@ -317,6 +352,7 @@ export async function ensureD1SchemaUpdated(force = false) {
     await addCol("AdminSettings", "gmailSenderName", "TEXT");
     await addCol("AdminSettings", "gmailConnected", "BOOLEAN DEFAULT 0");
     await addCol("AdminSettings", "gmailConnectedEmail", "TEXT");
+    await addCol("AdminSettings", "gmailRefreshToken", "TEXT");
     await addCol("AdminSettings", "credentialsVault", "TEXT");
 
     // Integrations
@@ -349,6 +385,16 @@ export async function ensureD1SchemaUpdated(force = false) {
       } catch {}
     }
 
+    // Indici su colonne FK/filtro di tabelle create a mano sopra — mai
+    // aggiunti automaticamente da Prisma (a differenza delle tabelle nate da
+    // un vero `prisma db push`), ma filtrate spesso: vedi commento su addIndex.
+    await addIndex("FontVariant", "ingredientId");
+    await addIndex("Ingredient", "authorId");
+    await addIndex("Ingredient", "licenseType");
+    await addIndex("Prescription", "primaryFontId");
+    await addIndex("Prescription", "secondaryFontId");
+    await addIndex("Post", "authorId");
+
     isMigrated = true;
   } catch (err) {
     console.error("[DbMigration] Error migrating D1 schema:", err);
@@ -368,4 +414,36 @@ export async function withSafeDbQuery<T>(run: () => Promise<T>): Promise<T> {
     await ensureD1SchemaUpdated(true);
     return await run();
   }
+}
+
+// Errore transitorio del D1 locale (Miniflare/workerd) sotto carico — non un
+// errore di schema (withSafeDbQuery sopra non lo intercetta: non è un
+// PrismaClientKnownRequestError con un P-code, è un PrismaClientUnknownRequestError
+// generico). Tipicamente compare durante lavoro CPU-bound prolungato (conversione
+// font, unzip) che blocca l'event loop abbastanza a lungo da far scadere la
+// sessione D1 sottostante. Qui solo un retry con backoff breve — non risolve
+// la causa (limite dell'emulatore D1 in dev, non applicativo) ma evita che un
+// singolo blip transitorio faccia crashare un'intera pagina server component
+// (es. i conteggi delle card "Key Tasks" in /admin, tutte awaited senza try/catch).
+function isTransientD1Error(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return /Failed to parse body as JSON|D1_ERROR.*internal error/i.test(msg);
+}
+
+export async function withD1Retry<T>(run: () => Promise<T>, retries = 2, delayMs = 300): Promise<T> {
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await run();
+    } catch (err) {
+      lastErr = err;
+      if (attempt === retries || !isTransientD1Error(err)) throw err;
+      console.warn(
+        `[D1 Retry] Transient D1 error, retrying (${attempt + 1}/${retries})...`,
+        err instanceof Error ? err.message : err
+      );
+      await new Promise((r) => setTimeout(r, delayMs * (attempt + 1)));
+    }
+  }
+  throw lastErr;
 }

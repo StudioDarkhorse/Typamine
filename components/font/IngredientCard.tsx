@@ -14,7 +14,7 @@ import { NON_REAL_FONT_AUTHOR_SLUGS } from "@/lib/constants/placeholderFontAutho
 // "Typamine Import" o il letterale "Unknown" scritto dall'AI.
 const RAW_IMPORT_CREATOR_LABELS = new Set(["typamine import", "google fonts", "fontshare", "unknown"]);
 
-function getPublicCreatorLabel(font: Ingredient): string {
+export function getPublicCreatorLabel(font: Ingredient): string {
   if (font.author && !NON_REAL_FONT_AUTHOR_SLUGS.includes(font.author.slug)) {
     return font.author.name;
   }

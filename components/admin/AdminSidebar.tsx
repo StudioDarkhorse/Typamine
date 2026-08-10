@@ -66,7 +66,7 @@ export default function AdminSidebar({ session }: { session: any }) {
         )}>
           <DynamicLogo
             className="text-black dark:text-white"
-            height={collapsed ? 48 : 64}
+            height={collapsed ? 48 : 92}
             squareGlow={theme === "light"}
             squareIsButton={true}
             squareButtonAction={() => setCollapsed(!collapsed)}
@@ -75,7 +75,7 @@ export default function AdminSidebar({ session }: { session: any }) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 border-t border-black/5 dark:border-white/5 px-3 py-3 flex flex-col justify-center space-y-1.5 overflow-y-auto overflow-x-hidden">
+        <nav className="flex-1 border-t border-black/5 dark:border-white/5 px-3 py-2 flex flex-col justify-center space-y-1 overflow-y-auto overflow-x-hidden">
           {filteredMenuItems.map((item) => {
             const isActive = item.href === "/admin"
               ? pathname === "/admin"
@@ -85,7 +85,7 @@ export default function AdminSidebar({ session }: { session: any }) {
                 key={item.name}
                 href={item.href as any}
                 className={cn(
-                  "flex items-center px-4 py-2.5 rounded-md transition-all duration-300 group",
+                  "flex items-center px-4 py-2 rounded-md transition-all duration-300 group",
                   collapsed ? "justify-center" : "justify-start gap-3",
                   isActive
                     ? "bg-bluegray-100 dark:bg-redgray-800 text-black dark:text-white shadow-sm"

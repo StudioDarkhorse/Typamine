@@ -5,6 +5,7 @@ import { getServerAuthSession } from "@/lib/session";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { uploadToR2, deleteFromR2 } from "@/lib/r2";
 import { withCreatedAtBackfill } from "@/lib/services/font";
+import { withD1Retry } from "@/lib/services/dbMigration";
 import { generateFontQualityWithGemini } from "@/lib/ai/fontQuality";
 import { generateFontIdentityWithGemini } from "@/lib/ai/fontIdentity";
 import {
@@ -15,7 +16,8 @@ import {
   getOrCreateUnknownAfterAiCheckAuthorId,
   getAllNonRealFontAuthorIds,
 } from "@/lib/services/fontAuthor";
-import { FONT_LICENSE_TYPES, UNKNOWN_AFTER_AI_CHECK_LICENSE } from "@/lib/constants/fontLicenseTypes";
+import { FONT_LICENSE_TYPES, UNKNOWN_AFTER_AI_CHECK_LICENSE, matchKnownLicenseType } from "@/lib/constants/fontLicenseTypes";
+import { scrapeDafontFontPage } from "@/lib/services/dafontScraper";
 import { CACHE_TAGS } from "@/lib/cacheTags";
 import crypto from "crypto";
 
@@ -179,6 +181,11 @@ export async function deleteFont(id: string) {
 
   await prisma.ingredient.delete({ where: { id } });
   revalidatePath("/admin/fonts");
+  // Anche "/admin": le card "Key Tasks" (missingAuthorCount, dafontScrapeCount,
+  // ecc) sono props calcolate quando la pagina /admin viene renderizzata — senza
+  // questa revalidate restano ferme al numero del primo caricamento anche dopo
+  // aver risolto font, mostrando lo stesso conteggio ad ogni riapertura del modale.
+  revalidatePath("/admin");
   revalidateTag(CACHE_TAGS.ingredients, "max");
 }
 
@@ -204,20 +211,27 @@ export async function getFontsNeedingQualityReview() {
 
 export async function hasFontsNeedingQualityReview() {
   await checkPermission("font:read");
-  const count = await prisma.ingredient.count({ where: QUALITY_CANDIDATE_WHERE });
+  const count = await withD1Retry(() => prisma.ingredient.count({ where: QUALITY_CANDIDATE_WHERE }));
   return count > 0;
 }
 
 export async function rateFontQualityWithAI(fontId: string) {
   await checkPermission("font:update");
 
-  const [font, allTags] = await Promise.all([
-    prisma.ingredient.findUnique({ where: { id: fontId }, select: { id: true, name: true } }),
+  const [font, allTags, nonRealAuthorIds] = await Promise.all([
+    prisma.ingredient.findUnique({ where: { id: fontId }, select: { id: true, name: true, creator: true, authorId: true } }),
     prisma.tag.findMany({ select: { id: true, name: true } }),
+    getAllNonRealFontAuthorIds(),
   ]);
   if (!font) throw new Error("Font not found");
 
-  const result = await generateFontQualityWithGemini(font.name, allTags.map((t) => t.name));
+  // Solo se l'autore e' reale (non un placeholder d'import/AI "unknown") —
+  // altrimenti passeremmo a Gemini rumore tipo "Google Fonts Placeholder
+  // Author" o "Typamine Import" invece di un vero designer/fonderia.
+  const hasRealAuthor = !!font.authorId && !nonRealAuthorIds.includes(font.authorId) && !!font.creator;
+  const authorName = hasRealAuthor ? font.creator! : undefined;
+
+  const result = await generateFontQualityWithGemini(font.name, allTags.map((t) => t.name), authorName);
 
   // Gemini sceglie tra i tag già esistenti (enum nello schema, vedi
   // lib/ai/fontQuality.ts) — qui basta mappare nome -> id. connect() invece
@@ -233,6 +247,11 @@ export async function rateFontQualityWithAI(fontId: string) {
   });
 
   revalidatePath("/admin/fonts");
+  // Anche "/admin": le card "Key Tasks" (missingAuthorCount, dafontScrapeCount,
+  // ecc) sono props calcolate quando la pagina /admin viene renderizzata — senza
+  // questa revalidate restano ferme al numero del primo caricamento anche dopo
+  // aver risolto font, mostrando lo stesso conteggio ad ogni riapertura del modale.
+  revalidatePath("/admin");
   revalidateTag(CACHE_TAGS.ingredients, "max");
 
   return {
@@ -272,7 +291,7 @@ export async function getFontsNeedingIdentityDetection() {
 export async function hasFontsNeedingIdentityDetection() {
   await checkPermission("font:read");
   const where = await getIdentityCandidateWhere();
-  const count = await prisma.ingredient.count({ where });
+  const count = await withD1Retry(() => prisma.ingredient.count({ where }));
   return count > 0;
 }
 
@@ -320,6 +339,11 @@ export async function detectFontIdentityWithAI(fontId: string) {
   await prisma.ingredient.update({ where: { id: fontId }, data });
 
   revalidatePath("/admin/fonts");
+  // Anche "/admin": le card "Key Tasks" (missingAuthorCount, dafontScrapeCount,
+  // ecc) sono props calcolate quando la pagina /admin viene renderizzata — senza
+  // questa revalidate restano ferme al numero del primo caricamento anche dopo
+  // aver risolto font, mostrando lo stesso conteggio ad ogni riapertura del modale.
+  revalidatePath("/admin");
   revalidateTag(CACHE_TAGS.ingredients, "max");
 
   return {
@@ -361,7 +385,7 @@ export async function getFontsNeedingManualAuthor() {
 export async function getFontsNeedingManualAuthorCount() {
   await checkPermission("font:read");
   const where = await getManualAuthorCandidateWhere();
-  return prisma.ingredient.count({ where });
+  return withD1Retry(() => prisma.ingredient.count({ where }));
 }
 
 export async function assignManualFontAuthor(fontId: string, authorName: string) {
@@ -381,6 +405,11 @@ export async function assignManualFontAuthor(fontId: string, authorName: string)
   });
 
   revalidatePath("/admin/fonts");
+  // Anche "/admin": le card "Key Tasks" (missingAuthorCount, dafontScrapeCount,
+  // ecc) sono props calcolate quando la pagina /admin viene renderizzata — senza
+  // questa revalidate restano ferme al numero del primo caricamento anche dopo
+  // aver risolto font, mostrando lo stesso conteggio ad ogni riapertura del modale.
+  revalidatePath("/admin");
   revalidateTag(CACHE_TAGS.ingredients, "max");
 
   return { id: font.id, family: font.name, authorName: trimmed };
@@ -408,7 +437,7 @@ export async function getFontsNeedingManualLicense() {
 export async function getFontsNeedingManualLicenseCount() {
   await checkPermission("font:read");
   const where = await getManualLicenseCandidateWhere();
-  return prisma.ingredient.count({ where });
+  return withD1Retry(() => prisma.ingredient.count({ where }));
 }
 
 export async function assignManualFontLicense(fontId: string, licenseType: string) {
@@ -428,9 +457,127 @@ export async function assignManualFontLicense(fontId: string, licenseType: strin
   });
 
   revalidatePath("/admin/fonts");
+  // Anche "/admin": le card "Key Tasks" (missingAuthorCount, dafontScrapeCount,
+  // ecc) sono props calcolate quando la pagina /admin viene renderizzata — senza
+  // questa revalidate restano ferme al numero del primo caricamento anche dopo
+  // aver risolto font, mostrando lo stesso conteggio ad ogni riapertura del modale.
+  revalidatePath("/admin");
   revalidateTag(CACHE_TAGS.ingredients, "max");
 
   return { id: font.id, family: font.name, licenseType: trimmed };
+}
+
+// "Force Dafont Scraping" in dashboard: stesso universo di candidati di "Fill
+// Missing Authors" UNION "Fill Missing Licenses" (autore su un placeholder o
+// nullo, OPPURE licenza mai settata/terminale AI) — un font può mancare di
+// uno solo dei due campi e resta comunque candidato, la scrape prova sempre
+// entrambi ma scrive solo quello che serve davvero (vedi scrapeFontFromDafont).
+async function getDafontScrapeCandidateWhere() {
+  const nonRealAuthorIds = await getAllNonRealFontAuthorIds();
+  return {
+    OR: [
+      { authorId: { in: nonRealAuthorIds } },
+      { authorId: null },
+      { licenseType: null },
+      { licenseType: "" },
+      { licenseType: UNKNOWN_AFTER_AI_CHECK_LICENSE },
+    ],
+  };
+}
+
+export async function getFontsNeedingDafontScrape() {
+  await checkPermission("font:read");
+  const where = await getDafontScrapeCandidateWhere();
+  return prisma.ingredient.findMany({
+    where,
+    select: { id: true, name: true, creator: true, licenseType: true },
+    orderBy: { name: "asc" },
+  });
+}
+
+export async function getFontsNeedingDafontScrapeCount() {
+  await checkPermission("font:read");
+  const where = await getDafontScrapeCandidateWhere();
+  return withD1Retry(() => prisma.ingredient.count({ where }));
+}
+
+
+export async function scrapeFontFromDafont(fontId: string) {
+  await checkPermission("font:update");
+
+  const [font, nonRealAuthorIds] = await Promise.all([
+    prisma.ingredient.findUnique({
+      where: { id: fontId },
+      select: { id: true, name: true, authorId: true, licenseType: true },
+    }),
+    getAllNonRealFontAuthorIds(),
+  ]);
+  if (!font) throw new Error("Font not found");
+
+  // Stessa regola di detectFontIdentityWithAI: mai sovrascrivere un campo
+  // già risolto, anche se lo scrape torna comunque un valore per entrambi.
+  const needsAuthor = !font.authorId || nonRealAuthorIds.includes(font.authorId);
+  const needsLicense = !font.licenseType || font.licenseType === UNKNOWN_AFTER_AI_CHECK_LICENSE;
+  console.log(
+    `[DafontScrape] "${font.name}" (${font.id}) → needsAuthor=${needsAuthor} (authorId=${font.authorId}), needsLicense=${needsLicense} (licenseType=${JSON.stringify(font.licenseType)})`
+  );
+
+  const result = await scrapeDafontFontPage(font.name);
+
+  if (result.notFound) {
+    console.log(`[DafontScrape] "${font.name}" → not found on dafont.com, nothing to save`);
+    return {
+      id: font.id,
+      family: font.name,
+      notFound: true,
+      author: null as string | null,
+      licenseType: null as string | null,
+      scrapedAuthor: null as string | null,
+      scrapedLicense: null as string | null,
+    };
+  }
+
+  const data: { creator?: string; authorId?: string; licenseType?: string } = {};
+
+  if (needsAuthor && result.author) {
+    const resolvedAuthorId = await findOrCreateFontAuthorByName(result.author);
+    if (resolvedAuthorId) {
+      data.creator = result.author;
+      data.authorId = resolvedAuthorId;
+    } else {
+      console.log(`[DafontScrape] "${font.name}" → scraped author "${result.author}" resolved to no id (treated as unknown), skipped`);
+    }
+  } else if (!needsAuthor && result.author) {
+    console.log(`[DafontScrape] "${font.name}" → page has author "${result.author}" but font already has a real author, kept existing`);
+  }
+
+  if (needsLicense && result.license) {
+    data.licenseType = matchKnownLicenseType(result.license);
+  } else if (!needsLicense && result.license) {
+    console.log(`[DafontScrape] "${font.name}" → page has license "${result.license}" but font already has a license set (${JSON.stringify(font.licenseType)}), kept existing`);
+  }
+
+  console.log(`[DafontScrape] "${font.name}" → writing ${JSON.stringify(data)}`);
+
+  if (Object.keys(data).length > 0) {
+    await prisma.ingredient.update({ where: { id: fontId }, data });
+    revalidatePath("/admin/fonts");
+    revalidatePath("/admin");
+    revalidateTag(CACHE_TAGS.ingredients, "max");
+  }
+
+  return {
+    id: font.id,
+    family: font.name,
+    notFound: false,
+    author: data.creator ?? null,
+    licenseType: data.licenseType ?? null,
+    // Quello che la pagina conteneva davvero, indipendentemente da se sia
+    // stato scritto o no (es. già risolto in precedenza) — la UI lo usa per
+    // non mostrare mai un campo trovato sulla pagina come "niente trovato".
+    scrapedAuthor: result.author,
+    scrapedLicense: result.license,
+  };
 }
 
 export async function saveFont(prevState: any, formData: FormData, id?: string) {
@@ -662,5 +809,10 @@ export async function saveFont(prevState: any, formData: FormData, id?: string) 
   // client dopo un salvataggio riuscito, tornando esattamente alla lista
   // con lo stato con cui l'utente l'aveva lasciata.
   revalidatePath("/admin/fonts");
+  // Anche "/admin": le card "Key Tasks" (missingAuthorCount, dafontScrapeCount,
+  // ecc) sono props calcolate quando la pagina /admin viene renderizzata — senza
+  // questa revalidate restano ferme al numero del primo caricamento anche dopo
+  // aver risolto font, mostrando lo stesso conteggio ad ogni riapertura del modale.
+  revalidatePath("/admin");
   revalidateTag(CACHE_TAGS.ingredients, "max");
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Eye,
   EyeOff,
@@ -12,6 +13,9 @@ import {
   KeyRound,
   ShieldCheck,
   CircleDashed,
+  Loader2,
+  AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 import { Input, Label } from "@/components/common/Input";
 import { Select } from "@/components/common/Select";
@@ -20,8 +24,18 @@ import { Badge } from "@/components/common/Badge";
 import { SettingsSection, SettingsSubCard } from "@/components/admin/settings/SettingsSection";
 import { SaveBar } from "@/components/admin/settings/SaveBar";
 import { useSettingsForm } from "@/components/admin/settings/useSettingsForm";
-import { saveAdminCommunicationSettings } from "@/lib/actions/adminSettings";
+import { saveAdminCommunicationSettings, disconnectGmail, sendTestEmail } from "@/lib/actions/adminSettings";
 import { AdminSettings, CredentialEntry } from "@/types";
+
+const GMAIL_CALLBACK_STATUS: Record<string, string> = {
+  missing_code: "Google did not return an authorization code.",
+  missing_client_id: "Set an OAuth Client ID before connecting.",
+  missing_client_credentials: "Set both OAuth Client ID and Secret before connecting.",
+  no_refresh_token: "Google did not return a refresh token — try disconnecting and reconnecting.",
+  exchange_failed: "Token exchange with Google failed.",
+  state_mismatch: "Security check failed — please try connecting again.",
+  unauthorized: "You don't have permission to connect Gmail.",
+};
 
 const PROVIDER_OPTIONS = [
   { label: "Gmail (OAuth 2.0)", value: "gmail_oauth2" },
@@ -58,7 +72,42 @@ export default function AdminCommunicationTab({ initialSettings }: { initialSett
   const [senderName, setSenderName] = useState(initialSettings.gmailSenderName ?? "Typamine");
   const [copied, setCopied] = useState(false);
 
-  const redirectUri = "https://typamine.com/api/oauth/gmail/callback";
+  const [redirectUri, setRedirectUri] = useState("/api/oauth/gmail/callback");
+  useEffect(() => {
+    setRedirectUri(`${window.location.origin}/api/oauth/gmail/callback`);
+  }, []);
+
+  const searchParams = useSearchParams();
+  const [callbackNotice, setCallbackNotice] = useState<{ ok: boolean; message: string } | null>(null);
+  useEffect(() => {
+    const gmailStatus = searchParams.get("gmail");
+    if (!gmailStatus) return;
+    if (gmailStatus === "connected") {
+      setCallbackNotice({ ok: true, message: "Gmail connected successfully." });
+    } else {
+      const detail = searchParams.get("detail") || "";
+      setCallbackNotice({ ok: false, message: GMAIL_CALLBACK_STATUS[detail] || "Failed to connect Gmail." });
+    }
+  }, [searchParams]);
+
+  const [disconnecting, startDisconnect] = useTransition();
+  const handleDisconnect = () => {
+    startDisconnect(async () => {
+      await disconnectGmail();
+      setConnected(false);
+      setConnectedEmail("");
+    });
+  };
+
+  const [testingEmail, startTestEmail] = useTransition();
+  const [testEmailResult, setTestEmailResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const handleSendTestEmail = () => {
+    setTestEmailResult(null);
+    startTestEmail(async () => {
+      const result = await sendTestEmail();
+      setTestEmailResult(result);
+    });
+  };
 
   const [credentials, setCredentials] = useState<CredentialEntry[]>(
     initialSettings.credentialsVault.length > 0 ? initialSettings.credentialsVault : []
@@ -99,6 +148,21 @@ export default function AdminCommunicationTab({ initialSettings }: { initialSett
       subtitle="Connect the mail provider and credentials used for automated outbound email"
     >
       <form action={dispatch} className="space-y-10">
+        {callbackNotice && (
+          <div
+            className={`flex items-start gap-2.5 p-4 rounded-xl text-sm font-haas ${
+              callbackNotice.ok ? "bg-green-500/10 text-green-600 dark:text-green-400" : "bg-red-500/10 text-red-500"
+            }`}
+          >
+            {callbackNotice.ok ? (
+              <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+            )}
+            <p>{callbackNotice.message}</p>
+          </div>
+        )}
+
         <SettingsSubCard
           title="Outbound Email Provider"
           description="Choose which service sends transactional and automated email on the platform's behalf."
@@ -128,16 +192,8 @@ export default function AdminCommunicationTab({ initialSettings }: { initialSett
                 <span className="font-haas text-black dark:text-white">
                   Sending as <span className="font-bold">{connectedEmail || "account@gmail.com"}</span>
                 </span>
-                <Button
-                  type="button"
-                  variant="danger"
-                  size="sm"
-                  onClick={() => {
-                    setConnected(false);
-                    setConnectedEmail("");
-                  }}
-                >
-                  Disconnect
+                <Button type="button" variant="danger" size="sm" onClick={handleDisconnect} disabled={disconnecting}>
+                  {disconnecting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Disconnect"}
                 </Button>
               </div>
             )}
@@ -192,23 +248,33 @@ export default function AdminCommunicationTab({ initialSettings }: { initialSett
             </div>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
+              <a href="/api/oauth/gmail/authorize">
+                <Button type="button" variant={connected ? "outline" : "primary"} className="flex items-center gap-2">
+                  <GoogleMark />
+                  {connected ? "Reconnect with Google" : "Connect with Google"}
+                </Button>
+              </a>
               <Button
                 type="button"
-                variant={connected ? "outline" : "primary"}
-                onClick={() => {
-                  setConnected(true);
-                  setConnectedEmail(connectedEmail || "notifications@typamine.com");
-                }}
+                variant="secondary"
+                disabled={!connected || testingEmail}
+                onClick={handleSendTestEmail}
                 className="flex items-center gap-2"
               >
-                <GoogleMark />
-                {connected ? "Reconnect with Google" : "Connect with Google"}
-              </Button>
-              <Button type="button" variant="secondary" disabled={!connected} className="flex items-center gap-2">
-                <Send className="h-4 w-4" />
+                {testingEmail ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 Send Test Email
               </Button>
             </div>
+            {(clientId !== (initialSettings.gmailClientId ?? "") || clientSecret !== (initialSettings.gmailClientSecret ?? "")) && (
+              <p className="text-xs font-haas text-amber-500">
+                Save the OAuth Client ID/Secret above before connecting — "Connect with Google" uses the last saved values.
+              </p>
+            )}
+            {testEmailResult && (
+              <p className={`text-xs font-haas ${testEmailResult.ok ? "text-green-500" : "text-red-500"}`}>
+                {testEmailResult.message}
+              </p>
+            )}
             <input type="hidden" name="gmailConnected" value={connected ? "true" : "false"} />
             <input type="hidden" name="gmailConnectedEmail" value={connectedEmail} />
           </SettingsSubCard>

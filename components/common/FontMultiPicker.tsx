@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Search, Check, Type as TypeIcon, X } from "lucide-react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { Search, Check, Type as TypeIcon, X, Loader2 } from "lucide-react";
 import BaseModal from "@/components/common/BaseModal";
+import InViewTrigger from "@/components/common/InViewTrigger";
 import { Button } from "@/components/common/Button";
+import { getFontsPage, getFontsByIds } from "@/lib/actions/font";
 
 export interface FontMultiPickerFont {
   id: string;
@@ -14,7 +17,14 @@ export interface FontMultiPickerFont {
 
 interface FontMultiPickerProps {
   label?: string;
-  fonts: FontMultiPickerFont[];
+  /**
+   * Lista statica già fetchata dal chiamante — comportamento legacy, filtro
+   * client-side con troncamento a PREVIEW_LIMIT. Ometti questa prop per il
+   * fetch progressivo self-fetching (30 alla volta, mano a mano che si
+   * scrolla), consigliato per liste che possono crescere oltre poche decine
+   * — stesso pattern dual-mode di FontPicker.
+   */
+  fonts?: FontMultiPickerFont[];
   value: string[];
   onChange: (ids: string[]) => void;
   emptyLabel?: string;
@@ -23,7 +33,8 @@ interface FontMultiPickerProps {
 // Combina la ricerca live + preview reale del FontPicker (single-select) con
 // il multi-select a chip del TagPicker: qui serve entrambe le cose perché
 // ArchivePost.fonts è una relazione many-to-many, non un singolo font.
-const PREVIEW_LIMIT = 60;
+const PAGE_SIZE = 30;
+const PREVIEW_LIMIT = 60; // solo modalità legacy (fonts fornito)
 
 export default function FontMultiPicker({
   label,
@@ -32,46 +43,104 @@ export default function FontMultiPicker({
   onChange,
   emptyLabel = "No fonts available.",
 }: FontMultiPickerProps) {
+  const selfFetching = fonts === undefined;
+
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const selectedFonts = fonts.filter((f) => value.includes(f.id));
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return fonts;
-    return fonts.filter(
-      (f) => f.name.toLowerCase().includes(q) || (f.category || "").toLowerCase().includes(q)
-    );
-  }, [fonts, query]);
-
-  const visible = filtered.slice(0, PREVIEW_LIMIT);
-  const hiddenCount = filtered.length - visible.length;
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(query.trim()), 300);
+    return () => clearTimeout(t);
+  }, [query]);
 
   useEffect(() => {
     if (isOpen) {
       setQuery("");
+      setDebouncedQuery("");
       const t = setTimeout(() => inputRef.current?.focus(), 50);
       return () => clearTimeout(t);
     }
   }, [isOpen]);
 
+  // --- Modalità legacy: filtro client-side sulla lista fornita ---
+  const legacyFiltered = useMemo(() => {
+    if (selfFetching) return [];
+    const q = query.trim().toLowerCase();
+    if (!q) return fonts!;
+    return fonts!.filter(
+      (f) => f.name.toLowerCase().includes(q) || (f.category || "").toLowerCase().includes(q)
+    );
+  }, [fonts, query, selfFetching]);
+  const legacyVisible = legacyFiltered.slice(0, PREVIEW_LIMIT);
+  const legacyHiddenCount = legacyFiltered.length - legacyVisible.length;
+
+  // --- Modalità self-fetching: pagine da 30 via TanStack Query ---
+  const infiniteQuery = useInfiniteQuery({
+    queryKey: ["font-multi-picker", debouncedQuery],
+    queryFn: ({ pageParam }) => getFontsPage({ search: debouncedQuery, cursor: pageParam, limit: PAGE_SIZE }),
+    initialPageParam: null as string | null,
+    getNextPageParam: (last) => last.nextCursor,
+    enabled: selfFetching && isOpen,
+  });
+
+  const fetchedItems = useMemo(
+    () => (selfFetching ? infiniteQuery.data?.pages.flatMap((p) => p.items) ?? [] : []),
+    [selfFetching, infiniteQuery.data]
+  );
+  const lastPageSize = selfFetching
+    ? infiniteQuery.data?.pages[infiniteQuery.data.pages.length - 1]?.items.length ?? 0
+    : 0;
+  const triggerIndex = Math.max(0, fetchedItems.length - Math.ceil(lastPageSize / 2));
+
+  const visible = selfFetching ? fetchedItems : legacyVisible;
+
+  // Chip dei selezionati: risolti dalla lista visibile quando possibile, coi
+  // buchi (id selezionati ma non ancora nella pagina/lista corrente) presi
+  // con un fetch mirato per id — mai serve l'intero catalogo solo per
+  // mostrare il nome di 2-3 font già scelti.
+  const knownById = useMemo(() => {
+    const map = new Map<string, FontMultiPickerFont>();
+    (selfFetching ? fetchedItems : fonts!).forEach((f) => map.set(f.id, f));
+    return map;
+  }, [selfFetching, fetchedItems, fonts]);
+
+  const missingSelectedIds = useMemo(
+    () => value.filter((id) => !knownById.has(id)),
+    [value, knownById]
+  );
+  const missingLookup = useQuery({
+    queryKey: ["fonts-by-ids", missingSelectedIds.join(",")],
+    queryFn: () => getFontsByIds(missingSelectedIds),
+    enabled: missingSelectedIds.length > 0,
+  });
+
+  const selectedFonts = useMemo(() => {
+    const lookupById = new Map((missingLookup.data ?? []).map((f) => [f.id, f]));
+    return value
+      .map((id) => knownById.get(id) ?? lookupById.get(id))
+      .filter((f): f is FontMultiPickerFont => !!f);
+  }, [value, knownById, missingLookup.data]);
+
   const fontFaceCss = useMemo(() => {
-    return visible
+    return [...visible, ...selectedFonts]
+      .filter((f, idx, arr) => arr.findIndex((g) => g.id === f.id) === idx)
       .map((f) => {
         const woff2 = f.variants?.[0]?.woff2Url;
         if (!woff2) return "";
         return `@font-face { font-family: 'FontMultiPicker_${f.id}'; src: url('${woff2}') format('woff2'); font-display: swap; }`;
       })
       .join("\n");
-  }, [visible]);
+  }, [visible, selectedFonts]);
 
   const toggleFont = (id: string) => {
     onChange(value.includes(id) ? value.filter((v) => v !== id) : [...value, id]);
   };
 
   const removeFont = (id: string) => onChange(value.filter((v) => v !== id));
+
+  const noFontsAtAll = !selfFetching && fonts!.length === 0;
 
   return (
     <div className="w-full">
@@ -83,6 +152,7 @@ export default function FontMultiPicker({
 
       <div className="p-3 border border-black/10 dark:border-white/10 rounded-lg bg-white/50 dark:bg-zinc-900/50 space-y-3">
         <div className="flex flex-wrap gap-2 min-h-[1.75rem]">
+          {fontFaceCss && <style>{fontFaceCss}</style>}
           {selectedFonts.length === 0 && (
             <span className="text-xs text-zinc-400 italic">No fonts selected yet.</span>
           )}
@@ -102,11 +172,11 @@ export default function FontMultiPicker({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          disabled={fonts.length === 0}
+          disabled={noFontsAtAll}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border border-dashed border-black/20 dark:border-white/20 text-zinc-500 dark:text-zinc-400 hover:border-black/40 dark:hover:border-white/40 hover:text-black dark:hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <TypeIcon className="w-3.5 h-3.5" />
-          {fonts.length === 0 ? emptyLabel : "Add fonts..."}
+          {noFontsAtAll ? emptyLabel : "Add fonts..."}
         </button>
       </div>
 
@@ -118,7 +188,6 @@ export default function FontMultiPicker({
             </h3>
           </BaseModal.Header>
           <BaseModal.Body>
-            {fontFaceCss && <style>{fontFaceCss}</style>}
             <div className="space-y-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400 pointer-events-none" />
@@ -127,18 +196,18 @@ export default function FontMultiPicker({
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder={`Search ${fonts.length} fonts by name or category...`}
+                  placeholder={selfFetching ? "Search fonts by name..." : `Search ${fonts!.length} fonts by name or category...`}
                   className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
                 />
               </div>
 
               <div className="max-h-96 overflow-y-auto rounded-xl border border-black/10 dark:border-white/10 divide-y divide-black/5 dark:divide-white/5">
-                {visible.map((f) => {
+                {visible.map((f, idx) => {
                   const isSelected = value.includes(f.id);
                   const hasWoff2 = Boolean(f.variants?.[0]?.woff2Url);
-                  return (
+
+                  const row = (
                     <button
-                      key={f.id}
                       type="button"
                       onClick={() => toggleFont(f.id)}
                       className={`w-full flex items-center justify-between gap-4 px-4 py-3 text-left transition-colors ${isSelected ? "bg-blue/10 dark:bg-red/10" : "hover:bg-black/5 dark:hover:bg-white/5"
@@ -158,18 +227,40 @@ export default function FontMultiPicker({
                       {isSelected && <Check className="h-4 w-4 text-blue dark:text-red shrink-0" />}
                     </button>
                   );
+
+                  if (selfFetching && idx === triggerIndex && infiniteQuery.hasNextPage) {
+                    return (
+                      <InViewTrigger
+                        key={f.id}
+                        onVisible={() => {
+                          if (!infiniteQuery.isFetchingNextPage) infiniteQuery.fetchNextPage();
+                        }}
+                      >
+                        {row}
+                      </InViewTrigger>
+                    );
+                  }
+
+                  return <div key={f.id}>{row}</div>;
                 })}
 
-                {visible.length === 0 && (
+                {selfFetching && (infiniteQuery.isLoading || infiniteQuery.isFetchingNextPage) && (
+                  <div className="px-4 py-3 flex items-center justify-center gap-2 text-xs text-zinc-400">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    Loading fonts...
+                  </div>
+                )}
+
+                {visible.length === 0 && !(selfFetching && infiniteQuery.isLoading) && (
                   <div className="px-4 py-8 text-center text-xs text-zinc-400">
                     No fonts match &quot;{query}&quot;.
                   </div>
                 )}
               </div>
 
-              {hiddenCount > 0 && (
+              {!selfFetching && legacyHiddenCount > 0 && (
                 <p className="text-[10px] text-zinc-400 text-center">
-                  {hiddenCount} more font(s) hidden &mdash; refine your search to narrow the list.
+                  {legacyHiddenCount} more font(s) hidden &mdash; refine your search to narrow the list.
                 </p>
               )}
             </div>

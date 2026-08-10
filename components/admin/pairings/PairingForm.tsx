@@ -21,7 +21,9 @@ import {
   Plus,
 } from "lucide-react";
 import { Reorder } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { savePairing } from "@/lib/actions/pairing";
+import { getFontsPage, getFontsByIds } from "@/lib/actions/font";
 import { Button } from "@/components/common/Button";
 import FontPicker from "@/components/common/FontPicker";
 import TagPicker from "@/components/common/TagPicker";
@@ -145,11 +147,10 @@ function InsightModuleForm({
 
 interface PairingFormProps {
   initialData?: any;
-  fonts: any[];
   tags: any[];
 }
 
-export default function PairingForm({ initialData, fonts, tags }: PairingFormProps) {
+export default function PairingForm({ initialData, tags }: PairingFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -160,11 +161,36 @@ export default function PairingForm({ initialData, fonts, tags }: PairingFormPro
   const [autoSlug, setAutoSlug] = useState(!initialData?.slug);
   const [description, setDescription] = useState(initialData?.description || "");
   const [published, setPublished] = useState(initialData?.published ?? false);
-  const [primaryFontId, setPrimaryFontId] = useState(initialData?.primaryFontId || (fonts[0]?.id || ""));
-  const [secondaryFontId, setSecondaryFontId] = useState(initialData?.secondaryFontId || (fonts[1]?.id || fonts[0]?.id || ""));
+  // Font picker ora self-fetching (niente più intero catalogo passato da
+  // qui) — su una pairing NUOVA (nessun initialData) i default primary/secondary
+  // vengono presi dalla prima pagina appena arriva (vedi effect sotto),
+  // invece che da un array `fonts` già in mano.
+  const [primaryFontId, setPrimaryFontId] = useState<string>(initialData?.primaryFontId || "");
+  const [secondaryFontId, setSecondaryFontId] = useState<string>(initialData?.secondaryFontId || "");
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>(
     (initialData?.tags || []).map((t: any) => t.id)
   );
+
+  const defaultFontsQuery = useQuery({
+    queryKey: ["pairing-default-fonts"],
+    queryFn: () => getFontsPage({ limit: 2 }),
+    enabled: !initialData,
+  });
+  useEffect(() => {
+    const items = defaultFontsQuery.data?.items;
+    if (!items || items.length === 0) return;
+    setPrimaryFontId((prev) => prev || items[0]?.id || "");
+    setSecondaryFontId((prev) => prev || items[1]?.id || items[0]?.id || "");
+  }, [defaultFontsQuery.data]);
+
+  // Oggetti font completi (per il canvas preview e i nomi) risolti per id —
+  // mai serve l'intero catalogo solo per questi due.
+  const selectedFontIds = [primaryFontId, secondaryFontId].filter(Boolean);
+  const selectedFontsQuery = useQuery({
+    queryKey: ["fonts-by-ids", selectedFontIds.join(",")],
+    queryFn: () => getFontsByIds(selectedFontIds),
+    enabled: selectedFontIds.length > 0,
+  });
 
   // Insight Modules State
   const [insightModules, setInsightModules] = useState<InsightModule[]>(() => {
@@ -297,8 +323,8 @@ export default function PairingForm({ initialData, fonts, tags }: PairingFormPro
   }, [isCanvasModalOpen]);
 
   // Find selected font objects
-  const primaryFontObj = fonts.find((f) => f.id === primaryFontId);
-  const secondaryFontObj = fonts.find((f) => f.id === secondaryFontId);
+  const primaryFontObj = selectedFontsQuery.data?.find((f) => f.id === primaryFontId);
+  const secondaryFontObj = selectedFontsQuery.data?.find((f) => f.id === secondaryFontId);
 
   // Inject @font-face style tags for preview
   const primaryWoff2 = primaryFontObj?.variants?.[0]?.woff2Url;
@@ -734,7 +760,6 @@ export default function PairingForm({ initialData, fonts, tags }: PairingFormPro
             <div className="p-4 rounded-xl border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] relative z-20">
               <FontPicker
                 label="Primary Font (Title / Display) *"
-                fonts={fonts}
                 value={primaryFontId}
                 onChange={(val) => setPrimaryFontId(val)}
                 placeholder="Select primary font..."
@@ -745,7 +770,6 @@ export default function PairingForm({ initialData, fonts, tags }: PairingFormPro
             <div className="p-4 rounded-xl border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] relative z-10">
               <FontPicker
                 label="Secondary Font (Body / Subtitle) *"
-                fonts={fonts}
                 value={secondaryFontId}
                 onChange={(val) => setSecondaryFontId(val)}
                 placeholder="Select secondary font..."

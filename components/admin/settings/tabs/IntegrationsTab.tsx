@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BarChart3, Target, ShieldQuestion, MapPin } from "lucide-react";
+import { BarChart3, Target, ShieldQuestion, MapPin, Tag } from "lucide-react";
 import { Input } from "@/components/common/Input";
 import { Switch } from "@/components/common/Switch";
 import { SettingsSection, SettingsSubCard } from "@/components/admin/settings/SettingsSection";
@@ -17,6 +17,7 @@ function useIntegration(initial: Omit<IntegrationConfig, "active">) {
 export default function IntegrationsTab({ initialSettings }: { initialSettings: AdminSettings }) {
   const cfg = initialSettings.integrationsConfig;
   const [analytics, setAnalytics] = useIntegration({ measurementId: cfg.analytics?.measurementId ?? "", ...cfg.analytics });
+  const [tagManager, setTagManager] = useIntegration({ containerId: cfg.tagManager?.containerId ?? "", ...cfg.tagManager });
   const [pixel, setPixel] = useIntegration({ pixelId: cfg.pixel?.pixelId ?? "", ...cfg.pixel });
   const [recaptcha, setRecaptcha] = useIntegration({ siteKey: cfg.recaptcha?.siteKey ?? "", secretKey: cfg.recaptcha?.secretKey ?? "", ...cfg.recaptcha });
   const [maps, setMaps] = useIntegration({ apiKey: cfg.maps?.apiKey ?? "", ...cfg.maps });
@@ -26,7 +27,7 @@ export default function IntegrationsTab({ initialSettings }: { initialSettings: 
   const patch = (setter: (v: IntegrationConfig) => void, current: IntegrationConfig, key: string, value: string | boolean) =>
     setter({ ...current, [key]: value });
 
-  const integrationsConfigJson = JSON.stringify({ analytics, pixel, recaptcha, maps });
+  const integrationsConfigJson = JSON.stringify({ analytics, tagManager, pixel, recaptcha, maps });
 
   return (
     <SettingsSection title="Integrations" subtitle="Third-party services connected to the public website">
@@ -44,6 +45,22 @@ export default function IntegrationsTab({ initialSettings }: { initialSettings: 
                 leftIcon={<BarChart3 className="h-4 w-4" />}
                 value={analytics.measurementId as string}
                 onChange={(v) => patch(setAnalytics, analytics, "measurementId", v)}
+              />
+            )}
+          </SettingsSubCard>
+
+          <SettingsSubCard
+            title="Google Tag Manager"
+            description="Manage all tracking tags from one container instead of hardcoding scripts."
+            right={<Switch checked={tagManager.active} onChange={(v) => patch(setTagManager, tagManager, "active", v)} />}
+          >
+            {tagManager.active && (
+              <Input
+                label="Container ID"
+                placeholder="GTM-XXXXXXX"
+                leftIcon={<Tag className="h-4 w-4" />}
+                value={tagManager.containerId as string}
+                onChange={(v) => patch(setTagManager, tagManager, "containerId", v)}
               />
             )}
           </SettingsSubCard>

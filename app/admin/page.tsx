@@ -8,11 +8,14 @@ import {
   hasFontsNeedingIdentityDetection,
   getFontsNeedingManualAuthorCount,
   getFontsNeedingManualLicenseCount,
+  getFontsNeedingDafontScrapeCount,
 } from "@/lib/actions/font";
 import AIFontQualityButton from "@/components/admin/AIFontQualityButton";
 import AIFontIdentityButton from "@/components/admin/AIFontIdentityButton";
 import FillMissingAuthorsCard from "@/components/admin/FillMissingAuthorsCard";
 import FillMissingLicensesCard from "@/components/admin/FillMissingLicensesCard";
+import ForceDafontScrapingCard from "@/components/admin/ForceDafontScrapingCard";
+import ScrapeFromDafontCard from "@/components/admin/ScrapeFromDafontCard";
 import { Card } from "@/components/common/Card";
 
 interface QuickAction {
@@ -64,6 +67,8 @@ export default async function AdminDashboard() {
   const showAIIdentityDetection = canReadFonts && (await hasFontsNeedingIdentityDetection());
   const missingAuthorCount = canReadFonts ? await getFontsNeedingManualAuthorCount() : 0;
   const missingLicenseCount = canReadFonts ? await getFontsNeedingManualLicenseCount() : 0;
+  const dafontScrapeCount = canReadFonts ? await getFontsNeedingDafontScrapeCount() : 0;
+  const canImportFonts = hasPermission(session, "font", "create");
 
   // Archive/blog/pairings/collections condividono il permesso "font" per la
   // create, stessa convenzione già usata nelle rispettive list page.
@@ -115,9 +120,17 @@ export default async function AdminDashboard() {
       {/* Spazio rimanente (fuori da Quick Actions): griglia 2 colonne x 3
           righe, ogni widget del dashboard occupa una cella (1 col, 1 row) —
           per ora solo "Fill Missing Authors", altri ne seguiranno. */}
-      <div className="flex-1 grid grid-cols-2 grid-rows-3 gap-4">
-        {missingAuthorCount > 0 && <FillMissingAuthorsCard count={missingAuthorCount} />}
-        {missingLicenseCount > 0 && <FillMissingLicensesCard count={missingLicenseCount} />}
+      <div className="flex-1 ">
+        <h2 className="mb-3 text-4xl font-rezland font-black uppercase tracking-widest text-center text-white dark:text-red-200">
+          Key Tasks
+        </h2>
+
+        <div className="grid grid-cols-2 grid-rows-3 gap-4">
+          {missingAuthorCount > 0 && <FillMissingAuthorsCard count={missingAuthorCount} />}
+          {missingLicenseCount > 0 && <FillMissingLicensesCard count={missingLicenseCount} />}
+          {dafontScrapeCount > 0 && <ForceDafontScrapingCard count={dafontScrapeCount} />}
+          {canImportFonts && <ScrapeFromDafontCard />}
+        </div>
       </div>
 
       {hasQuickActions && (
