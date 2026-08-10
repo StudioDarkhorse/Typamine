@@ -165,6 +165,16 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Rollover';
+  src: url('/fonts/rollover/ROLLOVER.woff2') format('woff2'),
+       url('/fonts/rollover/ROLLOVER.woff') format('woff'),
+       url('/fonts/rollover/ROLLOVER.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -184,6 +194,7 @@
   --font-galaxytail: 'Galaxy Tail';
   --font-ikosdub-outline: 'Ikos Dub Outline';
   --font-ikosdub-solid: 'Ikos Dub Solid';
+  --font-rollover: 'Rollover';
 
   --color-red: #ff3131;
   --color-blue: #00cece;
@@ -357,6 +368,7 @@
   --font-galaxytail: var(--font-galaxytail), sans-serif;
   --font-ikosdub-outline: var(--font-ikosdub-outline), sans-serif;
   --font-ikosdub-solid: var(--font-ikosdub-solid), sans-serif;
+  --font-rollover: var(--font-rollover), sans-serif;
 
   /* Standard system mappings */
   --font-sans: var(--font-sans);
@@ -496,8 +508,8 @@ h3 {
   font-family: var(--font-rezland);
 }
 
-.font-rezland {
-  font-family: var(--font-rezland);
+.font-rollover {
+  font-family: var(--font-rollover);
 }
 
 /* Colore/sfondo dinamico per i content module (blog, pairing insight, ecc.):

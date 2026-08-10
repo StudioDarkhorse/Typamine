@@ -37,7 +37,7 @@ interface LabsTool {
 const TOOLS: LabsTool[] = [
   {
     slug: "font-face-generator",
-    title: "@font-face Generator",
+    title: "Fontface Generator",
     description: "Turn a font file into copy-paste-ready CSS. Stack WOFF2, WOFF and TTF/OTF sources in the right fallback order, tune weight, style and font-display, and preview it live — for when you're wiring a new typeface into a site and need clean, production-safe @font-face rules in seconds instead of writing them by hand.",
     icon: Code2,
     iconClass: "text-red",
@@ -84,10 +84,10 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
           stesso sfondo animato (fixedBackground: il canvas resta ancorato
           al viewport mentre scrolli). */}
       <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 p-8 sm:p-16 pt-32 min-h-dvh">
-        <h1 className="font-rezland text-3xl sm:text-5xl font-bold uppercase tracking-tight text-black dark:text-white max-w-3xl">
-          LAB TOOLS <span className="text-blue dark:text-red">//</span> Tools designed for Creatives and Developers
+        <h1 className="font-rollover text-3xl sm:text-5xl font-bold uppercase tracking-[1rem] text-blue-900 dark:text-redgray-200 max-w-5xl">
+        Tools designed for Creatives and Developers
         </h1>
-        <p className="text-zinc-700 dark:text-zinc-300 text-sm sm:text-base max-w-xl leading-relaxed font-haas">
+        <p className="text-zinc-700 dark:text-zinc-300 text-sm sm:text-base max-w-xl leading-relaxed font-haas font-bold">
           {ingredient ? (
             <>
               Technical utilities to process, package, and integrate font assets into modern web apps. Pre-loaded with{" "}
@@ -121,7 +121,7 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
                 />
 
                 <div className="relative z-10 flex items-center justify-end gap-2">
-                  <h3 className="font-rezland text-2xl font-bold text-black dark:text-white">{tool.title}</h3>
+                  <h3 className="font-rezland text-4xl font-bold text-black dark:text-white">{tool.title}</h3>
                 </div>
 
                 <p className="relative z-10 text-black/80 dark:text-white/80 text-md leading-relaxed flex-1">
