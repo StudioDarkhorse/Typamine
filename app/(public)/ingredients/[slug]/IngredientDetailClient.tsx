@@ -14,6 +14,7 @@ import { Badge } from "@/components/common/Badge";
 import BaseModal from "@/components/common/BaseModal";
 import IngredientHeader from "@/components/font/IngredientHeader";
 import { Ingredient } from "@/types";
+import { NON_REAL_FONT_AUTHOR_SLUGS } from "@/lib/constants/placeholderFontAuthors";
 
 // Licenze considerate abbastanza libere da consentire il download diretto —
 // tutte le altre (incluso "non ancora classificata") mostrano il modale di
@@ -236,12 +237,20 @@ export default function IngredientDetailClient({ ingredient, hasPairings = false
         <BaseModal.Body>
           <div className="space-y-4">
             <p className="text-sm text-zinc-600 dark:text-zinc-300 font-haas leading-relaxed">
-              We're currently reaching out to <span className="font-bold text-black dark:text-white">{ingredient.name}</span>'s author{ingredient.author ? "" : "(s)"} to secure a signed distribution agreement.
+              {ingredient.author && !NON_REAL_FONT_AUTHOR_SLUGS.includes(ingredient.author.slug) ? (
+                <>
+                  We're currently reaching out to <span className="font-bold text-black dark:text-white">{ingredient.author.name}</span> to secure a signed distribution agreement.
+                </>
+              ) : (
+                <>
+                  We're currently reaching out to <span className="font-bold text-black dark:text-white">{ingredient.name}</span>'s author(s) to secure a signed distribution agreement.
+                </>
+              )}
             </p>
             <p className="text-sm text-zinc-600 dark:text-zinc-300 font-haas leading-relaxed">
               Once the license is confirmed, this font will unlock for download right here — no extra steps needed on your end. We'd rather take the time to do this properly than offer a download we're not legally clear to give you.
             </p>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-haas leading-relaxed">
+            <p className="text-xs text-black dark:text-white italic font-haas leading-relaxed">
               In the meantime, feel free to explore the live preview, try it in the Labs Bench, or check out how it pairs with other typefaces in our Prescriptions.
             </p>
           </div>

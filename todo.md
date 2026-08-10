@@ -52,5 +52,5 @@ migliorare mobile menu trigger etc
 
 security checks 
 
-Modifica modal dowmload non aurtorizzato mostrando il nome dell'author se presente, creazione bot invio mail agli author cxon mail che infgoram chi siamo e cosa facciamo. spuegagli che se accettano gli dai acesso al loro admin panel etc. 
+, creazione bot invio mail agli author cxon mail che infgoram chi siamo e cosa facciamo. spuegagli che se accettano gli dai acesso al loro admin panel etc. 
 

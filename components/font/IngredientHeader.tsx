@@ -102,16 +102,30 @@ export default function IngredientHeader({
           order-1 su mobile: nome/autore per primi, sopra a score e voto. */}
       <div className="relative z-10 p-3 md:p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 w-full order-1 md:order-2">
         <div className="space-y-1">
-          <h1 className="flex flex-col lg:flex-row items-center lg:items-baseline gap-x-3 font-haas text-3xl lg:text-2xl font-bold text-glow-cyan dark:text-glow-red text-blue dark:text-red">
+          <h1 className="flex flex-col lg:flex-row items-start lg:items-baseline gap-x-2 gap-y-1 font-haas text-3xl lg:text-2xl font-bold text-glow-cyan dark:text-glow-red text-blue dark:text-red">
             {ingredient.name.replaceAll('_', " ")} 
-            <div className="hidden lg:block">
-              <span className="text-sm">by</span>
-              <Link href={`/ingredients?author=${ingredient.author?.slug}`} className="text-black dark:text-white font-bold text-sm underline"> {ingredient.author?.name}</Link>
-            </div>
-            <div className="lg:hidden flex gap-2 self-end">
-              <span className="text-sm">by</span>
-              <Link href={`/ingredients?author=${ingredient.author?.slug}`} className="text-black dark:text-white font-bold text-sm underline"> {ingredient.author?.name}</Link>
-            </div>
+            {ingredient.author && (
+              <>
+                <div className="hidden lg:inline-flex items-baseline gap-x-1 text-sm text-zinc-500 dark:text-zinc-400 font-normal">
+                  <span>by</span>
+                  <Link
+                    href={`/ingredients?author=${ingredient.author.slug}`}
+                    className="text-black dark:text-white font-bold hover:text-blue dark:hover:text-red transition-colors underline"
+                  >
+                    {ingredient.author.name}
+                  </Link>
+                </div>
+                <div className="lg:hidden flex items-baseline gap-x-1 text-xs text-zinc-500 dark:text-zinc-400 font-normal mt-1">
+                  <span>by</span>
+                  <Link
+                    href={`/ingredients?author=${ingredient.author.slug}`}
+                    className="text-black dark:text-white font-bold hover:text-blue dark:hover:text-red transition-colors underline"
+                  >
+                    {ingredient.author.name}
+                  </Link>
+                </div>
+              </>
+            )}
           </h1>
           <div className="hidden md:block text-zinc-500 dark:text-zinc-400 text-xs font-haas mt-1">
             CATEGORY: {ingredient.category}

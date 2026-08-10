@@ -2,7 +2,7 @@ import type { ComponentType } from "react";
 import Link from "next/link";
 import { Code2, RefreshCw, ArrowRight } from "lucide-react";
 import { getIngredientBySlug } from "@/lib/services/font";
-import LabsHubHeader from "./LabsHubHeader";
+import { ChromeBlobHero } from "@/components/cheyy/ChromeBlobHero";
 
 export const dynamic = "force-dynamic";
 
@@ -71,13 +71,35 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
   const qs = ingredientSlug ? `?ingredient=${encodeURIComponent(ingredientSlug)}` : "";
 
   return (
-    <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 min-h-dvh flex flex-col gap-8">
-      <LabsHubHeader ingredientName={ingredient?.name} />
+    <ChromeBlobHero
+      heightClassName="min-h-dvh"
+      contentClassName="relative z-10 w-full flex flex-col"
+      fixedBackground
+      blobColorClassName="bg-[#4FE8E8] dark:bg-[#FF3132]"
+      backgroundColorClassName="bg-[#EEF0F2] dark:bg-[#13100F]"
+    >
+      {/* Sezione hero: stessa impaginazione centrata di prima, ma come
+          sezione dentro il flusso invece che come singolo contenuto
+          dell'hero — il resto della pagina segue subito sotto, sullo
+          stesso sfondo animato (fixedBackground: il canvas resta ancorato
+          al viewport mentre scrolli). */}
+      <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 p-8 sm:p-16 pt-32 min-h-dvh">
+        <h1 className="font-rezland text-3xl sm:text-5xl font-bold uppercase tracking-tight text-black dark:text-white max-w-3xl">
+          LAB TOOLS <span className="text-blue dark:text-red">//</span> Tools designed for Creatives and Developers
+        </h1>
+        <p className="text-zinc-700 dark:text-zinc-300 text-sm sm:text-base max-w-xl leading-relaxed font-haas">
+          {ingredient ? (
+            <>
+              Technical utilities to process, package, and integrate font assets into modern web apps. Pre-loaded with{" "}
+              <span className="uppercase font-bold text-blue dark:text-red">&quot;{ingredient.name}&quot;</span>.
+            </>
+          ) : (
+            "Technical utilities to process, package, and integrate font assets into modern web apps."
+          )}
+        </p>
+      </div>
 
-      {/* flex-1 + items-center: sullo schermo desktop la griglia si centra
-          verticalmente nello spazio rimasto sotto l'header, invece di
-          restare ancorata in alto. */}
-      <div className="flex-1 flex items-center">
+      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-dvh">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
           {TOOLS.map((tool) => {
             const Icon = tool.icon;
@@ -85,7 +107,7 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
               <Link
                 key={tool.slug}
                 href={`/labs/${tool.slug}${qs}`}
-                className="group relative overflow-hidden border border-zinc-300 dark:border-zinc-800 rounded-lg p-6 flex flex-col gap-4 bg-white dark:bg-zinc-950/50 shadow-sm hover:shadow-xl hover:border-zinc-400 dark:hover:border-zinc-600 transition-all"
+                className="group relative overflow-hidden border border-zinc-300 dark:border-zinc-800 rounded-lg p-6 flex flex-col gap-4 backdrop-blur-md shadow-sm hover:shadow-xl hover:border-zinc-400 dark:hover:border-zinc-600 transition-all"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
@@ -110,6 +132,6 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
           })}
         </div>
       </div>
-    </div>
+    </ChromeBlobHero>
   );
 }
