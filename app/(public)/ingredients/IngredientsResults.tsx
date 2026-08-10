@@ -34,7 +34,7 @@ export default async function IngredientsResults({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-0">
         {items.map((item, idx) => (
-          <IngredientCard key={item.id} font={item} idx={(page - 1) * perPage + idx} />
+          <IngredientCard key={item.id} font={item} idx={(page - 1) * perPage + idx} fontSize={24}/>
         ))}
       </div>
 

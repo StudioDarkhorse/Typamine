@@ -75,9 +75,9 @@ export default function FormulaDetailClient({ formula, isCurated }: FormulaDetai
                 </h2>
               </div>
               {formula.fonts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {formula.fonts.map((font, idx) => (
-                    <IngredientCard key={font.id} font={font} idx={idx} />
+                    <IngredientCard key={font.id} font={font} idx={idx} fontSize={32} />
                   ))}
                 </div>
               ) : (
