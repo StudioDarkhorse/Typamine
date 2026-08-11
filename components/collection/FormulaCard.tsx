@@ -41,19 +41,19 @@ export const FormulaCard: React.FC<FormulaCardProps> = ({ formula, isCurated = f
     >
       <div className="space-y-1 min-w-0 flex-1">
         <div className="flex items-center flex-wrap gap-2">
-          <span className="font-haas text-[10px] bg-zinc-100 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800 px-1.5 py-0.5 rounded">
+          <span className="font-haas text-[10px] bg-zinc-100 dark:bg-zinc-900 text-ocragray-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 px-1.5 py-0.5 rounded">
             {displayCode}
           </span>
           <h3 className="font-haas text-lg font-bold text-foreground">{formula.name}</h3>
         </div>
-        <p className="text-zinc-500 dark:text-zinc-400 line-clamp-2">{formula.description}</p>
-        <p className="font-haas text-sm text-zinc-500 dark:text-zinc-400 mt-2">INGREDIENTS: {formula.fonts.slice(0, 2).map(f => f.name).join(" + ") + "..."} </p>
+        <p className="text-ocragray-800 dark:text-zinc-200 line-clamp-2">{formula.description}</p>
+        <p className="font-haas text-sm text-ocragray-800 dark:text-zinc-200 mt-2">INGREDIENTS: {formula.fonts.slice(0, 2).map(f => f.name).join(" + ") + "..."} </p>
       </div>
 
       <div className="shrink-0 font-haas text-[10px] flex flex-col items-end justify-between border-t sm:border-t-0 border-zinc-200 dark:border-zinc-800 pt-2 sm:pt-0.5 sm:pb-1 gap-2 sm:gap-0">
         {isCurated ? (
           <div className="pe-4">
-            <Badge className="!text-[9px] !py-0.5"  ping>
+            <Badge className="!text-[9px] !py-0.5" ping>
               Typamine Selection
             </Badge>
           </div>
@@ -62,8 +62,8 @@ export const FormulaCard: React.FC<FormulaCardProps> = ({ formula, isCurated = f
         )}
 
         <div className="flex flex-row items-center gap-2 font-haas text-lg font-bold text-red transition-colors pe-4 whitespace-nowrap hover:underline">
-           View All
-            <MoveRight size={12} className="icon-altalenante" />
+          View All
+          <MoveRight size={12} className="icon-altalenante" />
         </div>
       </div>
     </Link>

@@ -38,7 +38,7 @@ export function Switch({
             <span className="text-sm font-bold text-black dark:text-white">{label}</span>
           )}
           {description && (
-            <span className="text-xs text-zinc-500 dark:text-zinc-400 font-haas leading-relaxed">
+            <span className="text-xs text-ocragray-800 dark:text-zinc-200 font-haas leading-relaxed">
               {description}
             </span>
           )}

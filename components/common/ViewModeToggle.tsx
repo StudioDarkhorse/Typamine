@@ -34,7 +34,7 @@ export function ViewModeToggle({ paramKey = "view", className = "" }: ViewModeTo
   const baseBtn =
     "h-8 w-8 flex items-center justify-center rounded-md transition-colors";
   const active = "bg-blue/20 dark:bg-red/20 text-blue dark:text-red";
-  const inactive = "text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white";
+  const inactive = "text-ocragray-800 dark:text-zinc-200 hover:text-black dark:hover:text-white";
 
   return (
     <div className={cn("flex items-center gap-1 border border-zinc-200 dark:border-zinc-800 rounded-lg p-1 shrink-0", className)}>

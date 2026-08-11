@@ -11,21 +11,21 @@ interface PrescriptionCardProps {
 export const PrescriptionCard: React.FC<PrescriptionCardProps> = ({ prescription }) => {
   const imageUrl = prescription.imageUrl || prescription.imgUrl;
   const href = prescription.href || `/prescriptions/${prescription.slug}`;
-  const fontList = prescription.fonts && prescription.fonts.length > 0 
-    ? prescription.fonts 
+  const fontList = prescription.fonts && prescription.fonts.length > 0
+    ? prescription.fonts
     : [prescription.primaryFont, prescription.secondaryFont].filter(Boolean) as any[];
 
   const fontNames = fontList.map(f => f.name).join(" + ");
 
   return (
-    <Link 
+    <Link
       href={href as any}
       className="relative border border-zinc-200 dark:border-zinc-800 rounded-lg p-5 flex flex-col justify-between transition-all group overflow-hidden min-h-[220px] hover:border-zinc-400 dark:hover:border-zinc-600"
     >
       {/* Background Image with Overlay */}
       {imageUrl && (
         <>
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
             style={{ backgroundImage: `url(${imageUrl})` }}
           />
@@ -62,9 +62,9 @@ export const PrescriptionCard: React.FC<PrescriptionCardProps> = ({ prescription
         </div>
 
         <div className="flex-1 flex flex-col justify-end mt-4">
-          <p className="font-haas text-[10px] text-zinc-500 dark:text-zinc-400 font-bold mb-1 uppercase tracking-wider">{fontNames}</p>
+          <p className="font-haas text-[10px] text-ocragray-800 dark:text-zinc-200 font-bold mb-1 uppercase tracking-wider">{fontNames}</p>
           {prescription.description && (
-            <p className="font-haas text-zinc-500 dark:text-zinc-400 text-lg mb-4 line-clamp-2">
+            <p className="font-haas text-ocragray-800 dark:text-zinc-200 text-lg mb-4 line-clamp-2">
               {prescription.description}
             </p>
           )}

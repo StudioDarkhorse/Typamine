@@ -12,6 +12,10 @@ export type PopupFrequency = "first_visit" | "every_visit" | "periodic";
 
 export type NotificationChannel = "off" | "email" | "slack" | "both";
 
+// Metodo di autenticazione SMTP (vedi AdminSettings.smtpAuthType):
+// "password" = app password / auth base, "oauth2" = XOAUTH2 con refresh token.
+export type SmtpAuthType = "password" | "oauth2";
+
 // Vedi AdminSettings.notificationChannels (JSON) — le chiavi corrispondono
 // agli eventi mostrati nel tab Notifications.
 export interface NotificationChannels {
@@ -141,6 +145,31 @@ export interface AdminSettings {
   gmailSenderName?: string;
   gmailConnected: boolean;
   gmailConnectedEmail?: string;
+  // Admin Communication — SMTP (nodemailer), alternativa a Gmail OAuth2:
+  // attiva quando emailProvider === "smtp". Il refresh token Gmail NON è qui
+  // di proposito (resta solo server-side, vedi schema.prisma); la password
+  // SMTP invece serve nel form admin per poterla rileggere/modificare.
+  smtpHost?: string;
+  smtpPort: number;
+  smtpUser?: string;
+  smtpPassword?: string;
+  smtpSecure: boolean;
+  smtpFromEmail?: string;
+  smtpFromName?: string;
+  // "password" = app password (auth base, come nell'esempio Outlook/Gmail),
+  // "oauth2" = XOAUTH2: nodemailer ricava l'access token dal refresh token
+  // e smtpPassword viene ignorato.
+  smtpAuthType: SmtpAuthType;
+  smtpOauthClientId?: string;
+  smtpOauthClientSecret?: string;
+  smtpOauthRefreshToken?: string;
+  /** Endpoint token del provider. Vuoto = Google (default di nodemailer). */
+  smtpOauthAccessUrl?: string;
+  // Admin Communication — Resend (emailProvider = "resend"): API HTTP, unico
+  // provider oltre a Gmail che funziona anche su Cloudflare Workers.
+  resendApiKey?: string;
+  resendFromEmail?: string;
+  resendFromName?: string;
   credentialsVault: CredentialEntry[];
 
   // Integrations

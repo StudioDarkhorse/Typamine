@@ -138,7 +138,7 @@ export default function TagPicker({ label, tags, value, onChange, emptyLabel = "
           type="button"
           onClick={() => setIsOpen(true)}
           disabled={isEmptyDisabled}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border border-dashed border-black/20 dark:border-white/20 text-zinc-500 dark:text-zinc-400 hover:border-black/40 dark:hover:border-white/40 hover:text-black dark:hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border border-dashed border-black/20 dark:border-white/20 text-ocragray-800 dark:text-zinc-200 hover:border-black/40 dark:hover:border-white/40 hover:text-black dark:hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <TagIcon className="w-3.5 h-3.5" />
           {isEmptyDisabled ? emptyLabel : "Add tags..."}

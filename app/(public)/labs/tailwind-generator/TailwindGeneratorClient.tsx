@@ -91,7 +91,7 @@ ${fontFaceCode}
 
       <Panel>
         <PanelHeading dot="bg-red glow-red" title="Tailwind Setup" />
-        <p className="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed">
+        <p className="text-ocragray-800 dark:text-zinc-200 text-xs leading-relaxed">
           Register <span className="font-bold text-black dark:text-white">'{familyName || "Font Name"}'</span> as a
           utility class (<code className="font-mono text-[11px]">font-{tailwindVar}</code>) — pick the config style that
           matches your project.
@@ -117,7 +117,7 @@ ${fontFaceCode}
             <PanelHeading dot="bg-blue glow-cyan" title="Classic Config" />
             <Badge variant="outline">tailwind.config.js</Badge>
           </div>
-          <p className="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed">
+          <p className="text-ocragray-800 dark:text-zinc-200 text-xs leading-relaxed">
             JS-based config — works on Tailwind v3, and on v4 in JS-config compatibility mode.
           </p>
           <div className="relative">
@@ -133,7 +133,7 @@ ${fontFaceCode}
             <PanelHeading dot="bg-green" title="CSS-First Config" />
             <Badge variant="standard">Tailwind v4+</Badge>
           </div>
-          <p className="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed">
+          <p className="text-ocragray-800 dark:text-zinc-200 text-xs leading-relaxed">
             Native <code className="font-mono text-[11px]">@theme</code> syntax — no config file, everything lives in CSS.
           </p>
           <div className="relative">

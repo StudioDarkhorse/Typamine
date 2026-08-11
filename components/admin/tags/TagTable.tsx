@@ -100,7 +100,7 @@ export default function TagTable({ tags }: TagTableProps) {
                       {tag.name}
                     </p>
                     {tag.description && (
-                      <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 line-clamp-1">
+                      <p className="text-xs text-ocragray-800 dark:text-zinc-200 mt-0.5 line-clamp-1">
                         {tag.description}
                       </p>
                     )}

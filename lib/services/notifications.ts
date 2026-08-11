@@ -7,7 +7,7 @@
 import prisma from "@/lib/prisma";
 import { withSafeDbQuery } from "./dbMigration";
 import { ADMIN_SETTINGS_ID } from "./adminSettings";
-import { sendGmailEmail } from "./email";
+import { sendTemplateMail } from "./email";
 import { NotificationChannel, NotificationChannels } from "@/types";
 
 export class SlackNotConfiguredError extends Error {
@@ -64,6 +64,13 @@ export async function notifyEvent(eventKey: keyof NotificationChannels, subject:
 
   if (wantsSlack) await sendSlackNotification(`*${subject}*\n${message}`);
   if (wantsEmail && record?.gmailConnectedEmail) {
-    await sendGmailEmail({ to: record.gmailConnectedEmail, subject, html: `<p>${message}</p>` });
+    // Template condiviso invece di HTML inline: stesso layout/branding di
+    // tutte le altre mail di sistema, e `subject` qui fa da `title` (il
+    // template lo interpola sia nell'oggetto che nel titolo del corpo).
+    await sendTemplateMail({
+      to: record.gmailConnectedEmail,
+      template: "notification",
+      args: { title: subject, message },
+    });
   }
 }

@@ -84,7 +84,7 @@ export default function NotificationsTab({ initialSettings }: { initialSettings:
                   </div>
                   <div>
                     <p className="text-sm font-bold text-black dark:text-white">{event.title}</p>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 font-haas">{event.description}</p>
+                    <p className="text-xs text-ocragray-800 dark:text-zinc-200 font-haas">{event.description}</p>
                   </div>
                 </div>
                 <div className="w-full sm:w-48 shrink-0">
@@ -124,7 +124,7 @@ export default function NotificationsTab({ initialSettings }: { initialSettings:
                 <p className={`text-xs font-haas ${testResult.ok ? "text-green-500" : "text-red-500"}`}>{testResult.message}</p>
               )}
             </div>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-haas">
+            <p className="text-xs text-ocragray-800 dark:text-zinc-200 font-haas">
               Test sends against the last <em>saved</em> webhook URL — save first if you just changed it.
             </p>
           </SettingsSubCard>

@@ -15,12 +15,14 @@ import BaseModal from "@/components/common/BaseModal";
 import IngredientHeader from "@/components/font/IngredientHeader";
 import { Ingredient } from "@/types";
 import { NON_REAL_FONT_AUTHOR_SLUGS } from "@/lib/constants/placeholderFontAuthors";
+import { isFreeLicense } from "@/lib/constants/fontLicenseTypes";
 
 // Licenze considerate abbastanza libere da consentire il download diretto —
 // tutte le altre (incluso "non ancora classificata") mostrano il modale di
 // attesa consenso invece di scaricare, finché non c'è un accordo firmato
-// con l'autore.
-const FREE_LICENSES = new Set(["Free", "Open Source (SIL OFL)", "Public Domain"]);
+// con l'autore. Definizione condivisa (vedi lib/constants/fontLicenseTypes.ts):
+// lo stesso criterio conta i font "da autorizzare" nella mail all'autore, e
+// due liste separate avrebbero potuto divergere.
 
 interface IngredientDetailClientProps {
   ingredient: Ingredient;
@@ -33,7 +35,7 @@ export default function IngredientDetailClient({ ingredient, hasPairings = false
   const [isDownloading, setIsDownloading] = useState(false);
   const [isLicenseModalOpen, setIsLicenseModalOpen] = useState(false);
 
-  const isLicenseFree = ingredient.licenseType ? FREE_LICENSES.has(ingredient.licenseType) : false;
+  const isLicenseFree = isFreeLicense(ingredient.licenseType);
 
   const fontData = {
     name: ingredient.name,
@@ -169,7 +171,7 @@ export default function IngredientDetailClient({ ingredient, hasPairings = false
               {/* Top Section: Tags */}
               {hasTags && (
                 <div className="space-y-3">
-                  <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-haas block">
+                  <span className="text-xs font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200 font-haas block">
                     TAGS & CATEGORIES
                   </span>
                   <div className="flex flex-wrap gap-2">
@@ -194,7 +196,7 @@ export default function IngredientDetailClient({ ingredient, hasPairings = false
               {/* Bottom Section: Pairings */}
               {hasPairings && (
                 <div className="space-y-4 flex flex-col justify-end">
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">
+                  <p className="text-sm text-ocragray-800 dark:text-zinc-200 mt-1 leading-relaxed">
                     See examples of how we used this font in our Pairings.
                   </p>
                   <Link href={prescriptionsHref} className="inline-block self-end">
@@ -269,7 +271,7 @@ export default function IngredientDetailClient({ ingredient, hasPairings = false
       </BaseModal>
 
       <Cta
-        title={<>Need <span className="text-blue dark:text-red font-rezland px-2">integration</span> tools?</>}
+        title={<>Need <span className="text-blue-600 dark:text-red px-2">integration</span> tools?</>}
         subtitle="Head over to the Labs Bench for @font-face snippet generators, WCAG contrast ratio checkers for accessibility, Tailwind CSS utilities, and much more."
         align="right"
         bgImage="/images/ingredient/cta-bg.png"

@@ -246,7 +246,7 @@ export default function PostListClient({ postType, posts, totalCount, canUpdate,
             <p className="text-xl font-rezland text-center mb-8 font-bold text-black dark:text-white leading-tight">
               Delete {selectedIds.length} selected post{selectedIds.length !== 1 && "s"}?
             </p>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            <p className="text-sm text-ocragray-800 dark:text-zinc-200 leading-relaxed">
               This will permanently delete the selected posts from the database and any thumbnail/hero images from storage. This action cannot be undone.
             </p>
           </div>

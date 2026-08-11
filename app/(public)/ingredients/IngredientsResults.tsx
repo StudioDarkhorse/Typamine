@@ -32,7 +32,7 @@ export default async function IngredientsResults({
 
   return (
     <>
-      <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
         {`TOTAL INGREDIENTS: ${total}`}
       </p>
 
@@ -53,7 +53,7 @@ export default async function IngredientsResults({
       )}
 
       {items.length === 0 && (
-        <div className="text-center py-12 border border-zinc-200 dark:border-zinc-800 border-dashed rounded-lg text-zinc-500 dark:text-zinc-400 font-haas">
+        <div className="text-center py-12 border border-zinc-200 dark:border-zinc-800 border-dashed rounded-lg text-ocragray-800 dark:text-zinc-200 font-haas">
           NO COMPOUNDS FOUND FOR THIS CLASSIFICATION
         </div>
       )}

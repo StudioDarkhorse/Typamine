@@ -46,9 +46,10 @@ module.exports = {
         rezland: ["var(--font-rezland)", "sans-serif"],
         candyhaus: ["var(--font-candyhaus)", "sans-serif"],
         galaxytail: ["var(--font-galaxytail)", "sans-serif"],
-        "ikosdub-outline": ["var(--font-ikosdub-outline)", "sans-serif"],
-        "ikosdub-solid": ["var(--font-ikosdub-solid)", "sans-serif"],
-
+        yummy: ["var(--font-yummy)", "sans-serif"],
+        crenzo: ["var(--font-crenzo)", "sans-serif"],
+        revert: ["var(--font-revert)", "sans-serif"],
+        revertro: ["var(--font-revertro)", "sans-serif"],
       },
       keyframes: {
         "bounce-x": {

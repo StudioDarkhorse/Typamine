@@ -79,7 +79,7 @@ export default function IngredientsClient({ tags, children }: IngredientsClientP
       {children}
 
       <Cta
-        title={<>Need help finding <br /> <span className="text-blue dark:text-red font-rezland px-2">what you&apos;re looking for?</span></>}
+        title={<>Need help finding <br /> <span className="text-blue-600 dark:text-red"> what you&apos;re looking for?</span></>}
         subtitle="Explore our Curated Collections to find the perfect typographic bundles ready to be used in your next project."
         align="left"
         useGrainient

@@ -109,9 +109,9 @@ export function ListHeaderHandlers({
         {/* Mass Actions (Visibili solo in selection mode) */}
         {isSelectionMode ? (
           <div className="flex items-center gap-4">
-                         <span className="text-bluegray-900 dark:text-redgray-200  text-sm font-bold whitespace-nowrap">
-                  {selectedCount} Selected
-                </span>
+            <span className="text-bluegray-900 dark:text-redgray-200  text-sm font-bold whitespace-nowrap">
+              {selectedCount} Selected
+            </span>
             {massActions.map((action, idx) => (
               <Button
                 key={idx}
@@ -170,7 +170,7 @@ export function ListHeaderHandlers({
               </Button>
             ) : (
               <div className="flex items-center gap-4">
-   
+
                 <Button
                   onClick={onToggleSelectionMode}
                   variant="outline"
@@ -221,7 +221,7 @@ export function ListPagination({
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between px-8 py-5 border-t  bg-bluegray-100 dark:bg-redgray-900/50  border-black/5 dark:border-white/5 gap-4">
-      <div className="text-xs text-zinc-500 dark:text-zinc-400">
+      <div className="text-xs text-ocragray-800 dark:text-zinc-200">
         Showing{" "}
         <span className="font-bold text-black dark:text-white">
           {(page - 1) * perPage + 1}

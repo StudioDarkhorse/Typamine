@@ -315,8 +315,8 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
               type="button"
               onClick={() => setActiveFormTab("content")}
               className={`px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeFormTab === "content"
-                  ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm"
-                  : "text-zinc-500 hover:text-black dark:hover:text-white"
+                ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm"
+                : "text-zinc-500 hover:text-black dark:hover:text-white"
                 }`}
             >
               Content
@@ -325,8 +325,8 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
               type="button"
               onClick={() => setActiveFormTab("seo")}
               className={`px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${activeFormTab === "seo"
-                  ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm"
-                  : "text-zinc-500 hover:text-black dark:hover:text-white"
+                ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm"
+                : "text-zinc-500 hover:text-black dark:hover:text-white"
                 }`}
             >
               SEO
@@ -484,7 +484,7 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
               <div className="flex items-center justify-between p-4 border border-black/5 dark:border-white/5 rounded-xl bg-black/5 dark:bg-white/5">
                 <div>
                   <p className="text-sm font-bold text-black dark:text-white">Publish Post</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">Make this post publicly visible on /{publicRouteBase}</p>
+                  <p className="text-xs text-ocragray-800 dark:text-zinc-200">Make this post publicly visible on /{publicRouteBase}</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -506,7 +506,7 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
                 <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
                   Hero Image
                 </h3>
-                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 -mt-2">Shown at the top of the post's detail page.</p>
+                <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 -mt-2">Shown at the top of the post's detail page.</p>
 
                 <ImageDropInput
                   name="image"
@@ -711,7 +711,7 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
                 <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
                   Search Engine Basics
                 </h3>
-                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1">Meta tags used by search engines for this post's own page.</p>
+                <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 mt-1">Meta tags used by search engines for this post's own page.</p>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -781,7 +781,7 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
               <div className="flex items-center justify-between p-4 border border-black/5 dark:border-white/5 rounded-xl bg-black/5 dark:bg-white/5">
                 <div>
                   <p className="text-sm font-bold text-black dark:text-white">Hide from Search Engines</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">Adds a "noindex" directive — the page stays reachable but won't be indexed.</p>
+                  <p className="text-xs text-ocragray-800 dark:text-zinc-200">Adds a "noindex" directive — the page stays reachable but won't be indexed.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -800,7 +800,7 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
               <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
                 Open Graph
               </h3>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-400 -mt-2">How this post looks when shared on Facebook, LinkedIn, iMessage, etc.</p>
+              <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 -mt-2">How this post looks when shared on Facebook, LinkedIn, iMessage, etc.</p>
 
               <ImageDropInput
                 inputRef={ogImagePreview.inputRef}
@@ -851,7 +851,7 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
               <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
                 Twitter / X
               </h3>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-400 -mt-2">How this post looks when shared on Twitter/X.</p>
+              <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 -mt-2">How this post looks when shared on Twitter/X.</p>
 
               <ImageDropInput
                 inputRef={twitterImagePreview.inputRef}

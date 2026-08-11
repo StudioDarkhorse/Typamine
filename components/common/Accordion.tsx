@@ -14,11 +14,11 @@ export interface AccordionProps {
   contentClassName?: string;
 }
 
-export function Accordion({ 
-  title, 
-  children, 
-  isOpen: controlledIsOpen, 
-  onToggle, 
+export function Accordion({
+  title,
+  children,
+  isOpen: controlledIsOpen,
+  onToggle,
   className,
   contentClassName
 }: AccordionProps) {
@@ -52,12 +52,12 @@ export function Accordion({
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="text-zinc-500 dark:text-zinc-400 shrink-0"
+          className="text-ocragray-800 dark:text-zinc-200 shrink-0"
         >
           <ChevronDown className="h-4 w-4" />
         </motion.div>
       </button>
-      
+
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div

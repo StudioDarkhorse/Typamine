@@ -91,7 +91,7 @@ export const Cta: React.FC<CtaProps> = ({
         {useGlassmorphism ? (
           <GlassSurface width="100%" height="auto" borderRadius={24} brightness={10} opacity={1.1} blur={25} backgroundOpacity={1} className="p-6 md:p-10  bg-red-500">
             <div className={`flex flex-col w-full ${alignStyles[align]}`}>
-              <h2 className="font-haas text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-tight mb-4">
+              <h2 className="font-crenzo text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-tight mb-4">
                 {title}
               </h2>
               {subtitle && (
@@ -108,7 +108,7 @@ export const Cta: React.FC<CtaProps> = ({
           </GlassSurface>
         ) : (
           <div className={`flex flex-col w-full ${alignStyles[align]}`}>
-            <h2 className="font-haas text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-tight mb-4">
+            <h2 className="font-crenzo text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-tight mb-4">
               {title}
             </h2>
             {subtitle && (

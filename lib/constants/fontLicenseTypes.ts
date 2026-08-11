@@ -21,6 +21,18 @@ export type FontLicenseType = (typeof FONT_LICENSE_TYPES)[number];
 // FONT_LICENSE_TYPES "reali": non compare nel select del form admin).
 export const UNKNOWN_AFTER_AI_CHECK_LICENSE = "Unknown (AI Checked)";
 
+// Licenze abbastanza libere da non richiedere un accordo con l'autore per
+// distribuire il font. Tutto il resto (Free for Personal Use, Demo,
+// Donationware, Commercial, o licenza ignota) richiede autorizzazione — è il
+// criterio usato sia per il download diretto lato pubblico
+// (app/(public)/ingredients/[slug]) sia per contare i font "da autorizzare"
+// nella mail di primo contatto all'autore (lib/actions/fontAuthor.ts).
+export const FREE_LICENSE_TYPES: string[] = ["Free", "Open Source (SIL OFL)", "Public Domain"];
+
+export function isFreeLicense(licenseType: string | null | undefined): boolean {
+  return !!licenseType && FREE_LICENSE_TYPES.includes(licenseType);
+}
+
 // Etichette osservate sui badge licenza di dafont.com (link vicino al numero
 // download, es. "[100% Free](.../faq.php#copyright)" — vedi lib/services/dafontScraper.ts)
 // mappate ai FONT_LICENSE_TYPES canonici. Tassonomia diversa dalla nostra

@@ -32,11 +32,10 @@ export const ThemeToggle: React.FC = () => {
       title="Toggle Lab State"
     >
       <span
-        className={`w-1.5 h-1.5 rounded-full transition-all ${
-          theme === "dark" ? "bg-[#ff3131] glow-red animate-pulse" : "bg-[#00cece] glow-cyan"
-        }`}
+        className={`w-1.5 h-1.5 rounded-full transition-all ${theme === "dark" ? "bg-[#ff3131] glow-red animate-pulse" : "bg-[#00cece] glow-cyan"
+          }`}
       />
-      <span className="text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider">
+      <span className="text-ocragray-800 dark:text-zinc-200 font-bold uppercase tracking-wider">
         {theme === "dark" ? "REACTION (DARK)" : "STABILITY (LIGHT)"}
       </span>
     </button>

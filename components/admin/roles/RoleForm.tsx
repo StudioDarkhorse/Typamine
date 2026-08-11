@@ -146,7 +146,7 @@ export default function RoleForm({ role, allPermissions }: { role?: any, allPerm
         </BaseModal.Header>
         <BaseModal.Body>
           <div className="space-y-4">
-            <p className="text-zinc-500 dark:text-zinc-400 font-haas">
+            <p className="text-ocragray-800 dark:text-zinc-200 font-haas">
               We encountered an error while trying to save the role configuration:
             </p>
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 font-bold text-sm">

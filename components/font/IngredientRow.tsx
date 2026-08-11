@@ -56,7 +56,7 @@ export const IngredientRow: React.FC<FontRowProps> = ({ font, idx, linklabel = "
         {/* Header: nome + meta (varianti, licenza) */}
         <div className="flex items-center justify-between gap-4 font-haas">
           <h3 className="font-bold text-sm text-foreground truncate">{font.name.replaceAll("_", " ")}</h3>
-          <div className="flex items-center gap-4 shrink-0 text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+          <div className="flex items-center gap-4 shrink-0 text-[10px] uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
             <span>
               {variantsCount} style{variantsCount === 1 ? "" : "s"}
             </span>
@@ -93,7 +93,7 @@ export const IngredientRow: React.FC<FontRowProps> = ({ font, idx, linklabel = "
 
         {/* Footer: autore + CTA */}
         <div className="pt-3 flex justify-between items-center border-t border-zinc-400/50 font-haas">
-          <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
+          <span className="text-[10px] text-ocragray-800 dark:text-zinc-200">
             DESIGNED BY <span className="text-foreground font-bold">{getPublicCreatorLabel(font)}</span>
           </span>
           <span className="flex flex-row items-center gap-2 text-sm text-red hover:underline transition-colors">
@@ -108,7 +108,7 @@ export const IngredientRow: React.FC<FontRowProps> = ({ font, idx, linklabel = "
           interpretabile come un click sulla card qualunque cosa tu ci faccia. */}
       <div className="absolute inset-x-0 bottom-3 flex justify-center opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-20">
         <div className="flex items-center gap-2.5 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-full px-3.5 py-1.5 shadow-lg">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Size</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">Size</span>
           <input
             type="range"
             min={MIN_SIZE}

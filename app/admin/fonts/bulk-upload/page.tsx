@@ -493,7 +493,7 @@ export default function BulkUploadPage() {
               size="md"
               roundness="md"
               onClick={() => setIsFilterModalOpen(true)}
-              className="flex items-center gap-2 font-bold text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400"
+              className="flex items-center gap-2 font-bold text-[10px] uppercase tracking-widest text-ocragray-800 dark:text-zinc-200"
             >
               <Filter className="h-3.5 w-3.5" />
               Filter &amp; Search
@@ -555,13 +555,13 @@ export default function BulkUploadPage() {
               onChange={(e) => setLocalFile(e.target.files?.[0] || null)}
             />
             <div className="h-11 w-11 rounded-2xl bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center">
-              <FolderDown className="h-5 w-5 text-zinc-500 dark:text-zinc-400" />
+              <FolderDown className="h-5 w-5 text-ocragray-800 dark:text-zinc-200" />
             </div>
             <div className="text-center px-6">
               <p className="text-sm font-bold text-black dark:text-white">
                 {localFile ? localFile.name : "No archive selected"}
               </p>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1 font-semibold uppercase tracking-wider max-w-sm mx-auto">
+              <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 mt-1 font-semibold uppercase tracking-wider max-w-sm mx-auto">
                 One .zip, one folder per font family, .ttf/.otf/.woff/.woff2 files inside each folder
               </p>
             </div>
@@ -580,7 +580,7 @@ export default function BulkUploadPage() {
             <Loader2 className="h-8 w-8 text-cyan-500 animate-spin" />
             <div className="text-center space-y-1">
               <p className="text-xs font-bold uppercase tracking-widest text-black dark:text-white">Fetching Font Data</p>
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Please wait...</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-ocragray-800 dark:text-zinc-200">Please wait...</p>
             </div>
           </div>
         ) : (
@@ -588,13 +588,13 @@ export default function BulkUploadPage() {
             {/* List Header Results Meta */}
             {filteredFonts.length > 0 && (
               <div className="flex items-center justify-between mb-2">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
                   Showing <span className="text-black dark:text-white font-black">
                     {currentPage * itemsPerPage + 1}&ndash;{Math.min((currentPage + 1) * itemsPerPage, filteredFonts.length)}
                   </span>
                   {" "}of {filteredFonts.length.toLocaleString()} families
                 </p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
                   <span className={selectedFamilies.size > 0 ? "text-cyan-600 dark:text-cyan-400 font-black" : ""}>
                     {selectedFamilies.size} selected
                   </span>
@@ -632,14 +632,14 @@ export default function BulkUploadPage() {
                             {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
                           </div>
                           <div className="min-w-0">
-                            <h4 className={`text-sm font-bold leading-tight truncate transition-colors ${isSelected ? "text-black dark:text-white" : "text-zinc-500 dark:text-zinc-400"}`}>
+                            <h4 className={`text-sm font-bold leading-tight truncate transition-colors ${isSelected ? "text-black dark:text-white" : "text-ocragray-800 dark:text-zinc-200"}`}>
                               {font.family}
                             </h4>
                           </div>
                         </div>
 
                         <div className="shrink-0 flex flex-col items-end gap-1.5">
-                          <span className={`inline-flex items-center text-[10px] font-black uppercase tracking-wider ${isVar ? 'text-cyan-500' : 'text-zinc-500 dark:text-zinc-400'}`}>
+                          <span className={`inline-flex items-center text-[10px] font-black uppercase tracking-wider ${isVar ? 'text-cyan-500' : 'text-ocragray-800 dark:text-zinc-200'}`}>
                             {isVar ? "Variable" : "Static"}
                           </span>
                         </div>
@@ -666,21 +666,21 @@ export default function BulkUploadPage() {
             {filteredFonts.length === 0 && fonts.length === 0 && (
               <div className="flex flex-col items-center justify-center py-20 gap-4 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 text-center">
                 <div className="h-11 w-11 rounded-2xl bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center">
-                  <Search className="h-5 w-5 text-zinc-500 dark:text-zinc-400" />
+                  <Search className="h-5 w-5 text-ocragray-800 dark:text-zinc-200" />
                 </div>
                 <div>
                   <p className="text-sm font-bold text-black dark:text-white">No results yet</p>
-                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1 font-semibold uppercase tracking-wider">Open filters and trigger your search setup</p>
+                  <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 mt-1 font-semibold uppercase tracking-wider">Open filters and trigger your search setup</p>
                 </div>
               </div>
             )}
 
             {filteredFonts.length === 0 && fonts.length > 0 && (
               <div className="flex flex-col items-center justify-center py-16 gap-3 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 text-center">
-                <AlertCircle className="h-8 w-8 text-zinc-500 dark:text-zinc-400" />
+                <AlertCircle className="h-8 w-8 text-ocragray-800 dark:text-zinc-200" />
                 <div>
                   <p className="text-sm font-bold text-black dark:text-white">No matches</p>
-                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1 font-semibold uppercase tracking-wider">Try adjusting your search or filters</p>
+                  <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 mt-1 font-semibold uppercase tracking-wider">Try adjusting your search or filters</p>
                 </div>
               </div>
             )}
@@ -691,9 +691,9 @@ export default function BulkUploadPage() {
       {/* ─── Bottom Pagination Area (Spinta in basso grazie a justify-between) ─── */}
       {totalPages > 1 && !isLoading && (
         <div className="flex items-center justify-between w-full pt-4">
-          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+          <p className="text-[10px] font-black uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
             Page {currentPage + 1}{" "}
-            <span className="text-zinc-500 dark:text-zinc-400">/</span>{" "}
+            <span className="text-ocragray-800 dark:text-zinc-200">/</span>{" "}
             {totalPages}
           </p>
           <div className="flex items-center gap-2">
@@ -724,7 +724,7 @@ export default function BulkUploadPage() {
                     onClick={() => setCurrentPage(page)}
                     className={`h-7 min-w-7 px-2 rounded-lg text-[10px] font-black transition-all ${page === currentPage
                       ? "bg-cyan-500 text-white shadow-sm shadow-cyan-500/30"
-                      : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                      : "text-ocragray-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                       }`}
                   >
                     {page + 1}
@@ -767,7 +767,7 @@ export default function BulkUploadPage() {
                 onClick={() => setIsFilterModalOpen(false)}
                 className="p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
               >
-                <X className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+                <X className="h-4 w-4 text-ocragray-800 dark:text-zinc-200" />
               </button>
             </div>
 
@@ -848,7 +848,7 @@ export default function BulkUploadPage() {
                     <span className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 transition-colors ${vfOnly ? "border-cyan-500 bg-cyan-500" : "border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-800"}`}>
                       <span className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow-sm transition-transform mt-px ${vfOnly ? "translate-x-3.5" : "translate-x-px"}`} />
                     </span>
-                    <span className={`text-[10px] font-black uppercase tracking-wider whitespace-nowrap ${vfOnly ? "text-cyan-700 dark:text-cyan-400" : "text-zinc-500 dark:text-zinc-400"}`}>
+                    <span className={`text-[10px] font-black uppercase tracking-wider whitespace-nowrap ${vfOnly ? "text-cyan-700 dark:text-cyan-400" : "text-ocragray-800 dark:text-zinc-200"}`}>
                       {vfOnly ? "Variable Layouts Only" : "All Typography Types"}
                     </span>
                   </button>
@@ -916,7 +916,7 @@ export default function BulkUploadPage() {
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">Batch Import</h3>
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 mt-0.5">
                     Downloading &middot; Converting &middot; Saving
                   </p>
                 </div>
@@ -932,7 +932,7 @@ export default function BulkUploadPage() {
           <BaseModal.Body>
             <div className="space-y-6">
               <div className="space-y-2">
-                <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
                   <span>Progress</span>
                   <span className="tabular-nums">{importProgress} / {importTotal}</span>
                 </div>

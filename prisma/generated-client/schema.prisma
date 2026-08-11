@@ -242,8 +242,39 @@ model AdminSettings {
   // per ottenere un access token fresco ad ogni invio. Non fa parte del tipo
   // pubblico AdminSettings in types/index.ts per lo stesso motivo.
   gmailRefreshToken   String?
+
+  // Admin Communication — SMTP (nodemailer). Alternativa a Gmail OAuth2,
+  // selezionabile con emailProvider = "smtp". smtpPassword per Gmail è una
+  // "app password" (richiede la verifica in due passaggi attiva sull'account),
+  // non la password vera. smtpSecure = true implica porta 465 (TLS implicito),
+  // false = 587 con STARTTLS.
+  smtpHost              String?
+  smtpPort              Int     @default(587)
+  smtpUser              String?
+  smtpPassword          String?
+  smtpSecure            Boolean @default(false)
+  smtpFromEmail         String?
+  smtpFromName          String?
+  // "password" = app password (auth base), "oauth2" = XOAUTH2. Con oauth2 il
+  // campo smtpPassword è ignorato: nodemailer ricava da sé un access token
+  // dal refresh token, chiamando smtpOauthAccessUrl (endpoint token del
+  // provider — Google di default, per Microsoft va messo il suo).
+  smtpAuthType          String  @default("password")
+  smtpOauthClientId     String?
+  smtpOauthClientSecret String?
+  smtpOauthRefreshToken String?
+  smtpOauthAccessUrl    String?
+
+  // Admin Communication — Resend (emailProvider = "resend"). API HTTP pura,
+  // quindi a differenza di SMTP funziona anche sul runtime Cloudflare Workers.
+  // Il dominio del mittente va verificato nella dashboard Resend, altrimenti
+  // l'unico invio permesso è verso il proprio indirizzo da onboarding@resend.dev.
+  resendApiKey    String?
+  resendFromEmail String?
+  resendFromName  String?
+
   // JSON array of {id, label, value} — generic API key/credential vault.
-  credentialsVault    String?
+  credentialsVault String?
 
   // Integrations — JSON: { analytics, pixel, recaptcha, maps }, each
   // { active, ...providerFields }. Kept as one JSON blob instead of a column

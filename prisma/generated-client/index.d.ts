@@ -12955,6 +12955,7 @@ export namespace Prisma {
     letterTFontSizePercent: number | null
     heroWordmarkLoopSpeed: number | null
     popupFrequencyDays: number | null
+    smtpPort: number | null
     sessionTimeoutMinutes: number | null
     auditRetentionDays: number | null
   }
@@ -12963,6 +12964,7 @@ export namespace Prisma {
     letterTFontSizePercent: number | null
     heroWordmarkLoopSpeed: number | null
     popupFrequencyDays: number | null
+    smtpPort: number | null
     sessionTimeoutMinutes: number | null
     auditRetentionDays: number | null
   }
@@ -13000,6 +13002,21 @@ export namespace Prisma {
     gmailConnected: boolean | null
     gmailConnectedEmail: string | null
     gmailRefreshToken: string | null
+    smtpHost: string | null
+    smtpPort: number | null
+    smtpUser: string | null
+    smtpPassword: string | null
+    smtpSecure: boolean | null
+    smtpFromEmail: string | null
+    smtpFromName: string | null
+    smtpAuthType: string | null
+    smtpOauthClientId: string | null
+    smtpOauthClientSecret: string | null
+    smtpOauthRefreshToken: string | null
+    smtpOauthAccessUrl: string | null
+    resendApiKey: string | null
+    resendFromEmail: string | null
+    resendFromName: string | null
     credentialsVault: string | null
     integrationsConfig: string | null
     notificationChannels: string | null
@@ -13050,6 +13067,21 @@ export namespace Prisma {
     gmailConnected: boolean | null
     gmailConnectedEmail: string | null
     gmailRefreshToken: string | null
+    smtpHost: string | null
+    smtpPort: number | null
+    smtpUser: string | null
+    smtpPassword: string | null
+    smtpSecure: boolean | null
+    smtpFromEmail: string | null
+    smtpFromName: string | null
+    smtpAuthType: string | null
+    smtpOauthClientId: string | null
+    smtpOauthClientSecret: string | null
+    smtpOauthRefreshToken: string | null
+    smtpOauthAccessUrl: string | null
+    resendApiKey: string | null
+    resendFromEmail: string | null
+    resendFromName: string | null
     credentialsVault: string | null
     integrationsConfig: string | null
     notificationChannels: string | null
@@ -13100,6 +13132,21 @@ export namespace Prisma {
     gmailConnected: number
     gmailConnectedEmail: number
     gmailRefreshToken: number
+    smtpHost: number
+    smtpPort: number
+    smtpUser: number
+    smtpPassword: number
+    smtpSecure: number
+    smtpFromEmail: number
+    smtpFromName: number
+    smtpAuthType: number
+    smtpOauthClientId: number
+    smtpOauthClientSecret: number
+    smtpOauthRefreshToken: number
+    smtpOauthAccessUrl: number
+    resendApiKey: number
+    resendFromEmail: number
+    resendFromName: number
     credentialsVault: number
     integrationsConfig: number
     notificationChannels: number
@@ -13123,6 +13170,7 @@ export namespace Prisma {
     letterTFontSizePercent?: true
     heroWordmarkLoopSpeed?: true
     popupFrequencyDays?: true
+    smtpPort?: true
     sessionTimeoutMinutes?: true
     auditRetentionDays?: true
   }
@@ -13131,6 +13179,7 @@ export namespace Prisma {
     letterTFontSizePercent?: true
     heroWordmarkLoopSpeed?: true
     popupFrequencyDays?: true
+    smtpPort?: true
     sessionTimeoutMinutes?: true
     auditRetentionDays?: true
   }
@@ -13168,6 +13217,21 @@ export namespace Prisma {
     gmailConnected?: true
     gmailConnectedEmail?: true
     gmailRefreshToken?: true
+    smtpHost?: true
+    smtpPort?: true
+    smtpUser?: true
+    smtpPassword?: true
+    smtpSecure?: true
+    smtpFromEmail?: true
+    smtpFromName?: true
+    smtpAuthType?: true
+    smtpOauthClientId?: true
+    smtpOauthClientSecret?: true
+    smtpOauthRefreshToken?: true
+    smtpOauthAccessUrl?: true
+    resendApiKey?: true
+    resendFromEmail?: true
+    resendFromName?: true
     credentialsVault?: true
     integrationsConfig?: true
     notificationChannels?: true
@@ -13218,6 +13282,21 @@ export namespace Prisma {
     gmailConnected?: true
     gmailConnectedEmail?: true
     gmailRefreshToken?: true
+    smtpHost?: true
+    smtpPort?: true
+    smtpUser?: true
+    smtpPassword?: true
+    smtpSecure?: true
+    smtpFromEmail?: true
+    smtpFromName?: true
+    smtpAuthType?: true
+    smtpOauthClientId?: true
+    smtpOauthClientSecret?: true
+    smtpOauthRefreshToken?: true
+    smtpOauthAccessUrl?: true
+    resendApiKey?: true
+    resendFromEmail?: true
+    resendFromName?: true
     credentialsVault?: true
     integrationsConfig?: true
     notificationChannels?: true
@@ -13268,6 +13347,21 @@ export namespace Prisma {
     gmailConnected?: true
     gmailConnectedEmail?: true
     gmailRefreshToken?: true
+    smtpHost?: true
+    smtpPort?: true
+    smtpUser?: true
+    smtpPassword?: true
+    smtpSecure?: true
+    smtpFromEmail?: true
+    smtpFromName?: true
+    smtpAuthType?: true
+    smtpOauthClientId?: true
+    smtpOauthClientSecret?: true
+    smtpOauthRefreshToken?: true
+    smtpOauthAccessUrl?: true
+    resendApiKey?: true
+    resendFromEmail?: true
+    resendFromName?: true
     credentialsVault?: true
     integrationsConfig?: true
     notificationChannels?: true
@@ -13405,6 +13499,21 @@ export namespace Prisma {
     gmailConnected: boolean
     gmailConnectedEmail: string | null
     gmailRefreshToken: string | null
+    smtpHost: string | null
+    smtpPort: number
+    smtpUser: string | null
+    smtpPassword: string | null
+    smtpSecure: boolean
+    smtpFromEmail: string | null
+    smtpFromName: string | null
+    smtpAuthType: string
+    smtpOauthClientId: string | null
+    smtpOauthClientSecret: string | null
+    smtpOauthRefreshToken: string | null
+    smtpOauthAccessUrl: string | null
+    resendApiKey: string | null
+    resendFromEmail: string | null
+    resendFromName: string | null
     credentialsVault: string | null
     integrationsConfig: string | null
     notificationChannels: string | null
@@ -13474,6 +13583,21 @@ export namespace Prisma {
     gmailConnected?: boolean
     gmailConnectedEmail?: boolean
     gmailRefreshToken?: boolean
+    smtpHost?: boolean
+    smtpPort?: boolean
+    smtpUser?: boolean
+    smtpPassword?: boolean
+    smtpSecure?: boolean
+    smtpFromEmail?: boolean
+    smtpFromName?: boolean
+    smtpAuthType?: boolean
+    smtpOauthClientId?: boolean
+    smtpOauthClientSecret?: boolean
+    smtpOauthRefreshToken?: boolean
+    smtpOauthAccessUrl?: boolean
+    resendApiKey?: boolean
+    resendFromEmail?: boolean
+    resendFromName?: boolean
     credentialsVault?: boolean
     integrationsConfig?: boolean
     notificationChannels?: boolean
@@ -13524,6 +13648,21 @@ export namespace Prisma {
     gmailConnected?: boolean
     gmailConnectedEmail?: boolean
     gmailRefreshToken?: boolean
+    smtpHost?: boolean
+    smtpPort?: boolean
+    smtpUser?: boolean
+    smtpPassword?: boolean
+    smtpSecure?: boolean
+    smtpFromEmail?: boolean
+    smtpFromName?: boolean
+    smtpAuthType?: boolean
+    smtpOauthClientId?: boolean
+    smtpOauthClientSecret?: boolean
+    smtpOauthRefreshToken?: boolean
+    smtpOauthAccessUrl?: boolean
+    resendApiKey?: boolean
+    resendFromEmail?: boolean
+    resendFromName?: boolean
     credentialsVault?: boolean
     integrationsConfig?: boolean
     notificationChannels?: boolean
@@ -13574,6 +13713,21 @@ export namespace Prisma {
     gmailConnected?: boolean
     gmailConnectedEmail?: boolean
     gmailRefreshToken?: boolean
+    smtpHost?: boolean
+    smtpPort?: boolean
+    smtpUser?: boolean
+    smtpPassword?: boolean
+    smtpSecure?: boolean
+    smtpFromEmail?: boolean
+    smtpFromName?: boolean
+    smtpAuthType?: boolean
+    smtpOauthClientId?: boolean
+    smtpOauthClientSecret?: boolean
+    smtpOauthRefreshToken?: boolean
+    smtpOauthAccessUrl?: boolean
+    resendApiKey?: boolean
+    resendFromEmail?: boolean
+    resendFromName?: boolean
     credentialsVault?: boolean
     integrationsConfig?: boolean
     notificationChannels?: boolean
@@ -13624,6 +13778,21 @@ export namespace Prisma {
     gmailConnected?: boolean
     gmailConnectedEmail?: boolean
     gmailRefreshToken?: boolean
+    smtpHost?: boolean
+    smtpPort?: boolean
+    smtpUser?: boolean
+    smtpPassword?: boolean
+    smtpSecure?: boolean
+    smtpFromEmail?: boolean
+    smtpFromName?: boolean
+    smtpAuthType?: boolean
+    smtpOauthClientId?: boolean
+    smtpOauthClientSecret?: boolean
+    smtpOauthRefreshToken?: boolean
+    smtpOauthAccessUrl?: boolean
+    resendApiKey?: boolean
+    resendFromEmail?: boolean
+    resendFromName?: boolean
     credentialsVault?: boolean
     integrationsConfig?: boolean
     notificationChannels?: boolean
@@ -13641,7 +13810,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AdminSettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteLanguage" | "siteTimezone" | "maintenanceActive" | "maintenanceMessage" | "letterTFontFamily" | "letterTFontSizePercent" | "logoLightModeColor" | "logoDarkModeColor" | "heroWordmarkFonts" | "heroWordmarkLoop" | "heroWordmarkLoopSpeed" | "marqueeActive" | "marqueeText" | "marqueeType" | "marqueeTextColor" | "marqueeBgColor" | "popupActive" | "popupImageUrl" | "popupHeadline" | "popupMessage" | "popupCtaLabel" | "popupCtaLink" | "popupFrequency" | "popupFrequencyDays" | "emailProvider" | "gmailClientId" | "gmailClientSecret" | "gmailSenderName" | "gmailConnected" | "gmailConnectedEmail" | "gmailRefreshToken" | "credentialsVault" | "integrationsConfig" | "notificationChannels" | "slackWebhookUrl" | "require2fa" | "sessionTimeoutMinutes" | "ipAllowlist" | "auditRetentionDays" | "cookieBannerActive" | "cookieBannerText" | "privacyPolicyUrl" | "termsOfServiceUrl" | "gdprRequestEmail" | "createdAt" | "updatedAt", ExtArgs["result"]["adminSettings"]>
+  export type AdminSettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteLanguage" | "siteTimezone" | "maintenanceActive" | "maintenanceMessage" | "letterTFontFamily" | "letterTFontSizePercent" | "logoLightModeColor" | "logoDarkModeColor" | "heroWordmarkFonts" | "heroWordmarkLoop" | "heroWordmarkLoopSpeed" | "marqueeActive" | "marqueeText" | "marqueeType" | "marqueeTextColor" | "marqueeBgColor" | "popupActive" | "popupImageUrl" | "popupHeadline" | "popupMessage" | "popupCtaLabel" | "popupCtaLink" | "popupFrequency" | "popupFrequencyDays" | "emailProvider" | "gmailClientId" | "gmailClientSecret" | "gmailSenderName" | "gmailConnected" | "gmailConnectedEmail" | "gmailRefreshToken" | "smtpHost" | "smtpPort" | "smtpUser" | "smtpPassword" | "smtpSecure" | "smtpFromEmail" | "smtpFromName" | "smtpAuthType" | "smtpOauthClientId" | "smtpOauthClientSecret" | "smtpOauthRefreshToken" | "smtpOauthAccessUrl" | "resendApiKey" | "resendFromEmail" | "resendFromName" | "credentialsVault" | "integrationsConfig" | "notificationChannels" | "slackWebhookUrl" | "require2fa" | "sessionTimeoutMinutes" | "ipAllowlist" | "auditRetentionDays" | "cookieBannerActive" | "cookieBannerText" | "privacyPolicyUrl" | "termsOfServiceUrl" | "gdprRequestEmail" | "createdAt" | "updatedAt", ExtArgs["result"]["adminSettings"]>
 
   export type $AdminSettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AdminSettings"
@@ -13679,6 +13848,21 @@ export namespace Prisma {
       gmailConnected: boolean
       gmailConnectedEmail: string | null
       gmailRefreshToken: string | null
+      smtpHost: string | null
+      smtpPort: number
+      smtpUser: string | null
+      smtpPassword: string | null
+      smtpSecure: boolean
+      smtpFromEmail: string | null
+      smtpFromName: string | null
+      smtpAuthType: string
+      smtpOauthClientId: string | null
+      smtpOauthClientSecret: string | null
+      smtpOauthRefreshToken: string | null
+      smtpOauthAccessUrl: string | null
+      resendApiKey: string | null
+      resendFromEmail: string | null
+      resendFromName: string | null
       credentialsVault: string | null
       integrationsConfig: string | null
       notificationChannels: string | null
@@ -14149,6 +14333,21 @@ export namespace Prisma {
     readonly gmailConnected: FieldRef<"AdminSettings", 'Boolean'>
     readonly gmailConnectedEmail: FieldRef<"AdminSettings", 'String'>
     readonly gmailRefreshToken: FieldRef<"AdminSettings", 'String'>
+    readonly smtpHost: FieldRef<"AdminSettings", 'String'>
+    readonly smtpPort: FieldRef<"AdminSettings", 'Int'>
+    readonly smtpUser: FieldRef<"AdminSettings", 'String'>
+    readonly smtpPassword: FieldRef<"AdminSettings", 'String'>
+    readonly smtpSecure: FieldRef<"AdminSettings", 'Boolean'>
+    readonly smtpFromEmail: FieldRef<"AdminSettings", 'String'>
+    readonly smtpFromName: FieldRef<"AdminSettings", 'String'>
+    readonly smtpAuthType: FieldRef<"AdminSettings", 'String'>
+    readonly smtpOauthClientId: FieldRef<"AdminSettings", 'String'>
+    readonly smtpOauthClientSecret: FieldRef<"AdminSettings", 'String'>
+    readonly smtpOauthRefreshToken: FieldRef<"AdminSettings", 'String'>
+    readonly smtpOauthAccessUrl: FieldRef<"AdminSettings", 'String'>
+    readonly resendApiKey: FieldRef<"AdminSettings", 'String'>
+    readonly resendFromEmail: FieldRef<"AdminSettings", 'String'>
+    readonly resendFromName: FieldRef<"AdminSettings", 'String'>
     readonly credentialsVault: FieldRef<"AdminSettings", 'String'>
     readonly integrationsConfig: FieldRef<"AdminSettings", 'String'>
     readonly notificationChannels: FieldRef<"AdminSettings", 'String'>
@@ -17147,6 +17346,21 @@ export namespace Prisma {
     gmailConnected: 'gmailConnected',
     gmailConnectedEmail: 'gmailConnectedEmail',
     gmailRefreshToken: 'gmailRefreshToken',
+    smtpHost: 'smtpHost',
+    smtpPort: 'smtpPort',
+    smtpUser: 'smtpUser',
+    smtpPassword: 'smtpPassword',
+    smtpSecure: 'smtpSecure',
+    smtpFromEmail: 'smtpFromEmail',
+    smtpFromName: 'smtpFromName',
+    smtpAuthType: 'smtpAuthType',
+    smtpOauthClientId: 'smtpOauthClientId',
+    smtpOauthClientSecret: 'smtpOauthClientSecret',
+    smtpOauthRefreshToken: 'smtpOauthRefreshToken',
+    smtpOauthAccessUrl: 'smtpOauthAccessUrl',
+    resendApiKey: 'resendApiKey',
+    resendFromEmail: 'resendFromEmail',
+    resendFromName: 'resendFromName',
     credentialsVault: 'credentialsVault',
     integrationsConfig: 'integrationsConfig',
     notificationChannels: 'notificationChannels',
@@ -18104,6 +18318,21 @@ export namespace Prisma {
     gmailConnected?: BoolFilter<"AdminSettings"> | boolean
     gmailConnectedEmail?: StringNullableFilter<"AdminSettings"> | string | null
     gmailRefreshToken?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpHost?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpPort?: IntFilter<"AdminSettings"> | number
+    smtpUser?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpPassword?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpSecure?: BoolFilter<"AdminSettings"> | boolean
+    smtpFromEmail?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpFromName?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpAuthType?: StringFilter<"AdminSettings"> | string
+    smtpOauthClientId?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpOauthClientSecret?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpOauthRefreshToken?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpOauthAccessUrl?: StringNullableFilter<"AdminSettings"> | string | null
+    resendApiKey?: StringNullableFilter<"AdminSettings"> | string | null
+    resendFromEmail?: StringNullableFilter<"AdminSettings"> | string | null
+    resendFromName?: StringNullableFilter<"AdminSettings"> | string | null
     credentialsVault?: StringNullableFilter<"AdminSettings"> | string | null
     integrationsConfig?: StringNullableFilter<"AdminSettings"> | string | null
     notificationChannels?: StringNullableFilter<"AdminSettings"> | string | null
@@ -18154,6 +18383,21 @@ export namespace Prisma {
     gmailConnected?: SortOrder
     gmailConnectedEmail?: SortOrderInput | SortOrder
     gmailRefreshToken?: SortOrderInput | SortOrder
+    smtpHost?: SortOrderInput | SortOrder
+    smtpPort?: SortOrder
+    smtpUser?: SortOrderInput | SortOrder
+    smtpPassword?: SortOrderInput | SortOrder
+    smtpSecure?: SortOrder
+    smtpFromEmail?: SortOrderInput | SortOrder
+    smtpFromName?: SortOrderInput | SortOrder
+    smtpAuthType?: SortOrder
+    smtpOauthClientId?: SortOrderInput | SortOrder
+    smtpOauthClientSecret?: SortOrderInput | SortOrder
+    smtpOauthRefreshToken?: SortOrderInput | SortOrder
+    smtpOauthAccessUrl?: SortOrderInput | SortOrder
+    resendApiKey?: SortOrderInput | SortOrder
+    resendFromEmail?: SortOrderInput | SortOrder
+    resendFromName?: SortOrderInput | SortOrder
     credentialsVault?: SortOrderInput | SortOrder
     integrationsConfig?: SortOrderInput | SortOrder
     notificationChannels?: SortOrderInput | SortOrder
@@ -18207,6 +18451,21 @@ export namespace Prisma {
     gmailConnected?: BoolFilter<"AdminSettings"> | boolean
     gmailConnectedEmail?: StringNullableFilter<"AdminSettings"> | string | null
     gmailRefreshToken?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpHost?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpPort?: IntFilter<"AdminSettings"> | number
+    smtpUser?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpPassword?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpSecure?: BoolFilter<"AdminSettings"> | boolean
+    smtpFromEmail?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpFromName?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpAuthType?: StringFilter<"AdminSettings"> | string
+    smtpOauthClientId?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpOauthClientSecret?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpOauthRefreshToken?: StringNullableFilter<"AdminSettings"> | string | null
+    smtpOauthAccessUrl?: StringNullableFilter<"AdminSettings"> | string | null
+    resendApiKey?: StringNullableFilter<"AdminSettings"> | string | null
+    resendFromEmail?: StringNullableFilter<"AdminSettings"> | string | null
+    resendFromName?: StringNullableFilter<"AdminSettings"> | string | null
     credentialsVault?: StringNullableFilter<"AdminSettings"> | string | null
     integrationsConfig?: StringNullableFilter<"AdminSettings"> | string | null
     notificationChannels?: StringNullableFilter<"AdminSettings"> | string | null
@@ -18257,6 +18516,21 @@ export namespace Prisma {
     gmailConnected?: SortOrder
     gmailConnectedEmail?: SortOrderInput | SortOrder
     gmailRefreshToken?: SortOrderInput | SortOrder
+    smtpHost?: SortOrderInput | SortOrder
+    smtpPort?: SortOrder
+    smtpUser?: SortOrderInput | SortOrder
+    smtpPassword?: SortOrderInput | SortOrder
+    smtpSecure?: SortOrder
+    smtpFromEmail?: SortOrderInput | SortOrder
+    smtpFromName?: SortOrderInput | SortOrder
+    smtpAuthType?: SortOrder
+    smtpOauthClientId?: SortOrderInput | SortOrder
+    smtpOauthClientSecret?: SortOrderInput | SortOrder
+    smtpOauthRefreshToken?: SortOrderInput | SortOrder
+    smtpOauthAccessUrl?: SortOrderInput | SortOrder
+    resendApiKey?: SortOrderInput | SortOrder
+    resendFromEmail?: SortOrderInput | SortOrder
+    resendFromName?: SortOrderInput | SortOrder
     credentialsVault?: SortOrderInput | SortOrder
     integrationsConfig?: SortOrderInput | SortOrder
     notificationChannels?: SortOrderInput | SortOrder
@@ -18315,6 +18589,21 @@ export namespace Prisma {
     gmailConnected?: BoolWithAggregatesFilter<"AdminSettings"> | boolean
     gmailConnectedEmail?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
     gmailRefreshToken?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    smtpHost?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    smtpPort?: IntWithAggregatesFilter<"AdminSettings"> | number
+    smtpUser?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    smtpPassword?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    smtpSecure?: BoolWithAggregatesFilter<"AdminSettings"> | boolean
+    smtpFromEmail?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    smtpFromName?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    smtpAuthType?: StringWithAggregatesFilter<"AdminSettings"> | string
+    smtpOauthClientId?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    smtpOauthClientSecret?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    smtpOauthRefreshToken?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    smtpOauthAccessUrl?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    resendApiKey?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    resendFromEmail?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
+    resendFromName?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
     credentialsVault?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
     integrationsConfig?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
     notificationChannels?: StringNullableWithAggregatesFilter<"AdminSettings"> | string | null
@@ -19481,6 +19770,21 @@ export namespace Prisma {
     gmailConnected?: boolean
     gmailConnectedEmail?: string | null
     gmailRefreshToken?: string | null
+    smtpHost?: string | null
+    smtpPort?: number
+    smtpUser?: string | null
+    smtpPassword?: string | null
+    smtpSecure?: boolean
+    smtpFromEmail?: string | null
+    smtpFromName?: string | null
+    smtpAuthType?: string
+    smtpOauthClientId?: string | null
+    smtpOauthClientSecret?: string | null
+    smtpOauthRefreshToken?: string | null
+    smtpOauthAccessUrl?: string | null
+    resendApiKey?: string | null
+    resendFromEmail?: string | null
+    resendFromName?: string | null
     credentialsVault?: string | null
     integrationsConfig?: string | null
     notificationChannels?: string | null
@@ -19531,6 +19835,21 @@ export namespace Prisma {
     gmailConnected?: boolean
     gmailConnectedEmail?: string | null
     gmailRefreshToken?: string | null
+    smtpHost?: string | null
+    smtpPort?: number
+    smtpUser?: string | null
+    smtpPassword?: string | null
+    smtpSecure?: boolean
+    smtpFromEmail?: string | null
+    smtpFromName?: string | null
+    smtpAuthType?: string
+    smtpOauthClientId?: string | null
+    smtpOauthClientSecret?: string | null
+    smtpOauthRefreshToken?: string | null
+    smtpOauthAccessUrl?: string | null
+    resendApiKey?: string | null
+    resendFromEmail?: string | null
+    resendFromName?: string | null
     credentialsVault?: string | null
     integrationsConfig?: string | null
     notificationChannels?: string | null
@@ -19581,6 +19900,21 @@ export namespace Prisma {
     gmailConnected?: BoolFieldUpdateOperationsInput | boolean
     gmailConnectedEmail?: NullableStringFieldUpdateOperationsInput | string | null
     gmailRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPort?: IntFieldUpdateOperationsInput | number
+    smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpSecure?: BoolFieldUpdateOperationsInput | boolean
+    smtpFromEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpFromName?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpAuthType?: StringFieldUpdateOperationsInput | string
+    smtpOauthClientId?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthClientSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthAccessUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    resendApiKey?: NullableStringFieldUpdateOperationsInput | string | null
+    resendFromEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    resendFromName?: NullableStringFieldUpdateOperationsInput | string | null
     credentialsVault?: NullableStringFieldUpdateOperationsInput | string | null
     integrationsConfig?: NullableStringFieldUpdateOperationsInput | string | null
     notificationChannels?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19631,6 +19965,21 @@ export namespace Prisma {
     gmailConnected?: BoolFieldUpdateOperationsInput | boolean
     gmailConnectedEmail?: NullableStringFieldUpdateOperationsInput | string | null
     gmailRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPort?: IntFieldUpdateOperationsInput | number
+    smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpSecure?: BoolFieldUpdateOperationsInput | boolean
+    smtpFromEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpFromName?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpAuthType?: StringFieldUpdateOperationsInput | string
+    smtpOauthClientId?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthClientSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthAccessUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    resendApiKey?: NullableStringFieldUpdateOperationsInput | string | null
+    resendFromEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    resendFromName?: NullableStringFieldUpdateOperationsInput | string | null
     credentialsVault?: NullableStringFieldUpdateOperationsInput | string | null
     integrationsConfig?: NullableStringFieldUpdateOperationsInput | string | null
     notificationChannels?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19681,6 +20030,21 @@ export namespace Prisma {
     gmailConnected?: boolean
     gmailConnectedEmail?: string | null
     gmailRefreshToken?: string | null
+    smtpHost?: string | null
+    smtpPort?: number
+    smtpUser?: string | null
+    smtpPassword?: string | null
+    smtpSecure?: boolean
+    smtpFromEmail?: string | null
+    smtpFromName?: string | null
+    smtpAuthType?: string
+    smtpOauthClientId?: string | null
+    smtpOauthClientSecret?: string | null
+    smtpOauthRefreshToken?: string | null
+    smtpOauthAccessUrl?: string | null
+    resendApiKey?: string | null
+    resendFromEmail?: string | null
+    resendFromName?: string | null
     credentialsVault?: string | null
     integrationsConfig?: string | null
     notificationChannels?: string | null
@@ -19731,6 +20095,21 @@ export namespace Prisma {
     gmailConnected?: BoolFieldUpdateOperationsInput | boolean
     gmailConnectedEmail?: NullableStringFieldUpdateOperationsInput | string | null
     gmailRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPort?: IntFieldUpdateOperationsInput | number
+    smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpSecure?: BoolFieldUpdateOperationsInput | boolean
+    smtpFromEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpFromName?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpAuthType?: StringFieldUpdateOperationsInput | string
+    smtpOauthClientId?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthClientSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthAccessUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    resendApiKey?: NullableStringFieldUpdateOperationsInput | string | null
+    resendFromEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    resendFromName?: NullableStringFieldUpdateOperationsInput | string | null
     credentialsVault?: NullableStringFieldUpdateOperationsInput | string | null
     integrationsConfig?: NullableStringFieldUpdateOperationsInput | string | null
     notificationChannels?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19781,6 +20160,21 @@ export namespace Prisma {
     gmailConnected?: BoolFieldUpdateOperationsInput | boolean
     gmailConnectedEmail?: NullableStringFieldUpdateOperationsInput | string | null
     gmailRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPort?: IntFieldUpdateOperationsInput | number
+    smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpSecure?: BoolFieldUpdateOperationsInput | boolean
+    smtpFromEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpFromName?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpAuthType?: StringFieldUpdateOperationsInput | string
+    smtpOauthClientId?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthClientSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthRefreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpOauthAccessUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    resendApiKey?: NullableStringFieldUpdateOperationsInput | string | null
+    resendFromEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    resendFromName?: NullableStringFieldUpdateOperationsInput | string | null
     credentialsVault?: NullableStringFieldUpdateOperationsInput | string | null
     integrationsConfig?: NullableStringFieldUpdateOperationsInput | string | null
     notificationChannels?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20757,6 +21151,21 @@ export namespace Prisma {
     gmailConnected?: SortOrder
     gmailConnectedEmail?: SortOrder
     gmailRefreshToken?: SortOrder
+    smtpHost?: SortOrder
+    smtpPort?: SortOrder
+    smtpUser?: SortOrder
+    smtpPassword?: SortOrder
+    smtpSecure?: SortOrder
+    smtpFromEmail?: SortOrder
+    smtpFromName?: SortOrder
+    smtpAuthType?: SortOrder
+    smtpOauthClientId?: SortOrder
+    smtpOauthClientSecret?: SortOrder
+    smtpOauthRefreshToken?: SortOrder
+    smtpOauthAccessUrl?: SortOrder
+    resendApiKey?: SortOrder
+    resendFromEmail?: SortOrder
+    resendFromName?: SortOrder
     credentialsVault?: SortOrder
     integrationsConfig?: SortOrder
     notificationChannels?: SortOrder
@@ -20778,6 +21187,7 @@ export namespace Prisma {
     letterTFontSizePercent?: SortOrder
     heroWordmarkLoopSpeed?: SortOrder
     popupFrequencyDays?: SortOrder
+    smtpPort?: SortOrder
     sessionTimeoutMinutes?: SortOrder
     auditRetentionDays?: SortOrder
   }
@@ -20815,6 +21225,21 @@ export namespace Prisma {
     gmailConnected?: SortOrder
     gmailConnectedEmail?: SortOrder
     gmailRefreshToken?: SortOrder
+    smtpHost?: SortOrder
+    smtpPort?: SortOrder
+    smtpUser?: SortOrder
+    smtpPassword?: SortOrder
+    smtpSecure?: SortOrder
+    smtpFromEmail?: SortOrder
+    smtpFromName?: SortOrder
+    smtpAuthType?: SortOrder
+    smtpOauthClientId?: SortOrder
+    smtpOauthClientSecret?: SortOrder
+    smtpOauthRefreshToken?: SortOrder
+    smtpOauthAccessUrl?: SortOrder
+    resendApiKey?: SortOrder
+    resendFromEmail?: SortOrder
+    resendFromName?: SortOrder
     credentialsVault?: SortOrder
     integrationsConfig?: SortOrder
     notificationChannels?: SortOrder
@@ -20865,6 +21290,21 @@ export namespace Prisma {
     gmailConnected?: SortOrder
     gmailConnectedEmail?: SortOrder
     gmailRefreshToken?: SortOrder
+    smtpHost?: SortOrder
+    smtpPort?: SortOrder
+    smtpUser?: SortOrder
+    smtpPassword?: SortOrder
+    smtpSecure?: SortOrder
+    smtpFromEmail?: SortOrder
+    smtpFromName?: SortOrder
+    smtpAuthType?: SortOrder
+    smtpOauthClientId?: SortOrder
+    smtpOauthClientSecret?: SortOrder
+    smtpOauthRefreshToken?: SortOrder
+    smtpOauthAccessUrl?: SortOrder
+    resendApiKey?: SortOrder
+    resendFromEmail?: SortOrder
+    resendFromName?: SortOrder
     credentialsVault?: SortOrder
     integrationsConfig?: SortOrder
     notificationChannels?: SortOrder
@@ -20886,6 +21326,7 @@ export namespace Prisma {
     letterTFontSizePercent?: SortOrder
     heroWordmarkLoopSpeed?: SortOrder
     popupFrequencyDays?: SortOrder
+    smtpPort?: SortOrder
     sessionTimeoutMinutes?: SortOrder
     auditRetentionDays?: SortOrder
   }

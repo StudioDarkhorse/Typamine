@@ -181,7 +181,7 @@ function DossierPanel({ post, tags, hasFonts, hasInsight, authorName, grainientC
       </div>
       <div className="leading-tight">
         <p className="font-haas text-xs font-bold text-black dark:text-white">Filed by {authorName}</p>
-        <p className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+        <p className="font-mono text-[10px] text-ocragray-800 dark:text-zinc-200 uppercase tracking-wider">
           {formatFiledDate(post.createdAt)}
         </p>
       </div>

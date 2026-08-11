@@ -161,7 +161,7 @@ export default function ContentTable<T>({
 
         {data.length === 0 && (
           <div className="py-24 text-center">
-            <p className="text-zinc-500 dark:text-zinc-400 text-sm font-bold uppercase tracking-wider">
+            <p className="text-ocragray-800 dark:text-zinc-200 text-sm font-bold uppercase tracking-wider">
               {emptyStateText}
             </p>
           </div>

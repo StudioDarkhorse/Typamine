@@ -53,7 +53,7 @@ export default function PrescriptionsClient({ tags, children }: PrescriptionsCli
       {children}
 
       <Cta
-        title={<>The <span className="text-blue dark:text-red font-rezland px-2">Vintage</span> Archive</>}
+        title={<>The <span className="text-blue-600 dark:text-red ">Vintage</span> Archive</>}
         subtitle="Explore our curated collection of vintage posters, spanning from Soviet propaganda and 1950s sci-fi to Bauhaus, Futurism, and Art Deco."
         align="center"
         bgImage="/images/prescriptions/cta-bg.png"

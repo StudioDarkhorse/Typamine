@@ -162,7 +162,7 @@ export default function AIFontIdentityButton() {
           </div>
           <div className="min-w-0">
             <p className="text-sm font-bold text-black dark:text-white truncate">Resolve Font Identity with AI</p>
-            <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 dark:text-zinc-400 truncate">
+            <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 truncate">
               Author &amp; license lookup
             </p>
           </div>
@@ -179,7 +179,7 @@ export default function AIFontIdentityButton() {
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">AI Identity Detection</h3>
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 mt-0.5">
                     Author lookup &middot; License type
                   </p>
                 </div>
@@ -189,7 +189,7 @@ export default function AIFontIdentityButton() {
                   onClick={close}
                   className="p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
                 >
-                  <X className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+                  <X className="h-4 w-4 text-ocragray-800 dark:text-zinc-200" />
                 </button>
               )}
             </div>
@@ -199,7 +199,7 @@ export default function AIFontIdentityButton() {
             {phase === "loading-candidates" && (
               <div className="flex flex-col items-center justify-center py-12 gap-3">
                 <Loader2 className="h-6 w-6 text-amber-500 animate-spin" />
-                <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
                   Scanning fonts...
                 </p>
               </div>
@@ -228,7 +228,7 @@ export default function AIFontIdentityButton() {
             {(phase === "running" || phase === "done") && (
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
                     <span>Progress</span>
                     <span className="tabular-nums">{progress} / {candidates.length}</span>
                   </div>

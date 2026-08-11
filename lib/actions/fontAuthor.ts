@@ -6,6 +6,9 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { uploadToR2, deleteFromR2 } from "@/lib/r2";
 import { withSafeDbQuery } from "@/lib/services/dbMigration";
 import { CACHE_TAGS } from "@/lib/cacheTags";
+import { FREE_LICENSE_TYPES } from "@/lib/constants/fontLicenseTypes";
+import { sendTemplateMail, sendResendTemplateMail } from "@/lib/services/email";
+import { listLocalTemplates } from "@/lib/services/emailTemplates";
 import crypto from "crypto";
 
 async function checkPermission(permission: string) {
@@ -316,4 +319,119 @@ export async function saveFontAuthor(prevState: any, formData: FormData, id?: st
 
   revalidatePath("/admin/font-authors");
   revalidateTag(CACHE_TAGS.fontAuthors, "max");
+}
+
+// ---------------------------------------------------------------------------
+// Invio email a un font author (azione "Send Email" in /admin/font-authors)
+// ---------------------------------------------------------------------------
+
+/**
+ * Binding risolti per i template: mostrati in anteprima prima dell'invio.
+ * Index signature esplicita perché questo oggetto viene passato dove ci si
+ * aspetta una mappa generica di variabili (Record<string,string> per Resend,
+ * EmailTemplateArgs per i template locali).
+ */
+export interface AuthorEmailBindings extends Record<string, string> {
+  author_name: string;
+  font_count: string;
+  author_auth_link: string;
+  website_url: string;
+}
+
+// Link di verifica/consenso. Placeholder concordato finché non esiste il vero
+// flusso di claim del profilo: quando ci sarà, va generato qui per-autore
+// (token firmato), non nel template.
+const AUTHOR_AUTH_LINK = "https://typamine.com/test";
+const WEBSITE_URL = "https://typamine.com";
+
+/**
+ * Calcola i valori delle variabili per un autore.
+ *
+ * font_count = i suoi font la cui licenza NON è libera (tutto ciò che non è
+ * Free / Open Source (SIL OFL) / Public Domain, licenza mancante inclusa):
+ * sono esattamente quelli per cui serve l'autorizzazione, ed è il numero
+ * citato nel corpo della mail.
+ */
+/** Template locali disponibili (file in /email-templates). */
+export async function getLocalEmailTemplates(): Promise<string[]> {
+  await checkPermission("font:read");
+  return listLocalTemplates();
+}
+
+export async function getAuthorEmailBindings(authorId: string): Promise<AuthorEmailBindings> {
+  await checkPermission("font:read");
+
+  const author = await withSafeDbQuery(() =>
+    prisma.fontAuthor.findUnique({ where: { id: authorId }, select: { name: true } })
+  );
+  if (!author) throw new Error("Font author not found");
+
+  const nonFreeCount = await withSafeDbQuery(() =>
+    prisma.ingredient.count({
+      where: {
+        authorId,
+        OR: [{ licenseType: null }, { licenseType: { notIn: FREE_LICENSE_TYPES } }],
+      },
+    })
+  );
+
+  return {
+    author_name: author.name,
+    font_count: String(nonFreeCount),
+    author_auth_link: AUTHOR_AUTH_LINK,
+    website_url: WEBSITE_URL,
+  };
+}
+
+/**
+ * Invia una mail a un font author.
+ *
+ * `source` distingue i due sistemi di template ora presenti:
+ *  - "local"  -> file HTML in /email-templates, renderizzati da noi e spediti
+ *                col provider configurato in Admin Communication;
+ *  - "resend" -> template creato nella dashboard Resend, renderizzato da loro.
+ * I binding sono gli stessi in entrambi i casi.
+ */
+export async function sendFontAuthorEmail({
+  authorId,
+  templateId,
+  source,
+}: {
+  authorId: string;
+  templateId: string;
+  source: "local" | "resend";
+}): Promise<{ ok: boolean; message: string }> {
+  try {
+    await checkPermission("font:update");
+
+    const author = await withSafeDbQuery(() =>
+      prisma.fontAuthor.findUnique({ where: { id: authorId }, select: { name: true, email: true } })
+    );
+    if (!author) return { ok: false, message: "Font author not found." };
+    if (!author.email) return { ok: false, message: `${author.name} has no email address on file.` };
+
+    // Gli autori sintetici (placeholder d'import, "unknown after AI check",
+    // creati da AI/manuale) hanno indirizzi @*.typamine.internal, che non
+    // esistono: scrivergli genererebbe solo bounce.
+    if (author.email.endsWith(".typamine.internal")) {
+      return {
+        ok: false,
+        message: `${author.name} is a placeholder author with a synthetic address (${author.email}) — nothing to send to.`,
+      };
+    }
+
+    const bindings = await getAuthorEmailBindings(authorId);
+
+    if (source === "resend") {
+      await sendResendTemplateMail({ to: author.email, templateId, variables: bindings });
+    } else {
+      await sendTemplateMail({ to: author.email, template: templateId, args: bindings });
+    }
+
+    return { ok: true, message: `Email sent to ${author.name} <${author.email}>.` };
+  } catch (error) {
+    console.error("[FontAuthor Action] Error sending author email:", error);
+    const message = error instanceof Error ? error.message : String(error);
+    return { ok: false, message: message || "Failed to send email." };
+  }
 }

@@ -171,7 +171,7 @@ export default function LivePreview({
             const rangeClassName =
               "w-full h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-blue dark:accent-red touch-pan-x";
             const controlLabelClassName =
-              "text-[9px] mb-2 text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-black";
+              "text-[9px] mb-2 text-ocragray-800 dark:text-zinc-200 uppercase tracking-widest font-black";
             const controlWrapClassName = "flex flex-col gap-1.5";
 
             // Due righe separate come prima (range da un lato, colori

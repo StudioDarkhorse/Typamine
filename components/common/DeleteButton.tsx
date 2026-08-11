@@ -72,7 +72,7 @@ export default function DeleteButton({
             <p className="text-xl font-rezland text-center mb-8 font-bold text-black dark:text-white leading-tight">
               Delete {entityName} <span className="text-red">"{name}"</span> ?
             </p>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            <p className="text-sm text-ocragray-800 dark:text-zinc-200 leading-relaxed">
               {confirmDescription || defaultDescription}
             </p>
           </div>

@@ -68,7 +68,7 @@ export default function FormulasClient({ tags, children }: FormulasClientProps) 
       {children}
 
       <Cta
-        title={<>Looking for <span className="text-blue dark:text-red font-rezland px-2">Inspirations?</span></>}
+        title={<>Looking for <span className="text-blue-600 dark:text-red"> Inspirations?</span></>}
         subtitle="Check out our Prescriptions for expert typography pairings, or dive into our Vintage Archive to discover great examples from the past."
         align="right"
         bgImage="/images/formulas/cta-bg.png"

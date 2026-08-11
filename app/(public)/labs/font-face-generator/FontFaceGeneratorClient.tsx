@@ -102,7 +102,7 @@ export default function FontFaceGeneratorClient({ initialIngredient, catalog, in
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <Panel>
           <PanelHeading dot="bg-red glow-red" title="@font-face Generator" />
-          <p className="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed">
+          <p className="text-ocragray-800 dark:text-zinc-200 text-xs leading-relaxed">
             Build a single cascading declaration — WOFF2 first, older formats loaded only as fallback.
           </p>
 

@@ -156,7 +156,7 @@ export default function FontConverterClient({ ingredientSlug, initialIngredient 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <Panel>
           <PanelHeading dot="bg-blue glow-cyan" title="Format Converter" />
-          <p className="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed">
+          <p className="text-ocragray-800 dark:text-zinc-200 text-xs leading-relaxed">
             Upload a .ttf, .otf, .woff or .woff2 file — get back all 3 formats, ready for a cascading @font-face.
           </p>
 
@@ -169,7 +169,7 @@ export default function FontConverterClient({ ingredientSlug, initialIngredient 
                 <p className="font-bold text-black dark:text-white">
                   Auto-loaded "{autoLoadLabel}" from the catalog
                 </p>
-                <p className="text-zinc-500 dark:text-zinc-400 mt-0.5">
+                <p className="text-ocragray-800 dark:text-zinc-200 mt-0.5">
                   Drop a different file below to convert something else.
                 </p>
               </div>
@@ -189,11 +189,10 @@ export default function FontConverterClient({ ingredientSlug, initialIngredient 
             onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-lg py-12 text-center transition-colors cursor-pointer ${
-              isDragging
+            className={`border-2 border-dashed rounded-lg py-12 text-center transition-colors cursor-pointer ${isDragging
                 ? "border-black dark:border-white bg-black/5 dark:bg-white/5"
                 : "border-zinc-300 dark:border-zinc-800 bg-black/[0.02] dark:bg-white/[0.02] hover:border-zinc-400 dark:hover:border-zinc-700"
-            }`}
+              }`}
           >
             {isConverting ? (
               <div className="flex flex-col items-center gap-2">
@@ -220,7 +219,7 @@ export default function FontConverterClient({ ingredientSlug, initialIngredient 
         <Panel>
           <PanelHeading dot="bg-green" title="Converted Files" />
           {!convertResult && !isConverting && (
-            <p className="text-zinc-500 dark:text-zinc-400 text-xs">
+            <p className="text-ocragray-800 dark:text-zinc-200 text-xs">
               Converted formats will show up here once you upload a font file.
             </p>
           )}

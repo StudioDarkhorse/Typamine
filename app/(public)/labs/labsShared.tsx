@@ -145,7 +145,7 @@ export function ToggleSwitch({
     <div className="flex items-center justify-between gap-3 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-black/[0.02] dark:bg-white/[0.02]">
       <div className="min-w-0">
         <p className="text-xs font-bold text-black dark:text-white">{label}</p>
-        {helperText && <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-0.5">{helperText}</p>}
+        {helperText && <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 mt-0.5">{helperText}</p>}
       </div>
       <label className="relative inline-flex items-center cursor-pointer shrink-0">
         <input

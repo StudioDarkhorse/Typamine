@@ -76,9 +76,8 @@ export default function IngredientHeader({
         <div className="hidden md:block m-4">
           <div
             key={glowKey}
-            className={`w-24 h-24 shrink-0 border border-blue/30 dark:border-red-200/30 rounded-lg bg-zinc-100 dark:bg-zinc-950 flex items-center justify-center font-haas font-bold text-4xl text-blue dark:text-red-200 ${
-              glowKey > 0 ? "animate-glow-pulse-1s" : ""
-            }`}
+            className={`w-24 h-24 shrink-0 border border-blue/30 dark:border-red-200/30 rounded-lg bg-zinc-100 dark:bg-zinc-950 flex items-center justify-center font-haas font-bold text-4xl text-blue dark:text-red-200 ${glowKey > 0 ? "animate-glow-pulse-1s" : ""
+              }`}
           >
             {GetSymbol({ fontName: ingredient.name })}
           </div>
@@ -103,10 +102,10 @@ export default function IngredientHeader({
       <div className="relative z-10 p-3 md:p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 w-full order-1 md:order-2">
         <div className="space-y-1">
           <h1 className="flex flex-col lg:flex-row items-start lg:items-baseline gap-x-2 gap-y-1 font-haas text-3xl lg:text-2xl font-bold text-glow-cyan dark:text-glow-red text-blue dark:text-red">
-            {ingredient.name.replaceAll('_', " ")} 
+            {ingredient.name.replaceAll('_', " ")}
             {ingredient.author && (
               <>
-                <div className="hidden lg:inline-flex items-baseline gap-x-1 text-sm text-zinc-500 dark:text-zinc-400 font-normal">
+                <div className="hidden lg:inline-flex items-baseline gap-x-1 text-sm text-ocragray-800 dark:text-zinc-200 font-normal">
                   <span>by</span>
                   <Link
                     href={`/ingredients?author=${ingredient.author.slug}`}
@@ -115,7 +114,7 @@ export default function IngredientHeader({
                     {ingredient.author.name}
                   </Link>
                 </div>
-                <div className="lg:hidden flex items-baseline gap-x-1 text-xs text-zinc-500 dark:text-zinc-400 font-normal mt-1">
+                <div className="lg:hidden flex items-baseline gap-x-1 text-xs text-ocragray-800 dark:text-zinc-200 font-normal mt-1">
                   <span>by</span>
                   <Link
                     href={`/ingredients?author=${ingredient.author.slug}`}
@@ -127,7 +126,7 @@ export default function IngredientHeader({
               </>
             )}
           </h1>
-          <div className="hidden md:block text-zinc-500 dark:text-zinc-400 text-xs font-haas mt-1">
+          <div className="hidden md:block text-ocragray-800 dark:text-zinc-200 text-xs font-haas mt-1">
             CATEGORY: {ingredient.category}
           </div>
         </div>
@@ -143,7 +142,7 @@ export default function IngredientHeader({
               {isDownloading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
               {isDownloading ? "PREPARING..." : "DOWNLOAD WOFF2"}
             </button>
-            <span className="hidden md:flex items-center gap-1.5 font-haas text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+            <span className="hidden md:flex items-center gap-1.5 font-haas text-[10px] uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
               {isLicenseFree ? (
                 <ShieldCheck className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
               ) : (

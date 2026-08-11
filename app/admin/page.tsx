@@ -36,7 +36,7 @@ function QuickActionCard({ action }: { action: QuickAction }) {
           </div>
           <div className="min-w-0">
             <p className="text-sm font-bold text-black dark:text-white truncate">{action.label}</p>
-            <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 dark:text-zinc-400 truncate">
+            <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 truncate">
               {action.description}
             </p>
           </div>

@@ -74,7 +74,7 @@ export default function AuthorDetailClient({ author, fonts }: AuthorDetailClient
                 {author.name}
               </h1>
               {author.isVerified && <ShieldCheck className="h-5 w-5 text-emerald-500 shrink-0" />}
-              <span className="text-[10px] font-haas uppercase tracking-wider px-2 py-1 rounded-sm bg-zinc-100 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800">
+              <span className="text-[10px] font-haas uppercase tracking-wider px-2 py-1 rounded-sm bg-zinc-100 dark:bg-zinc-900 text-ocragray-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800">
                 {author.type}
               </span>
             </div>
@@ -83,7 +83,7 @@ export default function AuthorDetailClient({ author, fonts }: AuthorDetailClient
               <p className="text-sm text-zinc-600 dark:text-zinc-300 font-haas max-w-2xl">{author.bio}</p>
             )}
 
-            <div className="flex items-center gap-4 flex-wrap text-xs font-haas text-zinc-500 dark:text-zinc-400">
+            <div className="flex items-center gap-4 flex-wrap text-xs font-haas text-ocragray-800 dark:text-zinc-200">
               {author.nationality && <span>{author.nationality}</span>}
               {author.website && (
                 <a
@@ -125,7 +125,7 @@ export default function AuthorDetailClient({ author, fonts }: AuthorDetailClient
 
       {/* Fonts by this author */}
       <div className="space-y-4">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
           {`FONTS BY ${author.name.toUpperCase()}: ${fonts.length}`}
         </p>
 
@@ -136,7 +136,7 @@ export default function AuthorDetailClient({ author, fonts }: AuthorDetailClient
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 border border-zinc-200 dark:border-zinc-800 border-dashed rounded-lg text-zinc-500 dark:text-zinc-400 font-haas">
+          <div className="text-center py-12 border border-zinc-200 dark:border-zinc-800 border-dashed rounded-lg text-ocragray-800 dark:text-zinc-200 font-haas">
             NO FONTS PUBLISHED BY THIS AUTHOR YET
           </div>
         )}
@@ -148,7 +148,7 @@ export default function AuthorDetailClient({ author, fonts }: AuthorDetailClient
 function StatTile({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) {
   return (
     <div className="border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 bg-white/50 dark:bg-zinc-900/20 flex flex-col gap-1">
-      <span className="flex items-center gap-1.5 text-[10px] font-haas uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+      <span className="flex items-center gap-1.5 text-[10px] font-haas uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
         {icon} {label}
       </span>
       <span className="font-haas font-bold text-lg text-blue dark:text-red">{value}</span>

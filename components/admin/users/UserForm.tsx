@@ -101,7 +101,7 @@ export default function UserForm({ user, roles }: { user?: any, roles: any[] }) 
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors"
+                    className="text-ocragray-800 dark:text-zinc-200 hover:text-black dark:hover:text-white transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -117,12 +117,12 @@ export default function UserForm({ user, roles }: { user?: any, roles: any[] }) 
                 onChange={setPasswordConfirm}
                 required={!user || password.length > 0}
                 placeholder="••••••••"
-                leftIcon={<Lock className={cn("h-5 w-5", password && password === passwordConfirm ? "text-emerald-500" : "text-zinc-500 dark:text-zinc-400")} />}
+                leftIcon={<Lock className={cn("h-5 w-5", password && password === passwordConfirm ? "text-emerald-500" : "text-ocragray-800 dark:text-zinc-200")} />}
                 rightIcon={
                   <button
                     type="button"
                     onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
-                    className="text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors"
+                    className="text-ocragray-800 dark:text-zinc-200 hover:text-black dark:hover:text-white transition-colors"
                   >
                     {showPasswordConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -199,7 +199,7 @@ export default function UserForm({ user, roles }: { user?: any, roles: any[] }) 
                   label="Upload Avatar"
                 />
                 <input type="hidden" name="removeImage" value={String(removeImage)} />
-                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-tighter font-bold">Square profile image.</p>
+                <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 uppercase tracking-tighter font-bold">Square profile image.</p>
               </div>
             </div>
           </div>
@@ -217,7 +217,7 @@ export default function UserForm({ user, roles }: { user?: any, roles: any[] }) 
         </BaseModal.Header>
         <BaseModal.Body>
           <div className="space-y-4">
-            <p className="text-zinc-500 dark:text-zinc-400 font-haas">
+            <p className="text-ocragray-800 dark:text-zinc-200 font-haas">
               We encountered an error while trying to save the user profile:
             </p>
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 font-bold text-sm">

@@ -94,7 +94,7 @@ function HeroWordmarkFontsField({
           ))}
         </div>
       )}
-      <p className="text-[10px] text-zinc-500 dark:text-zinc-400">
+      <p className="text-[10px] text-ocragray-800 dark:text-zinc-200">
         The &quot;T&quot; cycles through these fonts in order, in the homepage hero — up to {MAX_HERO_WORDMARK_FONTS}.
         Each has its own size, same convention as the wordmark &quot;T&quot; above (100% = default size).
       </p>
@@ -134,7 +134,7 @@ function ModeColorField({
       <Label>{label}</Label>
       <div className="flex items-center gap-3 mt-1">
         <HexColorPickerPopover color={value || defaultSwatch} onChange={onChange} title={label} />
-        <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">{value || "Default"}</span>
+        <span className="text-xs font-mono text-ocragray-800 dark:text-zinc-200">{value || "Default"}</span>
         {value && (
           <button
             type="button"
@@ -207,7 +207,7 @@ export default function GeneralTab({ initialSettings }: { initialSettings: Admin
               onChange={setLetterTFontSizePercent}
             />
           </div>
-        
+
           <input type="hidden" name="letterTFontFamily" value={letterTFontFamily} />
           <input type="hidden" name="letterTFontSizePercent" value={letterTFontSizePercent} />
 
@@ -225,7 +225,7 @@ export default function GeneralTab({ initialSettings }: { initialSettings: Admin
               onChange={setLogoDarkModeColor}
             />
           </div>
-     
+
           <input type="hidden" name="logoLightModeColor" value={logoLightModeColor} />
           <input type="hidden" name="logoDarkModeColor" value={logoDarkModeColor} />
         </SettingsSubCard>
@@ -244,7 +244,7 @@ export default function GeneralTab({ initialSettings }: { initialSettings: Admin
           }
         >
           <HeroWordmarkFontsField value={heroWordmarkFonts} onChange={setHeroWordmarkFonts} />
-          <p className="text-[10px] text-zinc-500 dark:text-zinc-400 -mt-2">
+          <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 -mt-2">
             {heroWordmarkLoop
               ? "Loops through the fonts forever."
               : "Plays through the fonts once, then stops on the last one."}
@@ -260,7 +260,7 @@ export default function GeneralTab({ initialSettings }: { initialSettings: Admin
               onChange={setHeroWordmarkLoopSpeed}
             />
           </div>
-          <p className="text-[10px] text-zinc-500 dark:text-zinc-400 -mt-4">
+          <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 -mt-4">
             0 = normal speed, -5 = slowest, 5 = fastest.
           </p>
           <input type="hidden" name="heroWordmarkLoopSpeed" value={heroWordmarkLoopSpeed} />

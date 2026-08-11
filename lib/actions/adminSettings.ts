@@ -8,7 +8,14 @@ import { CACHE_TAGS } from "@/lib/cacheTags";
 import { withSafeDbQuery } from "@/lib/services/dbMigration";
 import { ADMIN_SETTINGS_ID, DEFAULT_ADMIN_SETTINGS, mapAdminSettings } from "@/lib/services/adminSettings";
 import { uploadToR2, deleteFromR2 } from "@/lib/r2";
-import { sendGmailEmail, EmailNotConfiguredError } from "@/lib/services/email";
+import {
+  sendTemplateMail,
+  sendResendTemplateMail,
+  listResendTemplates,
+  getActiveEmailProviderLabel,
+  EmailNotConfiguredError,
+  type ResendTemplate,
+} from "@/lib/services/email";
 import { sendSlackNotification, SlackNotConfiguredError } from "@/lib/services/notifications";
 import {
   AdminSettings,
@@ -18,10 +25,12 @@ import {
   MarqueeType,
   NotificationChannels,
   PopupFrequency,
+  SmtpAuthType,
 } from "@/types";
 
 const MARQUEE_TYPES: MarqueeType[] = ["every_page", "homepage_top", "homepage_banner"];
 const POPUP_FREQUENCIES: PopupFrequency[] = ["first_visit", "every_visit", "periodic"];
+const SMTP_AUTH_TYPES: SmtpAuthType[] = ["password", "oauth2"];
 const MAX_HERO_WORDMARK_FONTS = 12;
 
 async function checkPermission(permission: string) {
@@ -267,6 +276,23 @@ export async function saveAdminCommunicationSettings(prevState: any, formData: F
       gmailSenderName: str(formData, "gmailSenderName"),
       gmailConnected: bool(formData, "gmailConnected"),
       gmailConnectedEmail: str(formData, "gmailConnectedEmail"),
+      smtpHost: str(formData, "smtpHost"),
+      smtpPort: int(formData, "smtpPort", 587),
+      smtpUser: str(formData, "smtpUser"),
+      smtpPassword: str(formData, "smtpPassword"),
+      smtpSecure: bool(formData, "smtpSecure"),
+      smtpFromEmail: str(formData, "smtpFromEmail"),
+      smtpFromName: str(formData, "smtpFromName"),
+      smtpAuthType: SMTP_AUTH_TYPES.includes(formData.get("smtpAuthType") as SmtpAuthType)
+        ? (formData.get("smtpAuthType") as string)
+        : "password",
+      smtpOauthClientId: str(formData, "smtpOauthClientId"),
+      smtpOauthClientSecret: str(formData, "smtpOauthClientSecret"),
+      smtpOauthRefreshToken: str(formData, "smtpOauthRefreshToken"),
+      smtpOauthAccessUrl: str(formData, "smtpOauthAccessUrl"),
+      resendApiKey: str(formData, "resendApiKey"),
+      resendFromEmail: str(formData, "resendFromEmail"),
+      resendFromName: str(formData, "resendFromName"),
       credentialsVault: JSON.stringify(credentialsVault),
     };
 
@@ -438,20 +464,61 @@ export async function disconnectGmail() {
   await revalidateSettings(false);
 }
 
+/** Template disponibili sull'account Resend, per popolare la select in admin. */
+export async function getResendTemplates(): Promise<{ ok: boolean; templates: ResendTemplate[]; error?: string }> {
+  try {
+    await checkPermission("setting:read");
+    const templates = await listResendTemplates();
+    return { ok: true, templates };
+  } catch (error) {
+    if (error instanceof EmailNotConfiguredError) return { ok: false, templates: [], error: error.message };
+    console.error("[AdminSettings Action] Error listing Resend templates:", error);
+    return { ok: false, templates: [], error: describeError(error, "Failed to load Resend templates.") };
+  }
+}
+
 // Invia una mail di prova alla casella dell'admin loggato — prova reale del
-// round-trip OAuth2 + Gmail API, non solo "le credenziali sono salvate".
-export async function sendTestEmail(): Promise<{ ok: boolean; message: string }> {
+// round-trip col provider configurato, non solo "le credenziali sono salvate".
+export async function sendTestEmail(resendTemplateId?: string): Promise<{ ok: boolean; message: string }> {
   try {
     const session = await checkPermission("setting:update");
     const to = session?.user?.email;
     if (!to) return { ok: false, message: "No email address on the current admin session." };
 
-    await sendGmailEmail({
+    const provider = await getActiveEmailProviderLabel();
+
+    // Template della dashboard Resend: il rendering lo fa Resend, quindi
+    // bypassa i nostri template locali e il provider selezionato (vedi
+    // sendResendTemplateMail). Le variabili qui sono le stesse del template
+    // locale di test — se il template su Resend usa altri nomi, semplicemente
+    // non verranno sostituite: è il modo più diretto per verificarle.
+    if (resendTemplateId) {
+      await sendResendTemplateMail({
+        to,
+        templateId: resendTemplateId,
+        variables: {
+          provider,
+          recipient: to,
+          sentAt: new Date().toLocaleString("en-GB", { timeZone: "UTC", timeZoneName: "short" }),
+        },
+      });
+      return { ok: true, message: `Test email sent to ${to} using Resend template "${resendTemplateId}".` };
+    }
+
+    // Template reale (email-templates/test-email.html) invece di HTML inline:
+    // così il pulsante di test esercita l'intera catena — provider scelto,
+    // render del layout, interpolazione di subject e corpo — e non solo la
+    // connessione. Se il template si rompe, si vede qui e non in produzione.
+    await sendTemplateMail({
       to,
-      subject: "Typamine — Test Email",
-      html: "<p>This is a test email from <strong>Typamine Admin Communication</strong> settings. If you received this, the Gmail connection works.</p>",
+      template: "test-email",
+      args: {
+        provider,
+        recipient: to,
+        sentAt: new Date().toLocaleString("en-GB", { timeZone: "UTC", timeZoneName: "short" }),
+      },
     });
-    return { ok: true, message: `Test email sent to ${to}.` };
+    return { ok: true, message: `Test email sent to ${to} via ${provider}.` };
   } catch (error) {
     if (error instanceof EmailNotConfiguredError) return { ok: false, message: error.message };
     console.error("[AdminSettings Action] Error sending test email:", error);

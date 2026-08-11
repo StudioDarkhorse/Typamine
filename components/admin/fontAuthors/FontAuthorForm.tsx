@@ -371,7 +371,7 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
               <ShieldCheck className="h-4 w-4 text-emerald-500" />
               <div>
                 <p className="text-sm font-bold text-black dark:text-white">Verified</p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">Show a verified badge on this author</p>
+                <p className="text-xs text-ocragray-800 dark:text-zinc-200">Show a verified badge on this author</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">

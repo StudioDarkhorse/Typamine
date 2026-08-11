@@ -175,6 +175,47 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Yummy';
+  src: url('/fonts/yummy/yummy.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Crenzo';
+  src: url('/fonts/crenzo/CRENZO.otf') format('opentype'),
+       url('/fonts/crenzo/CRENZO.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Revert';
+  src: url('/fonts/revert_brk/revert.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Revert';
+  src: url('/fonts/revert_brk/revertro.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Revertro';
+  src: url('/fonts/revert_brk/revertro.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -195,6 +236,10 @@
   --font-ikosdub-outline: 'Ikos Dub Outline';
   --font-ikosdub-solid: 'Ikos Dub Solid';
   --font-rollover: 'Rollover';
+  --font-yummy: 'Yummy';
+  --font-crenzo: 'Crenzo';
+  --font-revert: 'Revert';
+  --font-revertro: 'Revertro';
 
   --color-red: #ff3131;
   --color-blue: #00cece;
@@ -369,6 +414,10 @@
   --font-ikosdub-outline: var(--font-ikosdub-outline), sans-serif;
   --font-ikosdub-solid: var(--font-ikosdub-solid), sans-serif;
   --font-rollover: var(--font-rollover), sans-serif;
+  --font-yummy: var(--font-yummy), sans-serif;
+  --font-crenzo: var(--font-crenzo), sans-serif;
+  --font-revert: var(--font-revert), sans-serif;
+  --font-revertro: var(--font-revertro), sans-serif;
 
   /* Standard system mappings */
   --font-sans: var(--font-sans);
@@ -510,6 +559,22 @@ h3 {
 
 .font-rollover {
   font-family: var(--font-rollover);
+}
+
+.font-yummy {
+  font-family: var(--font-yummy);
+}
+
+.font-crenzo {
+  font-family: var(--font-crenzo);
+}
+
+.font-revert {
+  font-family: var(--font-revert);
+}
+
+.font-revertro {
+  font-family: var(--font-revertro);
 }
 
 /* Colore/sfondo dinamico per i content module (blog, pairing insight, ecc.):

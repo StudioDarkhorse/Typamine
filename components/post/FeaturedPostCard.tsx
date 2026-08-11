@@ -47,15 +47,15 @@ export const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
       )}
       {!cover && <div className="absolute inset-0 bg-zinc-100 dark:bg-zinc-900" />}
 
-      <div className="relative z-10 flex flex-col justify-end md:justify-center gap-4 p-6 sm:p-10 max-w-2xl">
+      <div className="relative z-10 flex flex-col justify-end md:justify-center gap-4 p-6 sm:p-10 max-w-3xl">
         <div className="flex items-center gap-2">
 
-          <span className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
+          <span className="font-mono text-[10px] text-ocragray-800 dark:text-zinc-200 uppercase tracking-widest">
             {formatFiledDate(post.createdAt)}
           </span>
         </div>
 
-        <h2 className="font-rezland text-4xl sm:text-5xl leading-[0.95] text-black dark:text-white">
+        <h2 className="font-crenzo text-4xl sm:text-5xl leading-[0.95] text-black dark:text-white">
           {post.title}
         </h2>
 
@@ -64,7 +64,7 @@ export const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
         )}
 
         {post.description && (
-          <p className="font-haas text-sm text-zinc-500 dark:text-zinc-400 line-clamp-3 max-w-xl">
+          <p className="font-haas text-sm text-ocragray-800 dark:text-zinc-200 line-clamp-3 max-w-xl">
             {post.description}
           </p>
         )}
@@ -84,8 +84,8 @@ export const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
 
         </div>
       </div>
-      <div className="p-6 sm:p-10 flex justify-end items-end relative z-10">
-        <div className="flex items-center gap-2 font-haas font-bold text-blue dark:text-red">
+      <div className="flex justify-end items-end relative z-10">
+        <div className="sm:ps-12 sm:pe-8 sm:pt-10 sm:pb-4 rounded-tl-[80%] rounded-bl-[10px] rounded-tr-[25%] bg-gradient-to-r from-blue-800/80 to-bluegray-800/80 dark:from-red-800/20 dark:to-red-800/80 flex items-center gap-2 font-haas font-bold text-blue-500 dark:text-red-500">
           {ctaLabel}
           <MoveRight size={14} className="icon-altalenante" />
         </div>

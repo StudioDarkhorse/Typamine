@@ -52,5 +52,5 @@ migliorare mobile menu trigger etc
 
 security checks 
 
-, creazione bot invio mail agli author cxon mail che infgoram chi siamo e cosa facciamo. spuegagli che se accettano gli dai acesso al loro admin panel etc. 
+creazione bot invio mail agli author cxon mail che infgoram chi siamo e cosa facciamo. spuegagli che se accettano gli dai acesso al loro admin panel etc. [80%]
 

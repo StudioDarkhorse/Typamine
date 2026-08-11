@@ -107,12 +107,12 @@ export default function IngredientRatingWidget({
 
       {/* Users Score */}
       <div className="hidden md:flex flex-col gap-2">
-        <p className="font-haas text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Users Score</p>
+        <p className="font-haas text-[10px] uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">Users Score</p>
         <div className="flex items-center gap-2">
           {isRevealed ?
 
             <StarRating value={userRating} size={20} />
-            : <p className="font-haas text-xs text-zinc-500 dark:text-zinc-400">
+            : <p className="font-haas text-xs text-ocragray-800 dark:text-zinc-200">
               Locked — {userRatingsCount}/{MIN_VOTES_TO_REVEAL} votes
             </p>}
 
@@ -138,7 +138,7 @@ export default function IngredientRatingWidget({
           </span>
         ) : (
           <>
-            <span className="font-haas text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+            <span className="font-haas text-[10px] uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
               {isSubmitting ? "Submitting..." : "Rate this font"}
             </span>
             {isSubmitting ? (

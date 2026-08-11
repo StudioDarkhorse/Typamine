@@ -105,7 +105,7 @@ export default function HomeClient({ recentIngredients = [], recentPairings = []
         <section className="space-y-4 mt-48 lg:mt-0">
           <div className="flex justify-between items-end border-b border-zinc-200 dark:border-zinc-800 pb-2">
             <div className="flex items-center space-x-2">
-              <span className="text-zinc-500 dark:text-zinc-400 font-haas text-sm">[x]</span>
+              <span className="text-ocragray-800 dark:text-zinc-200 font-haas text-sm">[x]</span>
               <h2 className="font-haas text-sm font-bold tracking-wider">POPULAR PRESCRIPTIONS // Font Pairing Examples</h2>
             </div>
             <MinimalLink href="/prescriptions" label="OUR PAIRING SELECTION" />
@@ -145,7 +145,7 @@ export default function HomeClient({ recentIngredients = [], recentPairings = []
             (stesso contenitore, nessun confine da attraversare): vedi nota lì. */}
         <div className="mt-[19rem] lg:mt-0">
           <Cta
-            title={<>Daily <span className="text-blue dark:text-red font-rezland px-2">Typographic</span> Pills</>}
+            title={<>Daily <span className="text-blue-600 dark:text-red px-2">Typographic</span> Pills</>}
             subtitle="Subscribe to our blog for weekly doses of typographic inspiration, technical tutorials, and experimental font pairings directly to your console."
             align="center"
             useGrainient

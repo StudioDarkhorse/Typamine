@@ -147,8 +147,8 @@ export default function FontListClient({ fonts, totalCount, canUpdate, canDelete
               className: "w-1/8 hidden md:block",
               render: (font: any) => (
                 <div className={`px-3 py-1.5 rounded-md flex items-center gap-2 border shadow-sm text-xs max-w-fit mt-1 ${font?.variants?.length
-                    ? "bg-white text-blue-800 dark:bg-redgray-800 dark:text-red-200 border-blue-800 dark:border-red-200"
-                    : "bg-zinc-400 dark:bg-zinc-900 border-zinc-900 dark:border-zinc-900 text-zinc-900 dark:text-zinc-400"
+                  ? "bg-white text-blue-800 dark:bg-redgray-800 dark:text-red-200 border-blue-800 dark:border-red-200"
+                  : "bg-zinc-400 dark:bg-zinc-900 border-zinc-900 dark:border-zinc-900 text-zinc-900 dark:text-zinc-400"
                   }`}
                 >                  <Layers className="h-3.5 w-3.5 shrink-0" />
                   <span className="text-[10px] font-black uppercase tracking-tighter">
@@ -164,8 +164,8 @@ export default function FontListClient({ fonts, totalCount, canUpdate, canDelete
               render: (font: any) => (
                 <div
                   className={`px-3 py-1.5 rounded-md flex items-center gap-2 border shadow-sm text-xs max-w-fit mt-1 ${font.tags?.length
-                      ? "bg-white text-blue-800 dark:bg-redgray-800 dark:text-red-200 border-blue-800 dark:border-red-200"
-                      : "bg-zinc-400 dark:bg-zinc-900 border-zinc-900 dark:border-zinc-900 text-zinc-900 dark:text-zinc-400"
+                    ? "bg-white text-blue-800 dark:bg-redgray-800 dark:text-red-200 border-blue-800 dark:border-red-200"
+                    : "bg-zinc-400 dark:bg-zinc-900 border-zinc-900 dark:border-zinc-900 text-zinc-900 dark:text-zinc-400"
                     }`}
                 >
                   <Tag className="h-3.5 w-3.5 shrink-0" />
@@ -220,7 +220,7 @@ export default function FontListClient({ fonts, totalCount, canUpdate, canDelete
             <p className="text-xl font-rezland text-center mb-8 font-bold text-black dark:text-white leading-tight">
               Delete {selectedIds.length} selected font{selectedIds.length !== 1 && "s"}?
             </p>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            <p className="text-sm text-ocragray-800 dark:text-zinc-200 leading-relaxed">
               This will permanently delete the selected fonts and all of their associated weight assets from the database and storage. This action cannot be undone.
             </p>
           </div>

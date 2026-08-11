@@ -52,7 +52,7 @@ export default function PillDetailClient({ post }: PillDetailClientProps) {
     try {
       const parsed = JSON.parse(post.insight);
       if (Array.isArray(parsed)) modules = parsed;
-    } catch {}
+    } catch { }
   }
 
   const firstIsHero = modules.length > 0 && HERO_MODULE_TYPES.has(modules[0]?.type);
@@ -127,7 +127,7 @@ export default function PillDetailClient({ post }: PillDetailClientProps) {
           </div>
           <div className="leading-tight">
             <p className="font-haas text-sm font-bold text-black dark:text-white">Written by {authorName}</p>
-            <p className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+            <p className="font-mono text-[10px] text-ocragray-800 dark:text-zinc-200 uppercase tracking-wider">
               {formatFiledDate(post.createdAt)}
             </p>
           </div>

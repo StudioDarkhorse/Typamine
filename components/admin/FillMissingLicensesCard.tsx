@@ -98,7 +98,7 @@ export default function FillMissingLicensesCard({ count }: { count: number }) {
               </div>
               <div>
                 <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">Fill Missing Licenses</h3>
-                <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 dark:text-zinc-400 mt-0.5">
+                <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 mt-0.5">
                   One font at a time
                 </p>
               </div>
@@ -109,7 +109,7 @@ export default function FillMissingLicensesCard({ count }: { count: number }) {
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-12 gap-3">
                 <Loader2 className="h-6 w-6 text-amber-500 animate-spin" />
-                <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
                   Loading fonts...
                 </p>
               </div>
@@ -122,11 +122,11 @@ export default function FillMissingLicensesCard({ count }: { count: number }) {
               <div className="flex flex-col items-center justify-center py-12 gap-3 text-center">
                 <CheckCircle2 className="h-8 w-8 text-emerald-500" />
                 <p className="text-sm font-bold text-black dark:text-white">All done</p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">{savedCount} license(s) filled in.</p>
+                <p className="text-xs text-ocragray-800 dark:text-zinc-200">{savedCount} license(s) filled in.</p>
               </div>
             ) : current ? (
               <div className="space-y-4">
-                <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
                   <span>Progress</span>
                   <span className="tabular-nums">{index + 1} / {queue.length}</span>
                 </div>
@@ -138,7 +138,7 @@ export default function FillMissingLicensesCard({ count }: { count: number }) {
                 </div>
 
                 <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-1">Font</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200 mb-1">Font</p>
                   <p className="text-lg font-rezland text-black dark:text-white">{current.name}</p>
                 </div>
 

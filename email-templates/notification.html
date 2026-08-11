@@ -1,0 +1,30 @@
+<!--
+  subject: {{title}}
+
+  Template generico per le notifiche admin (vedi notifyEvent in
+  lib/services/notifications.ts): un titolo, un messaggio e una CTA
+  opzionale. Il subject è interamente interpolato dall'argomento `title`.
+
+  Argomenti attesi: title, message
+  Argomenti opzionali: ctaLabel, ctaUrl (la CTA compare solo se ctaUrl è valorizzato)
+-->
+<h1 style="margin:0 0 16px 0; font-family:Helvetica,Arial,sans-serif; font-size:22px; font-weight:700; color:#13100F;">
+  {{title}}
+</h1>
+
+<p style="margin:0 0 24px 0;">
+  {{message}}
+</p>
+
+{{#ctaUrl}}
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 8px 0;">
+  <tr>
+    <td style="background-color:#ff3131; border-radius:6px;">
+      <a
+        href="{{ctaUrl}}"
+        style="display:inline-block; padding:12px 24px; font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:700; color:#13100F; text-decoration:none;"
+      >{{ctaLabel}}</a>
+    </td>
+  </tr>
+</table>
+{{/ctaUrl}}

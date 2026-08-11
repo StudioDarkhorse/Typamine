@@ -111,13 +111,13 @@ export default function ForceDafontScrapingCard({ count }: { count: number }) {
           const authorPart = result.author
             ? `author: ${result.author}`
             : result.scrapedAuthor
-            ? `author "${result.scrapedAuthor}" found but kept existing`
-            : null;
+              ? `author "${result.scrapedAuthor}" found but kept existing`
+              : null;
           const licensePart = result.licenseType
             ? `license: ${result.licenseType}`
             : result.scrapedLicense
-            ? `license "${result.scrapedLicense}" found but kept existing`
-            : null;
+              ? `license "${result.scrapedLicense}" found but kept existing`
+              : null;
           const parts = [authorPart, licensePart].filter(Boolean).join(", ");
           setLogs((prev) => [...prev, `✓ ${font.name} → ${parts || "nothing found on page"}`].slice(-40));
         }
@@ -179,14 +179,14 @@ export default function ForceDafontScrapingCard({ count }: { count: number }) {
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">Force Dafont Scraping</h3>
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 mt-0.5">
                     dafont.com &middot; Author &amp; license lookup
                   </p>
                 </div>
               </div>
               {phase !== "running" && (
                 <button onClick={close} className="p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition">
-                  <X className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+                  <X className="h-4 w-4 text-ocragray-800 dark:text-zinc-200" />
                 </button>
               )}
             </div>
@@ -196,7 +196,7 @@ export default function ForceDafontScrapingCard({ count }: { count: number }) {
             {phase === "loading-candidates" && (
               <div className="flex flex-col items-center justify-center py-12 gap-3">
                 <Loader2 className="h-6 w-6 text-cyan-500 animate-spin" />
-                <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Scanning fonts...</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">Scanning fonts...</p>
               </div>
             )}
 
@@ -223,7 +223,7 @@ export default function ForceDafontScrapingCard({ count }: { count: number }) {
             {(phase === "running" || phase === "done") && (
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
                     <span>Progress</span>
                     <span className="tabular-nums">
                       {progress} / {candidates.length}

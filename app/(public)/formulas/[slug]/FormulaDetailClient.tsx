@@ -81,22 +81,22 @@ export default function FormulaDetailClient({ formula, isCurated }: FormulaDetai
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-12 border border-zinc-200 dark:border-zinc-800 border-dashed rounded-lg text-zinc-500 dark:text-zinc-400 font-haas">
+                <div className="text-center py-12 border border-zinc-200 dark:border-zinc-800 border-dashed rounded-lg text-ocragray-800 dark:text-zinc-200 font-haas">
                   NO_FONTS_IN_THIS_COLLECTION_YET
                 </div>
               )}
             </section>
 
             <Cta
-              title={<>Explore <span className="text-blue dark:text-red font-rezland px-2">More</span> Fonts?</>}
+              title={<>Explore <span className="text-blue-600 dark:text-red"> More</span> Fonts?</>}
               subtitle="Browse the full archive to find your next favorite typeface, or check out our expert pairing prescriptions."
               align="center"
             >
               <Link href="/ingredients" className="inline-block">
-                <Button variant="primary">BROWSE_ALL_FONTS</Button>
+                <Button variant="primary">BROWSE ALL FONTS</Button>
               </Link>
               <Link href="/prescriptions" className="inline-block">
-                <Button variant="secondary">VIEW_PRESCRIPTIONS</Button>
+                <Button variant="secondary">VIEW PRESCRIPTIONS</Button>
               </Link>
             </Cta>
           </div>

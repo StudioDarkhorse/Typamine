@@ -56,7 +56,7 @@ export function SettingsSubCard({ title, description, right, children, className
         <div className="min-w-0">
           <h4 className="text-sm font-bold text-black dark:text-white">{title}</h4>
           {description && (
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 font-haas leading-relaxed max-w-xl">
+            <p className="text-xs text-ocragray-800 dark:text-zinc-200 mt-1 font-haas leading-relaxed max-w-xl">
               {description}
             </p>
           )}

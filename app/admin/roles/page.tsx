@@ -41,7 +41,7 @@ export default async function RoleListPage() {
                   {canUpdate && (
                     <Link
                       href={`/admin/roles/${role.id}/edit`}
-                      className="p-2.5 text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-white dark:hover:bg-white/10 rounded-md transition-all shadow-sm"
+                      className="p-2.5 text-ocragray-800 dark:text-zinc-200 hover:text-black dark:hover:text-white hover:bg-white dark:hover:bg-white/10 rounded-md transition-all shadow-sm"
                     >
                       <Edit className="h-4 w-4" />
                     </Link>

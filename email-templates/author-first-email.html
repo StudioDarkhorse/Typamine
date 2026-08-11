@@ -1,0 +1,79 @@
+<!--
+  subject: Authorization request for your fonts on Typamine
+
+  Mail di primo contatto a un font author (vedi sendFontAuthorEmail in
+  lib/actions/fontAuthor.ts, azione "Send Email" nella tabella
+  /admin/font-authors).
+
+  Argomenti attesi:
+    author_name       nome dell'autore
+    font_count        quanti suoi font abbiamo con licenza NON libera
+                      (tutto ciò che non è Free / Open Source (SIL OFL) /
+                      Public Domain — vedi FREE_LICENSE_TYPES)
+    author_auth_link  link di verifica/consenso
+    website_url       URL pubblico della piattaforma
+-->
+<p style="margin:0 0 16px 0;">Dear {{author_name}},</p>
+
+<p style="margin:0 0 16px 0;">
+  We are reaching out from Typamine, a new digital typography platform. As you can see on our website
+  (<a href="{{website_url}}" style="color:#ff3131; text-decoration:underline;">{{website_url}}</a>), we cover all aspects of
+  typography — from historical design examples and curated pairing suggestions to blog articles, specialized developer tools,
+  and much more.
+</p>
+
+<p style="margin:0 0 16px 0;">
+  During a recent database audit, our system identified <strong>{{font_count}}</strong> fonts attributed to you that are
+  currently listed under licenses other than 100% Free or Open Source (such as Free for Personal Use).
+</p>
+
+<p style="margin:0 0 16px 0;">
+  Respecting creators' intellectual property is core to our mission. Therefore, we would like to formally request your
+  authorization to distribute and showcase these fonts and their related data within our catalog.
+</p>
+
+<p style="margin:0 0 12px 0;">
+  To give you full control over your work, we provide every verified font author with access to a dedicated Admin Panel.
+  Through this dashboard, you will be able to:
+</p>
+
+<ul style="margin:0 0 20px 0; padding-left:20px;">
+  <li style="margin-bottom:6px;">Manage and update your profile and metadata.</li>
+  <li style="margin-bottom:6px;">Add or modify donation links, portfolio URLs, and commercial license store links.</li>
+  <li style="margin-bottom:6px;">Upload new font releases directly to our platform.</li>
+</ul>
+
+<p style="margin:0 0 20px 0;">
+  To authorize the distribution of your fonts and claim your profile, please confirm your consent by replying to this email
+  or clicking the verification link below:
+</p>
+
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px 0;">
+  <tr>
+    <td style="background-color:#ff3131; border-radius:6px;">
+      <a
+        href="{{author_auth_link}}"
+        style="display:inline-block; padding:12px 24px; font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:700; color:#13100F; text-decoration:none;"
+      >Authorize &amp; claim my profile</a>
+    </td>
+  </tr>
+</table>
+
+<p style="margin:0 0 16px 0; font-size:13px; color:#71717a;">
+  Or paste this link in your browser:<br />
+  <a href="{{author_auth_link}}" style="color:#ff3131;">{{author_auth_link}}</a>
+</p>
+
+<p style="margin:0 0 16px 0;">
+  Once your account is verified, we will immediately send over your secure login credentials to access your dedicated
+  Admin Panel.
+</p>
+
+<p style="margin:0 0 16px 0;">
+  Thank you for your time and for contributing to the typography community. We look forward to collaborating with you.
+</p>
+
+<p style="margin:0;">
+  Best regards,<br />
+  <strong>The Typamine Team</strong>
+</p>

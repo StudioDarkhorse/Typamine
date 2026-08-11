@@ -9,6 +9,7 @@ import {
   NotificationChannels,
   PopupFrequency,
   ResolvedHeroWordmarkFontFrame,
+  SmtpAuthType,
 } from "@/types";
 import { withSafeDbQuery } from "./dbMigration";
 import { CACHE_TAGS } from "@/lib/cacheTags";
@@ -32,6 +33,9 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   popupFrequencyDays: 7,
   emailProvider: "gmail_oauth2",
   gmailConnected: false,
+  smtpPort: 587,
+  smtpSecure: false,
+  smtpAuthType: "password",
   credentialsVault: [],
   integrationsConfig: {},
   notificationChannels: {
@@ -97,6 +101,21 @@ export function mapAdminSettings(record: any): AdminSettings {
     gmailSenderName: record.gmailSenderName ?? undefined,
     gmailConnected: !!record.gmailConnected,
     gmailConnectedEmail: record.gmailConnectedEmail ?? undefined,
+    smtpHost: record.smtpHost ?? undefined,
+    smtpPort: record.smtpPort ?? 587,
+    smtpUser: record.smtpUser ?? undefined,
+    smtpPassword: record.smtpPassword ?? undefined,
+    smtpSecure: !!record.smtpSecure,
+    smtpFromEmail: record.smtpFromEmail ?? undefined,
+    smtpFromName: record.smtpFromName ?? undefined,
+    smtpAuthType: (record.smtpAuthType as SmtpAuthType) ?? "password",
+    smtpOauthClientId: record.smtpOauthClientId ?? undefined,
+    smtpOauthClientSecret: record.smtpOauthClientSecret ?? undefined,
+    smtpOauthRefreshToken: record.smtpOauthRefreshToken ?? undefined,
+    smtpOauthAccessUrl: record.smtpOauthAccessUrl ?? undefined,
+    resendApiKey: record.resendApiKey ?? undefined,
+    resendFromEmail: record.resendFromEmail ?? undefined,
+    resendFromName: record.resendFromName ?? undefined,
     credentialsVault: safeJsonParse<CredentialEntry[]>(record.credentialsVault, []),
 
     integrationsConfig: safeJsonParse<IntegrationsConfig>(record.integrationsConfig, {}),

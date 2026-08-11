@@ -43,7 +43,7 @@ export default function AdminHeader({ session, dbSource }: { session: any; dbSou
                 <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${dbSource === "Cloudflare D1" ? "bg-emerald-400 dark:bg-emerald-500" : "bg-amber-400 dark:bg-amber-500"}`}></span>
                 <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${dbSource === "Cloudflare D1" ? "bg-emerald-500" : "bg-amber-500"}`}></span>
               </span>
-              <span className="text-xs font-semibold tracking-wide text-zinc-500 dark:text-zinc-400">
+              <span className="text-xs font-semibold tracking-wide text-ocragray-800 dark:text-zinc-200">
                 Database: <span className={dbSource === "Cloudflare D1" ? "text-emerald-600 dark:text-emerald-400 font-bold" : "text-amber-600 dark:text-amber-400 font-bold"}>{dbSource}</span>
               </span>
             </div>

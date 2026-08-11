@@ -192,14 +192,14 @@ export default function ScrapeFromDafontCard() {
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">Scrape From Dafont</h3>
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 mt-0.5">
                     Import a whole dafont.com category
                   </p>
                 </div>
               </div>
               {!isRunning && (
                 <button onClick={close} className="p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition">
-                  <X className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+                  <X className="h-4 w-4 text-ocragray-800 dark:text-zinc-200" />
                 </button>
               )}
             </div>
@@ -235,7 +235,7 @@ export default function ScrapeFromDafontCard() {
             {step === "page" && (
               <div className="space-y-5">
                 <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-1">Category</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200 mb-1">Category</p>
                   <p className="text-sm font-bold text-black dark:text-white">
                     {macro} / {sub}
                   </p>
@@ -260,7 +260,7 @@ export default function ScrapeFromDafontCard() {
             {(step === "running" || step === "done") && (
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
                     <span>Progress</span>
                     <span className="tabular-nums">
                       {progress} / {total}

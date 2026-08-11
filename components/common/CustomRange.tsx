@@ -88,7 +88,7 @@ export const CustomRange: React.FC<CustomRangeProps> = ({
 
             {/* Min/Max Labels */}
             {showMinMax && (
-                <div className="flex justify-between mt-1 text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase">
+                <div className="flex justify-between mt-1 text-[10px] text-ocragray-800 dark:text-zinc-200 font-bold uppercase">
                     <span>{min}</span>
                     <span>{max}</span>
                 </div>

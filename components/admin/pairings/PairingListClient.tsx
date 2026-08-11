@@ -180,8 +180,8 @@ export default function PairingListClient({ pairings, totalCount, canUpdate, can
               render: (p: any) => (
                 <div
                   className={`px-3 py-1.5 rounded-md flex items-center gap-2 border shadow-sm text-xs max-w-fit mt-1 ${p.tags?.length
-                      ? "bg-white text-blue-800 dark:bg-redgray-800 dark:text-red-200 border-blue-800 dark:border-red-200"
-                      : "bg-zinc-400 dark:bg-zinc-900 border-zinc-900 dark:border-zinc-900 text-zinc-900 dark:text-zinc-400"
+                    ? "bg-white text-blue-800 dark:bg-redgray-800 dark:text-red-200 border-blue-800 dark:border-red-200"
+                    : "bg-zinc-400 dark:bg-zinc-900 border-zinc-900 dark:border-zinc-900 text-zinc-900 dark:text-zinc-400"
                     }`}
                 >
                   <Tag className="h-3.5 w-3.5 shrink-0" />
@@ -266,7 +266,7 @@ export default function PairingListClient({ pairings, totalCount, canUpdate, can
             <p className="text-xl font-rezland text-center mb-8 font-bold text-black dark:text-white leading-tight">
               Delete {selectedIds.length} selected pairing{selectedIds.length !== 1 && "s"}?
             </p>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            <p className="text-sm text-ocragray-800 dark:text-zinc-200 leading-relaxed">
               This will permanently delete the selected font pairings from the database and any preview images from storage. This action cannot be undone.
             </p>
           </div>

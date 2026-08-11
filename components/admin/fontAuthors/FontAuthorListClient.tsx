@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Edit, ShieldCheck, AlertTriangle, User as UserIcon } from "lucide-react";
+import { Edit, ShieldCheck, AlertTriangle, User as UserIcon, Mail } from "lucide-react";
 import ContentTable from "@/components/common/ContentTable";
 import DeleteButton from "@/components/common/DeleteButton";
 import { deleteFontAuthor } from "@/lib/actions/fontAuthor";
 import { ListHeaderHandlers, ListPagination } from "@/components/common/ListHandlers";
 import BaseModal from "@/components/common/BaseModal";
 import { Button } from "@/components/common/Button";
+import SendAuthorEmailModal from "@/components/admin/fontAuthors/SendAuthorEmailModal";
 import { useRouter } from "next/navigation";
 
 interface FontAuthorListClientProps {
@@ -29,6 +30,10 @@ export default function FontAuthorListClient({ authors, totalCount, canUpdate, c
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  // Un solo modale per l'intera tabella, pilotato dall'autore selezionato:
+  // montarne uno per riga significherebbe decine di modali (e delle loro
+  // fetch di template) istanziati per nulla.
+  const [emailAuthor, setEmailAuthor] = useState<{ id: string; name: string; email?: string | null } | null>(null);
   const router = useRouter();
 
   const handleToggleSelectionMode = () => {
@@ -150,7 +155,7 @@ export default function FontAuthorListClient({ authors, totalCount, canUpdate, c
               key: "email",
               header: "Email",
               className: "w-1/4 hidden lg:block",
-              render: (a: any) => <span className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{a.email}</span>,
+              render: (a: any) => <span className="text-xs text-ocragray-800 dark:text-zinc-200 truncate">{a.email}</span>,
             },
             {
               key: "status",
@@ -168,6 +173,16 @@ export default function FontAuthorListClient({ authors, totalCount, canUpdate, c
           ]}
           rowActions={(a: any) => (
             <>
+              {canUpdate && (
+                <button
+                  type="button"
+                  onClick={() => setEmailAuthor({ id: a.id, name: a.name, email: a.email })}
+                  className="p-2.5 text-bluegray-800 dark:text-redgray-200 hover:text-black dark:hover:text-white hover:bg-white dark:hover:bg-white/10 rounded-md transition-all shadow-sm backdrop-blur-md"
+                  title="Send Email"
+                >
+                  <Mail className="h-4 w-4" />
+                </button>
+              )}
               {canUpdate && (
                 <Link
                   href={`/admin/font-authors/${a.id}`}
@@ -193,6 +208,10 @@ export default function FontAuthorListClient({ authors, totalCount, canUpdate, c
         <ListPagination totalCount={totalCount} entityNamePlural="Font Authors" />
       </div>
 
+      {emailAuthor && (
+        <SendAuthorEmailModal author={emailAuthor} isOpen={!!emailAuthor} onClose={() => setEmailAuthor(null)} />
+      )}
+
       <BaseModal isOpen={isModalOpen} onClose={() => !isProcessing && setIsModalOpen(false)}>
         <BaseModal.Header onClose={() => !isProcessing && setIsModalOpen(false)}>
           <div className="flex items-end gap-4">
@@ -207,7 +226,7 @@ export default function FontAuthorListClient({ authors, totalCount, canUpdate, c
             <p className="text-xl font-rezland text-center mb-8 font-bold text-black dark:text-white leading-tight">
               Delete {selectedIds.length} selected font author{selectedIds.length !== 1 && "s"}?
             </p>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            <p className="text-sm text-ocragray-800 dark:text-zinc-200 leading-relaxed">
               This will permanently delete the selected font authors from the database and any avatar/banner images from storage. This action cannot be undone.
             </p>
           </div>

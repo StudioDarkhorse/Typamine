@@ -734,7 +734,7 @@ export default function PairingForm({ initialData, tags }: PairingFormProps) {
           <div className="flex items-center justify-between p-4 border border-black/5 dark:border-white/5 rounded-xl bg-black/5 dark:bg-white/5">
             <div>
               <p className="text-sm font-bold text-black dark:text-white">Publish Pairing</p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">Make this prescription publicly visible on /prescriptions</p>
+              <p className="text-xs text-ocragray-800 dark:text-zinc-200">Make this prescription publicly visible on /prescriptions</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -792,8 +792,8 @@ export default function PairingForm({ initialData, tags }: PairingFormProps) {
                   type="button"
                   onClick={() => setActiveTab("canvas")}
                   className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${activeTab === "canvas"
-                      ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm"
-                      : "text-zinc-500 hover:text-black dark:hover:text-white"
+                    ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm"
+                    : "text-zinc-500 hover:text-black dark:hover:text-white"
                     }`}
                 >
                   Canvas Generator
@@ -802,8 +802,8 @@ export default function PairingForm({ initialData, tags }: PairingFormProps) {
                   type="button"
                   onClick={() => setActiveTab("upload")}
                   className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${activeTab === "upload"
-                      ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm"
-                      : "text-zinc-500 hover:text-black dark:hover:text-white"
+                    ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm"
+                    : "text-zinc-500 hover:text-black dark:hover:text-white"
                     }`}
                 >
                   File Upload
@@ -933,7 +933,7 @@ export default function PairingForm({ initialData, tags }: PairingFormProps) {
                         <RefreshCw className="w-3 h-3" /> Redraw
                       </button>
                     </div>
-                    <p className="text-center text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                    <p className="text-center text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
                       1200 &times; 630
                     </p>
                   </div>

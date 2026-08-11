@@ -147,8 +147,8 @@ export default function CollectionForm({ formula, fonts = [], tags = [] }: Colle
                       type="button"
                       onClick={() => handleFontToggle(f.id)}
                       className={`px-3 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border ${isSelected
-                          ? "bg-black text-white dark:bg-white dark:text-black border-transparent"
-                          : "bg-transparent text-zinc-600 dark:text-zinc-400 border-black/10 dark:border-white/10 hover:border-black/30 dark:hover:border-white/30"
+                        ? "bg-black text-white dark:bg-white dark:text-black border-transparent"
+                        : "bg-transparent text-zinc-600 dark:text-zinc-400 border-black/10 dark:border-white/10 hover:border-black/30 dark:hover:border-white/30"
                         }`}
                     >
                       {isSelected && <Check className="w-3 h-3" />}
@@ -173,7 +173,7 @@ export default function CollectionForm({ formula, fonts = [], tags = [] }: Colle
             <div className="bg-white/20 dark:bg-zinc-900/60 border border-black/5 dark:border-white/5 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl backdrop-blur-md">
               <div className="border-b border-black/5 dark:border-white/5 pb-4">
                 <h3 className="text-xs font-black uppercase tracking-widest text-bluegray-800 dark:text-redgray-200">Metadata & Details</h3>
-                <p className="text-[10px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mt-1 font-semibold">Classification and additional details</p>
+                <p className="text-[10px] uppercase tracking-wider text-ocragray-800 dark:text-zinc-200 mt-1 font-semibold">Classification and additional details</p>
               </div>
 
               <div className="space-y-6">
@@ -217,7 +217,7 @@ export default function CollectionForm({ formula, fonts = [], tags = [] }: Colle
         </BaseModal.Header>
         <BaseModal.Body>
           <div className="space-y-4">
-            <p className="text-zinc-500 dark:text-zinc-400 font-haas">
+            <p className="text-ocragray-800 dark:text-zinc-200 font-haas">
               We encountered an error while trying to save the collection:
             </p>
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 font-bold text-sm">

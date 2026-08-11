@@ -353,6 +353,21 @@ export async function ensureD1SchemaUpdated(force = false) {
     await addCol("AdminSettings", "gmailConnected", "BOOLEAN DEFAULT 0");
     await addCol("AdminSettings", "gmailConnectedEmail", "TEXT");
     await addCol("AdminSettings", "gmailRefreshToken", "TEXT");
+    await addCol("AdminSettings", "smtpHost", "TEXT");
+    await addCol("AdminSettings", "smtpPort", "INTEGER DEFAULT 587");
+    await addCol("AdminSettings", "smtpUser", "TEXT");
+    await addCol("AdminSettings", "smtpPassword", "TEXT");
+    await addCol("AdminSettings", "smtpSecure", "BOOLEAN DEFAULT 0");
+    await addCol("AdminSettings", "smtpFromEmail", "TEXT");
+    await addCol("AdminSettings", "smtpFromName", "TEXT");
+    await addCol("AdminSettings", "smtpAuthType", "TEXT DEFAULT 'password'");
+    await addCol("AdminSettings", "smtpOauthClientId", "TEXT");
+    await addCol("AdminSettings", "smtpOauthClientSecret", "TEXT");
+    await addCol("AdminSettings", "smtpOauthRefreshToken", "TEXT");
+    await addCol("AdminSettings", "smtpOauthAccessUrl", "TEXT");
+    await addCol("AdminSettings", "resendApiKey", "TEXT");
+    await addCol("AdminSettings", "resendFromEmail", "TEXT");
+    await addCol("AdminSettings", "resendFromName", "TEXT");
     await addCol("AdminSettings", "credentialsVault", "TEXT");
 
     // Integrations

@@ -89,7 +89,7 @@ export default function PairingTable({ pairings }: PairingTableProps) {
                   <p className="font-rezland text-xl font-bold text-black dark:text-white leading-tight truncate">
                     {p.name}
                   </p>
-                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono tracking-wider mt-0.5 truncate">
+                  <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 font-mono tracking-wider mt-0.5 truncate">
                     /{p.slug}
                   </p>
                 </div>
@@ -105,7 +105,7 @@ export default function PairingTable({ pairings }: PairingTableProps) {
                     <span className="text-[10px] font-black uppercase text-blue-600 dark:text-red-400">Primary:</span>
                     <span>{p.primaryFont?.name || "N/A"}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
+                  <div className="flex items-center gap-1.5 text-ocragray-800 dark:text-zinc-200">
                     <span className="text-[10px] font-black uppercase">Secondary:</span>
                     <span>{p.secondaryFont?.name || "N/A"}</span>
                   </div>
