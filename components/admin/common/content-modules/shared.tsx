@@ -59,6 +59,7 @@ export const FONT_FAMILIES = [
   { id: 'galaxytail', label: 'Galaxy Tail', class: 'font-galaxytail' },
   { id: 'ikosdubOutline', label: 'Ikos Dub Outline', class: 'font-ikosdub-outline' },
   { id: 'ikosdubSolid', label: 'Ikos Dub Solid', class: 'font-ikosdub-solid' },
+  { id: 'neuropol', label: 'Neuropol', class: 'font-neuropol' },
 ];
 
 export const SITE_COLORS = [

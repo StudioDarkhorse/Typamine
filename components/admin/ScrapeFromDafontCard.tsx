@@ -175,9 +175,9 @@ export default function ScrapeFromDafontCard() {
     <>
       <Card roundness="lg" visualHover className="cursor-pointer" onClick={openModal}>
         <div className="p-2 h-full flex flex-col justify-center items-center gap-2">
-          <p className="text-xl font-bold text-black dark:text-white truncate text-center">Browse a dafont.com category</p>
-          <p className="text-md text-center uppercase tracking-widest font-bold text-cyan-600 dark:text-cyan-400 truncate">
-            Scrape From Dafont
+          <p className="text-xl font-bold text-black dark:text-white truncate text-center">Import Fonts from Dafont</p>
+          <p className="font-haas text-md text-center uppercase tracking-widest font-bold text-blue-100 dark:text-red-200 truncate">
+            Run Scraper
           </p>
         </div>
       </Card>
@@ -187,11 +187,11 @@ export default function ScrapeFromDafontCard() {
           <BaseModal.Header>
             <div className="flex items-center justify-between w-full gap-4">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="h-10 w-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0">
+                <div className="h-10 w-10 rounded-md bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0">
                   <Download className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">Scrape From Dafont</h3>
+                  <h3 className="text-2xl font-crenzo text-black dark:text-white leading-tight">Scrape Fonts</h3>
                   <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 mt-0.5">
                     Import a whole dafont.com category
                   </p>

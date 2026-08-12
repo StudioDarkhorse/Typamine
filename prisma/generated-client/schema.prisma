@@ -46,28 +46,33 @@ model Permission {
 // businessInfo) sono oggetti/array JSON-serializzati in colonne TEXT, stesso
 // pattern già usato per `Prescription.insight`/`Post.insight` su D1/SQLite.
 model FontAuthor {
-  id              String       @id @default(uuid())
-  slug            String       @unique
-  name            String
-  type            String       @default("INDIVIDUAL")
-  email           String
-  supportEmail    String?
-  avatarUrl       String?
-  bannerUrl       String?
-  bio             String?
-  website         String?
-  donation        String?
-  nationality     String?
-  languagesSpoken String?
-  isVerified      Boolean      @default(false)
-  socialLinks     String?
-  metrics         String?
-  businessInfo    String?
-  specialties     String?
-  status          String       @default("ACTIVE")
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @default(now()) @updatedAt
-  fonts           Ingredient[]
+  id               String       @id @default(uuid())
+  slug             String       @unique
+  name             String
+  type             String       @default("INDIVIDUAL")
+  email            String
+  supportEmail     String?
+  avatarUrl        String?
+  bannerUrl        String?
+  bio              String?
+  website          String?
+  // Pagina profilo dell'autore su dafont.com (es.
+  // https://www.dafont.com/mjtype.d10200) — popolata dalla key task
+  // "Scrape Author Dafont Profiles", che la ricava dalla PDP del primo font
+  // dell'autore invece che indovinare uno slug (dafont usa id numerici).
+  dafontProfileUrl String?
+  donation         String?
+  nationality      String?
+  languagesSpoken  String?
+  isVerified       Boolean      @default(false)
+  socialLinks      String?
+  metrics          String?
+  businessInfo     String?
+  specialties      String?
+  status           String       @default("ACTIVE")
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now()) @updatedAt
+  fonts            Ingredient[]
 }
 
 // Entità SEO condivisa: un unico set di meta-tag riusabile da qualunque

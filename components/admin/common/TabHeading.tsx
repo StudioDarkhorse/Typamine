@@ -27,7 +27,7 @@ export default function TabHeading({
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-2 pb-4">
       <div className="space-y-2 ps-4">
-        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-rezland text-black dark:text-white tracking-tight leading-none">
+        <h2 className="text-xl sm:text-2xl lg:text-4xl font-crenzo text-black dark:text-white tracking-tight leading-none">
           {title}
         </h2>
         {subtitle && (

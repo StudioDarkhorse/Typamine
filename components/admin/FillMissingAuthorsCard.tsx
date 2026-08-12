@@ -79,8 +79,8 @@ export default function FillMissingAuthorsCard({ count }: { count: number }) {
             <p className="text-xl font-bold text-black dark:text-white truncate">
               {count} font{count !== 1 ? "s" : ""} without an author
             </p>
-            <p className="text-md text-center uppercase tracking-widest font-bold text-indigo-600 dark:text-indigo-400 truncate">
-              Fill with Gemini
+            <p className="font-haas text-md text-center uppercase tracking-widest font-bold text-blue-800 dark:text-red-600 truncate">
+              Fill Manually
             </p>
           </div>
         </div>
@@ -90,11 +90,11 @@ export default function FillMissingAuthorsCard({ count }: { count: number }) {
         <BaseModal isOpen={isOpen} onClose={() => (!isSaving ? close() : undefined)} size="md">
           <BaseModal.Header onClose={() => (!isSaving ? close() : undefined)}>
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+              <div className="h-10 w-10 rounded-md bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
                 <UserPlus className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
               </div>
               <div>
-                <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">Fill Missing Authors</h3>
+                <h3 className="text-lg font-crenzo text-black dark:text-white leading-tight">Fill Authors</h3>
                 <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 mt-0.5">
                   One font at a time
                 </p>
@@ -136,7 +136,7 @@ export default function FillMissingAuthorsCard({ count }: { count: number }) {
 
                 <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200 mb-1">Font</p>
-                  <p className="text-lg font-rezland text-black dark:text-white">{current.name}</p>
+                  <p className="text-lg font-haas text-black dark:text-white">{current.name.replace('_',' ')}</p>
                 </div>
 
                 <Input

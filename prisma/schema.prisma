@@ -56,6 +56,15 @@ model FontAuthor {
   bannerUrl       String?
   bio             String?
   website         String?
+  // Pagina profilo dell'autore su dafont.com (es.
+  // https://www.dafont.com/mjtype.d10200) — popolata dalla key task
+  // "Scrape Author Dafont Profiles", che la ricava dalla PDP del primo font
+  // dell'autore invece che indovinare uno slug (dafont usa id numerici).
+  dafontProfileUrl String?
+  // Pagina profilo utente dafont (dafont.com/profile.php?user=NNNN), linkata
+  // dalla pagina autore sopra: è quella che, quando l'autore l'ha resa
+  // pubblica, contiene la sua email di contatto.
+  dafontProfileInfoUrl String?
   donation        String?
   nationality     String?
   languagesSpoken String?

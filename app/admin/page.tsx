@@ -10,11 +10,17 @@ import {
   getFontsNeedingManualLicenseCount,
   getFontsNeedingDafontScrapeCount,
 } from "@/lib/actions/font";
+import {
+  getAuthorsNeedingDafontProfileCount,
+  getAuthorsNeedingDafontProfileInfoCount,
+} from "@/lib/actions/fontAuthor";
 import AIFontQualityButton from "@/components/admin/AIFontQualityButton";
 import AIFontIdentityButton from "@/components/admin/AIFontIdentityButton";
 import FillMissingAuthorsCard from "@/components/admin/FillMissingAuthorsCard";
 import FillMissingLicensesCard from "@/components/admin/FillMissingLicensesCard";
 import ForceDafontScrapingCard from "@/components/admin/ForceDafontScrapingCard";
+import ScrapeAuthorProfilesCard from "@/components/admin/ScrapeAuthorProfilesCard";
+import ScrapeAuthorProfileInfoCard from "@/components/admin/ScrapeAuthorProfileInfoCard";
 import ScrapeFromDafontCard from "@/components/admin/ScrapeFromDafontCard";
 import { Card } from "@/components/common/Card";
 
@@ -68,6 +74,9 @@ export default async function AdminDashboard() {
   const missingAuthorCount = canReadFonts ? await getFontsNeedingManualAuthorCount() : 0;
   const missingLicenseCount = canReadFonts ? await getFontsNeedingManualLicenseCount() : 0;
   const dafontScrapeCount = canReadFonts ? await getFontsNeedingDafontScrapeCount() : 0;
+  const canReadAuthors = hasPermission(session, "fontAuthor", "read");
+  const authorsWithoutDafontProfileCount = canReadAuthors ? await getAuthorsNeedingDafontProfileCount() : 0;
+  const authorsWithoutProfileInfoCount = canReadAuthors ? await getAuthorsNeedingDafontProfileInfoCount() : 0;
   const canImportFonts = hasPermission(session, "font", "create");
 
   // Archive/blog/pairings/collections condividono il permesso "font" per la
@@ -121,21 +130,27 @@ export default async function AdminDashboard() {
           righe, ogni widget del dashboard occupa una cella (1 col, 1 row) —
           per ora solo "Fill Missing Authors", altri ne seguiranno. */}
       <div className="flex-1 ">
-        <h2 className="mb-3 text-4xl font-rezland font-black uppercase tracking-widest text-center text-white dark:text-red-200">
-          Key Tasks
+        <h2 className="mb-3 text-4xl font-crenzo font-black uppercase tracking-widest text-center text-white dark:text-red-200">
+          Auto Bulk Tasks
         </h2>
 
         <div className="grid grid-cols-2 grid-rows-3 gap-4">
           {missingAuthorCount > 0 && <FillMissingAuthorsCard count={missingAuthorCount} />}
           {missingLicenseCount > 0 && <FillMissingLicensesCard count={missingLicenseCount} />}
           {dafontScrapeCount > 0 && <ForceDafontScrapingCard count={dafontScrapeCount} />}
+          {authorsWithoutDafontProfileCount > 0 && (
+            <ScrapeAuthorProfilesCard count={authorsWithoutDafontProfileCount} />
+          )}
+          {authorsWithoutProfileInfoCount > 0 && (
+            <ScrapeAuthorProfileInfoCard count={authorsWithoutProfileInfoCount} />
+          )}
           {canImportFonts && <ScrapeFromDafontCard />}
         </div>
       </div>
 
       {hasQuickActions && (
         <div className="space-y-3 w-1/4 shrink-0">
-          <h2 className="text-4xl font-rezland font-black uppercase tracking-widest text-center text-white dark:text-red-200">
+          <h2 className="text-2xl font-crenzo font-black uppercase tracking-widest text-center text-white dark:text-red-200">
             Quick Actions
           </h2>
           <div className="grid grid-cols-1 gap-4">

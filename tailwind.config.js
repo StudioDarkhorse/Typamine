@@ -50,6 +50,7 @@ module.exports = {
         crenzo: ["var(--font-crenzo)", "sans-serif"],
         revert: ["var(--font-revert)", "sans-serif"],
         revertro: ["var(--font-revertro)", "sans-serif"],
+        neuropol: ["var(--font-neuropol)", "sans-serif"],
       },
       keyframes: {
         "bounce-x": {

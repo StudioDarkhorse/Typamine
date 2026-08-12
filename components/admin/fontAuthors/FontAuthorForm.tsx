@@ -69,6 +69,8 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
   const [email, setEmail] = useState(initialData?.email || "");
   const [supportEmail, setSupportEmail] = useState(initialData?.supportEmail || "");
   const [website, setWebsite] = useState(initialData?.website || "");
+  const [dafontProfileUrl, setDafontProfileUrl] = useState(initialData?.dafontProfileUrl || "");
+  const [dafontProfileInfoUrl, setDafontProfileInfoUrl] = useState(initialData?.dafontProfileInfoUrl || "");
   const [nationality, setNationality] = useState(initialData?.nationality || "");
   const [bio, setBio] = useState(initialData?.bio || "");
   const [isVerified, setIsVerified] = useState(initialData?.isVerified ?? false);
@@ -336,6 +338,26 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input label="Website" name="website" value={website} onChange={setWebsite} placeholder="https://foundry.com" />
             <Input label="Nationality (ISO-2)" name="nationality" value={nationality} onChange={(v) => setNationality(v.toUpperCase())} placeholder="IT" maxLength={2} />
+          </div>
+
+          {/* Popolati in automatico dalle key task "Scrape Author Dafont
+              Profiles" e "Scrape Profile Info" in dashboard, editabili a mano
+              da qui. */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="DaFont Profile Page"
+              name="dafontProfileUrl"
+              value={dafontProfileUrl}
+              onChange={setDafontProfileUrl}
+              placeholder="https://www.dafont.com/mjtype.d10200"
+            />
+            <Input
+              label="DaFont Profile Info Page"
+              name="dafontProfileInfoUrl"
+              value={dafontProfileInfoUrl}
+              onChange={setDafontProfileInfoUrl}
+              placeholder="https://www.dafont.com/profile.php?user=1490629"
+            />
           </div>
 
           <Input as="textarea" rows={4} label="Bio" name="bio" value={bio} onChange={setBio} placeholder="Short biography (Markdown supported)..." />

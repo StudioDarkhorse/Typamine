@@ -26,7 +26,7 @@ export default async function PillsResults({ page, perPage, tagIds, search, sort
       </p>
 
       {posts.length > 0 && (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8 mb-16">
           {posts.map((post) => (
             <FeaturedPostCard key={post.id} post={post} />
           ))}

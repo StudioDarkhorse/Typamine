@@ -33,7 +33,7 @@ export const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
   return (
     <Link
       href={href as any}
-      className="group relative flex flex-col md:flex-row md:justify-between overflow-hidden border border-zinc-200 dark:border-zinc-800 min-h-[320px]"
+      className="group relative flex flex-col md:flex-row md:justify-between overflow-hidden border border-zinc-200 dark:border-zinc-800 h-[640px]"
     >
       {/* Background image spanning the whole spotlight, same overlay trick as PrescriptionCard */}
       {cover && (
@@ -47,41 +47,43 @@ export const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
       )}
       {!cover && <div className="absolute inset-0 bg-zinc-100 dark:bg-zinc-900" />}
 
-      <div className="relative z-10 flex flex-col justify-end md:justify-center gap-4 p-6 sm:p-10 max-w-3xl">
-        <div className="flex items-center gap-2">
+      <div className="relative z-10 flex-1 flex flex-col justify-between px-8 pt-8 pb-4 sm:px-12 sm:pt-12 md:px-16 md:pt-16 max-w-4xl">
+        <div className="grow flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[10px] text-ocragray-800 dark:text-zinc-200 uppercase tracking-widest">
+              {formatFiledDate(post.createdAt)}
+            </span>
+          </div>
 
-          <span className="font-mono text-[10px] text-ocragray-800 dark:text-zinc-200 uppercase tracking-widest">
-            {formatFiledDate(post.createdAt)}
-          </span>
+          <h2 className="font-crenzo text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.85] text-black dark:text-white line-clamp-5 overflow-hidden">
+            {post.title}
+          </h2>
         </div>
 
-        <h2 className="font-crenzo text-4xl sm:text-5xl leading-[0.95] text-black dark:text-white">
-          {post.title}
-        </h2>
+        <div className="flex flex-col gap-4 mt-6">
+          {post.caption && (
+            <p className="font-haas text-lg sm:text-xl text-zinc-600 dark:text-zinc-300 italic line-clamp-1">{post.caption}</p>
+          )}
 
-        {post.caption && (
-          <p className="font-haas text-lg text-zinc-600 dark:text-zinc-300 italic">{post.caption}</p>
-        )}
+          {post.description && (
+            <p className="font-haas text-sm sm:text-base text-ocragray-800 dark:text-zinc-200 line-clamp-4 max-w-2xl">
+              {post.description}
+            </p>
+          )}
 
-        {post.description && (
-          <p className="font-haas text-sm text-ocragray-800 dark:text-zinc-200 line-clamp-3 max-w-xl">
-            {post.description}
-          </p>
-        )}
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {post.tags.slice(0, 4).map((tag) => (
+                <Badge key={tag.id} variant="warm">{tag.name}</Badge>
+              ))}
+            </div>
+          )}
 
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {post.tags.slice(0, 4).map((tag) => (
-              <Badge key={tag.id} variant="warm">{tag.name}</Badge>
-            ))}
+          <div className="flex items-center justify-between pt-4">
+            <span className="font-haas text-[10px] sm:text-xs text-bluegray-800 dark:text-redgray-200 uppercase tracking-wider">
+              Filed by {authorName}
+            </span>
           </div>
-        )}
-
-        <div className="flex items-center justify-between pt-2">
-          <span className="font-haas text-[10px] text-bluegray-800 dark:text-redgray-200 uppercase tracking-wider">
-            Filed by {authorName}
-          </span>
-
         </div>
       </div>
       <div className="flex justify-end items-end relative z-10">

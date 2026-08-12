@@ -479,6 +479,12 @@ export interface FontAuthor {
   /** Sito web ufficiale dell'autore o della fonderia */
   website?: string;
 
+  /** Pagina profilo dell'autore su dafont.com (es. https://www.dafont.com/mjtype.d10200) */
+  dafontProfileUrl?: string;
+
+  /** Pagina profilo utente dafont con i contatti (es. https://www.dafont.com/profile.php?user=1490629) */
+  dafontProfileInfoUrl?: string;
+
   /** Dettagli per le donazioni / il supporto finanziario */
   donation: DonationDetails;
 

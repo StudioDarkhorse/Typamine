@@ -216,6 +216,17 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Neuropol';
+  src: url('/fonts/Neuropol/Neuropol.woff2') format('woff2'),
+       url('/fonts/Neuropol/Neuropol.woff') format('woff'),
+       url('/fonts/Neuropol/Neuropol.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -240,6 +251,7 @@
   --font-crenzo: 'Crenzo';
   --font-revert: 'Revert';
   --font-revertro: 'Revertro';
+  --font-neuropol: 'Neuropol';
 
   --color-red: #ff3131;
   --color-blue: #00cece;
@@ -418,6 +430,7 @@
   --font-crenzo: var(--font-crenzo), sans-serif;
   --font-revert: var(--font-revert), sans-serif;
   --font-revertro: var(--font-revertro), sans-serif;
+  --font-neuropol: var(--font-neuropol), sans-serif;
 
   /* Standard system mappings */
   --font-sans: var(--font-sans);
@@ -575,6 +588,10 @@ h3 {
 
 .font-revertro {
   font-family: var(--font-revertro);
+}
+
+.font-neuropol {
+  font-family: var(--font-neuropol);
 }
 
 /* Colore/sfondo dinamico per i content module (blog, pairing insight, ecc.):

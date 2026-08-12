@@ -25,7 +25,7 @@ export default function HomepageBanner({ text, textColorClassName, bgColorClassN
             {Array.from({ length: 6 }).map((_, idx) => (
               <span
                 key={idx}
-                className="px-8 font-rezland text-2xl sm:text-4xl whitespace-nowrap dyn-text"
+                className="px-8 font-crenzo text-xl sm:text-2xl whitespace-nowrap dyn-text"
                 style={dynamicTextStyle(textColorClassName)}
               >
                 {text}

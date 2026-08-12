@@ -146,6 +146,110 @@ export function parseDafontPDPMarkdown(markdownText: string | null | undefined):
   return { author, license };
 }
 
+// Link alla pagina profilo dell'autore su dafont, estratto dalla PDP di un
+// suo font: dafont scrive sempre `by [Nome](https://www.dafont.com/<slug>.dNNNN)`
+// sotto il nome del font. L'id numerico non è derivabile dal nome dell'autore,
+// quindi passare da un suo font è l'unico modo per ottenerlo — vedi la key
+// task "Scrape Author Dafont Profiles" (lib/actions/fontAuthor.ts).
+export function parseDafontAuthorProfileUrl(markdownText: string | null | undefined): string | null {
+  if (!markdownText) return null;
+
+  const match = markdownText.match(/\bby\s+\[[^\]]+\]\((https?:\/\/(?:www\.)?dafont\.com\/[^\s")]+)\)/i);
+  return match ? match[1].trim() : null;
+}
+
+// Link alla pagina profilo UTENTE (dafont.com/profile.php?user=NNNN), presente
+// sulla pagina autore accanto all'avatar ("[View profile](...)"). È la pagina
+// che può contenere l'email di contatto — vedi parseDafontProfileEmail.
+export function parseDafontProfileInfoUrl(markdownText: string | null | undefined): string | null {
+  if (!markdownText) return null;
+
+  const match = markdownText.match(/https?:\/\/(?:www\.)?dafont\.com\/profile\.php\?user=\d+/i);
+  return match ? match[0] : null;
+}
+
+// Nome con cui dafont firma i font di una pagina autore: la card di ogni font
+// riporta "by [Nome](url-della-pagina-autore)". Si prende l'occorrenza il cui
+// link punta alla pagina che stiamo leggendo (le card linkano anche altri
+// autori nelle sezioni laterali), con fallback sulla prima.
+export function parseDafontAuthorDisplayName(
+  markdownText: string | null | undefined,
+  authorPageUrl: string
+): string | null {
+  if (!markdownText) return null;
+
+  const target = normalizeDafontUrl(authorPageUrl);
+  const byRegex = /\bby\s+\[([^\]]+)\]\((https?:\/\/(?:www\.)?dafont\.com\/[^\s")]+)\)/gi;
+
+  let fallback: string | null = null;
+  let match: RegExpExecArray | null;
+  while ((match = byRegex.exec(markdownText)) !== null) {
+    const name = match[1].trim();
+    if (!fallback) fallback = name;
+    if (normalizeDafontUrl(match[2]) === target) return name;
+  }
+  return fallback;
+}
+
+// Confronto fra url dafont equivalenti: protocollo/www/slash finale irrilevanti,
+// e la paginazione (?page=2) punta comunque alla stessa pagina autore.
+function normalizeDafontUrl(url: string): string {
+  return url
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "")
+    .replace(/[?&]page=\d+/g, "")
+    .replace(/\/+$/, "");
+}
+
+// Nomi presenti sulla pagina profilo utente: lo username (riga subito prima di
+// "[Send a private message]") e il nome pubblico fra parentesi quadre escapate
+// ("\[MJType\]"). Servono, insieme al nome sulla pagina autore, a verificare
+// che il profilo appartenga davvero al nostro FontAuthor prima di prendergli
+// l'email.
+export function parseDafontProfileNames(markdownText: string | null | undefined): string[] {
+  if (!markdownText) return [];
+
+  const names: string[] = [];
+
+  const usernameMatch = markdownText.match(/(^|\n)\s*([^\n[\]()!*_#>|]{2,60}?)\s*\n+\s*\[Send a private message\]/i);
+  if (usernameMatch) names.push(usernameMatch[2].trim());
+
+  const bracketedMatch = markdownText.match(/\\\[([^\\\]]{2,60})\\\]/);
+  if (bracketedMatch) names.push(bracketedMatch[1].trim());
+
+  return names.filter(Boolean);
+}
+
+// Due nomi indicano la stessa persona/fonderia: confronto su lettere e cifre
+// soltanto, così "MJ Type", "MJType" e "mjtype" coincidono, mentre nomi
+// diversi restano diversi (nessun match parziale: meglio saltare un'email
+// buona che salvarne una di un altro autore).
+export function isSameDafontAuthorName(a: string | null | undefined, b: string | null | undefined): boolean {
+  const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (!a || !b) return false;
+  const left = normalize(a);
+  const right = normalize(b);
+  return left.length > 0 && left === right;
+}
+
+// Email di contatto sulla pagina profilo utente: dafont la pubblica come link
+// mailto ("[contact@imagex-fonts.com](mailto:contact@imagex-fonts.com)") solo
+// se l'autore ha scelto di renderla visibile, quindi spesso non c'è. Il
+// fallback su testo semplice scarta gli indirizzi @dafont.com (mai un contatto
+// dell'autore) per non salvare una mail del sito al posto della sua.
+export function parseDafontProfileEmail(markdownText: string | null | undefined): string | null {
+  if (!markdownText) return null;
+
+  const mailto = markdownText.match(/mailto:([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})/i);
+  const plain = markdownText.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/);
+
+  const email = (mailto?.[1] ?? plain?.[0] ?? "").trim().toLowerCase();
+  if (!email || email.endsWith("dafont.com")) return null;
+  return email;
+}
+
 // Scrape di una pagina categoria/tema dafont (theme.php?cat=NNN[&page=N]) —
 // usata da "Scrape From Dafont" (browse per macro/sotto-categoria, vedi
 // components/admin/ScrapeFromDafontCard.tsx e lib/data/dafontUrls.json).

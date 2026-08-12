@@ -84,7 +84,7 @@ BaseModal.Header = function BaseModalHeader({ children, onClose, className }: { 
     <div className={cn("flex items-center justify-between bg-ocragray-100/50 dark:bg-ocragray-800/50 p-6 sm:p-8 border-b border-black/50 dark:border-white/50", className)}>
       <div className="flex-1">
         {typeof children === "string" ? (
-          <h3 className="text-2xl font-rezland text-black dark:text-white">
+          <h3 className="text-2xl font-crenzo text-black dark:text-white">
             {children}
           </h3>
         ) : (

@@ -174,11 +174,11 @@ export default function AIFontIdentityButton() {
           <BaseModal.Header>
             <div className="flex items-center justify-between w-full gap-4">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="h-10 w-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                <div className="h-10 w-10 rounded-md bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
                   <Scale className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">AI Identity Detection</h3>
+                  <h3 className="text-lg font-crenzo text-black dark:text-white leading-tight">AI Identity Detection</h3>
                   <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 mt-0.5">
                     Author lookup &middot; License type
                   </p>
