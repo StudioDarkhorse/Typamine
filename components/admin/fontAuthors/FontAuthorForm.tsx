@@ -71,6 +71,7 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
   const [website, setWebsite] = useState(initialData?.website || "");
   const [dafontProfileUrl, setDafontProfileUrl] = useState(initialData?.dafontProfileUrl || "");
   const [dafontProfileInfoUrl, setDafontProfileInfoUrl] = useState(initialData?.dafontProfileInfoUrl || "");
+  const [fonts1001ProfileUrl, setFonts1001ProfileUrl] = useState(initialData?.fonts1001ProfileUrl || "");
   const [nationality, setNationality] = useState(initialData?.nationality || "");
   const [bio, setBio] = useState(initialData?.bio || "");
   const [isVerified, setIsVerified] = useState(initialData?.isVerified ?? false);
@@ -359,6 +360,14 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
               placeholder="https://www.dafont.com/profile.php?user=1490629"
             />
           </div>
+
+          <Input
+            label="1001Fonts Profile Page"
+            name="fonts1001ProfileUrl"
+            value={fonts1001ProfileUrl}
+            onChange={setFonts1001ProfileUrl}
+            placeholder="https://www.1001fonts.com/users/rhesma/"
+          />
 
           <Input as="textarea" rows={4} label="Bio" name="bio" value={bio} onChange={setBio} placeholder="Short biography (Markdown supported)..." />
 

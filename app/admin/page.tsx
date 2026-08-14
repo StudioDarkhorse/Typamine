@@ -22,7 +22,9 @@ import ForceDafontScrapingCard from "@/components/admin/ForceDafontScrapingCard"
 import ScrapeAuthorProfilesCard from "@/components/admin/ScrapeAuthorProfilesCard";
 import ScrapeAuthorProfileInfoCard from "@/components/admin/ScrapeAuthorProfileInfoCard";
 import ScrapeFromDafontCard from "@/components/admin/ScrapeFromDafontCard";
+import ScrapeFrom1001FontsCard from "@/components/admin/ScrapeFrom1001FontsCard";
 import { Card } from "@/components/common/Card";
+import AdminDashboardClient from "@/components/admin/AdminDashboardClient";
 
 interface QuickAction {
   href: string;
@@ -124,44 +126,35 @@ export default async function AdminDashboard() {
 
   const hasQuickActions = showAIQualityReview || showAIIdentityDetection || quickActions.length > 0;
 
-  return (
-    <div className="flex h-full gap-8 items-start">
-      {/* Spazio rimanente (fuori da Quick Actions): griglia 2 colonne x 3
-          righe, ogni widget del dashboard occupa una cella (1 col, 1 row) —
-          per ora solo "Fill Missing Authors", altri ne seguiranno. */}
-      <div className="flex-1 ">
-        <h2 className="mb-3 text-4xl font-crenzo font-black uppercase tracking-widest text-center text-white dark:text-red-200">
-          Auto Bulk Tasks
-        </h2>
+  const bulkTasks = [
+    missingAuthorCount > 0 ? <FillMissingAuthorsCard key="missing-authors" count={missingAuthorCount} /> : null,
+    missingLicenseCount > 0 ? <FillMissingLicensesCard key="missing-licenses" count={missingLicenseCount} /> : null,
+    dafontScrapeCount > 0 ? <ForceDafontScrapingCard key="dafont-scrape" count={dafontScrapeCount} /> : null,
+    authorsWithoutDafontProfileCount > 0 ? (
+      <ScrapeAuthorProfilesCard key="scrape-profiles" count={authorsWithoutDafontProfileCount} />
+    ) : null,
+    authorsWithoutProfileInfoCount > 0 ? (
+      <ScrapeAuthorProfileInfoCard key="scrape-profile-info" count={authorsWithoutProfileInfoCount} />
+    ) : null,
+    canImportFonts ? <ScrapeFromDafontCard key="scrape-dafont" /> : null,
+    canImportFonts ? <ScrapeFrom1001FontsCard key="scrape-1001" /> : null,
+  ].filter(Boolean) as React.ReactNode[];
 
-        <div className="grid grid-cols-2 grid-rows-3 gap-4">
-          {missingAuthorCount > 0 && <FillMissingAuthorsCard count={missingAuthorCount} />}
-          {missingLicenseCount > 0 && <FillMissingLicensesCard count={missingLicenseCount} />}
-          {dafontScrapeCount > 0 && <ForceDafontScrapingCard count={dafontScrapeCount} />}
-          {authorsWithoutDafontProfileCount > 0 && (
-            <ScrapeAuthorProfilesCard count={authorsWithoutDafontProfileCount} />
-          )}
-          {authorsWithoutProfileInfoCount > 0 && (
-            <ScrapeAuthorProfileInfoCard count={authorsWithoutProfileInfoCount} />
-          )}
-          {canImportFonts && <ScrapeFromDafontCard />}
-        </div>
-      </div>
-
-      {hasQuickActions && (
-        <div className="space-y-3 w-1/4 shrink-0">
-          <h2 className="text-2xl font-crenzo font-black uppercase tracking-widest text-center text-white dark:text-red-200">
-            Quick Actions
-          </h2>
-          <div className="grid grid-cols-1 gap-4">
-            {showAIQualityReview && <AIFontQualityButton />}
-            {showAIIdentityDetection && <AIFontIdentityButton />}
-            {quickActions.map(action => (
-              <QuickActionCard key={action.href + action.label} action={action} />
-            ))}
-          </div>
-        </div>
-      )}
+  const quickActionsPanel = (
+    <div className="grid grid-cols-1 gap-4 w-full">
+      {showAIQualityReview && <AIFontQualityButton />}
+      {showAIIdentityDetection && <AIFontIdentityButton />}
+      {quickActions.map(action => (
+        <QuickActionCard key={action.href + action.label} action={action} />
+      ))}
     </div>
   );
-}
+
+  return (
+    <AdminDashboardClient
+      bulkTasks={bulkTasks}
+      quickActionsPanel={quickActionsPanel}
+      hasQuickActions={hasQuickActions}
+    />
+  );
+}

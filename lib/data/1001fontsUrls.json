@@ -1,0 +1,174 @@
+{
+  "General": {
+    "Serif": "https://www.1001fonts.com//serif-fonts.html",
+    "Sans Serif": "https://www.1001fonts.com//sans-serif-fonts.html",
+    "Italic": "https://www.1001fonts.com//italic-fonts.html",
+    "Letterbat": "https://www.1001fonts.com//letterbat-fonts.html",
+    "Initials": "https://www.1001fonts.com//initial-fonts.html",
+    "Small Caps": "https://www.1001fonts.com//small-caps-fonts.html"
+  },
+  "Size": {
+    "Poster": "https://www.1001fonts.com//poster-fonts.html",
+    "Display": "https://www.1001fonts.com//display-fonts.html",
+    "Headline": "https://www.1001fonts.com//headline-fonts.html",
+    "Body Text": "https://www.1001fonts.com//body-text-fonts.html",
+    "Small Text": "https://www.1001fonts.com//small-text-fonts.html",
+    "Caption": "https://www.1001fonts.com//caption-fonts.html"
+  },
+  "Weight": {
+    "Hairline": "https://www.1001fonts.com//hairline-fonts.html",
+    "Thin": "https://www.1001fonts.com//thin-fonts.html",
+    "Light": "https://www.1001fonts.com//light-fonts.html",
+    "Regular": "https://www.1001fonts.com//regular-fonts.html",
+    "Medium": "https://www.1001fonts.com//medium-fonts.html",
+    "Bold": "https://www.1001fonts.com//bold-fonts.html",
+    "Heavy": "https://www.1001fonts.com//heavy-fonts.html",
+    "Black": "https://www.1001fonts.com//black-fonts.html",
+    "Fat": "https://www.1001fonts.com//fat-fonts.html"
+  },
+  "Width": {
+    "Monospaced": "https://www.1001fonts.com//monospaced-fonts.html",
+    "Ultra Narrow": "https://www.1001fonts.com//ultra-narrow-fonts.html",
+    "Extra Narrow": "https://www.1001fonts.com//extra-narrow-fonts.html",
+    "Narrow": "https://www.1001fonts.com//narrow-fonts.html",
+    "Wide": "https://www.1001fonts.com//wide-fonts.html",
+    "Extra Wide": "https://www.1001fonts.com//extra-wide-fonts.html",
+    "Ultra Wide": "https://www.1001fonts.com//ultra-wide-fonts.html"
+  },
+  "Occasion": {
+    "Wedding": "https://www.1001fonts.com//wedding-fonts.html",
+    "Baby Shower": "https://www.1001fonts.com//baby-shower-fonts.html",
+    "Birthday": "https://www.1001fonts.com//birthday-fonts.html",
+    "Party": "https://www.1001fonts.com//party-fonts.html",
+    "Tattoo": "https://www.1001fonts.com//tattoo-fonts.html"
+  },
+  "Holidays": {
+    "Christmas": "https://www.1001fonts.com//christmas-fonts.html",
+    "Hanukkah": "https://www.1001fonts.com//hanukkah-fonts.html",
+    "Valentine's Day": "https://www.1001fonts.com//valentines-day-fonts.html",
+    "St. Patrick's Day": "https://www.1001fonts.com//st-patricks-day-fonts.html",
+    "Easter": "https://www.1001fonts.com//easter-fonts.html",
+    "Halloween": "https://www.1001fonts.com//halloween-fonts.html",
+    "More": "https://www.1001fonts.com//holiday-fonts.html"
+  },
+  "Decade": {
+    "1990s": "https://www.1001fonts.com//1990s-fonts.html",
+    "1980s": "https://www.1001fonts.com//1980s-fonts.html",
+    "1970s": "https://www.1001fonts.com//1970s-fonts.html",
+    "1960s": "https://www.1001fonts.com//1960s-fonts.html",
+    "1950s": "https://www.1001fonts.com//1950s-fonts.html",
+    "1940s": "https://www.1001fonts.com//1940s-fonts.html",
+    "1930s": "https://www.1001fonts.com//1930s-fonts.html",
+    "1920s": "https://www.1001fonts.com//1920s-fonts.html",
+    "1910s": "https://www.1001fonts.com//1910s-fonts.html",
+    "1900s": "https://www.1001fonts.com//1900s-fonts.html",
+    "1890s": "https://www.1001fonts.com//1890s-fonts.html",
+    "Ancient": "https://www.1001fonts.com//ancient-fonts.html"
+  },
+  "Foreign Imitation": {
+    "African": "https://www.1001fonts.com//foreign-imitation+african-fonts.html",
+    "Alien": "https://www.1001fonts.com//foreign-imitation+alien-fonts.html",
+    "Arabic": "https://www.1001fonts.com//foreign-imitation+arabic-fonts.html",
+    "Asian": "https://www.1001fonts.com//foreign-imitation+asian-fonts.html",
+    "Greek": "https://www.1001fonts.com//foreign-imitation+greek-fonts.html",
+    "Mexican": "https://www.1001fonts.com//foreign-imitation+mexican-fonts.html",
+    "Runic": "https://www.1001fonts.com//foreign-imitation+runic-fonts.html",
+    "Russian": "https://www.1001fonts.com//foreign-imitation+russian-fonts.html",
+    "More": "https://www.1001fonts.com//foreign-imitation-fonts.html"
+  },
+  "Yesteryear": {
+    "Retro": "https://www.1001fonts.com//retro-fonts.html",
+    "Vintage": "https://www.1001fonts.com//vintage-fonts.html",
+    "Antique": "https://www.1001fonts.com//antique-fonts.html",
+    "Typewriter": "https://www.1001fonts.com//typewriter-fonts.html",
+    "Art Deco": "https://www.1001fonts.com//art-deco-fonts.html",
+    "Art Nouveau": "https://www.1001fonts.com//art-nouveau-fonts.html",
+    "Medieval": "https://www.1001fonts.com//medieval-fonts.html",
+    "Blackletter": "https://www.1001fonts.com//blackletter-fonts.html",
+    "Old English": "https://www.1001fonts.com//old-english-fonts.html",
+    "Ancient": "https://www.1001fonts.com//ancient-fonts.html"
+  },
+  "Modern": {
+    "Techno": "https://www.1001fonts.com//techno-fonts.html",
+    "Futuristic": "https://www.1001fonts.com//futuristic-fonts.html",
+    "Science-Fiction": "https://www.1001fonts.com//science-fiction-fonts.html",
+    "Digital": "https://www.1001fonts.com//digital-fonts.html",
+    "LCD": "https://www.1001fonts.com//lcd-fonts.html",
+    "Blocky": "https://www.1001fonts.com//blocky-fonts.html",
+    "Geometric": "https://www.1001fonts.com//geometric-fonts.html",
+    "Stenciled": "https://www.1001fonts.com//stenciled-fonts.html",
+    "Neon": "https://www.1001fonts.com//neon-fonts.html",
+    "Hard to Read": "https://www.1001fonts.com//hard-to-read-fonts.html"
+  },
+  "Style": {
+    "3d": "https://www.1001fonts.com//3d-fonts.html",
+    "Comic": "https://www.1001fonts.com//comic-fonts.html",
+    "Calligraphy": "https://www.1001fonts.com//calligraphy-fonts.html",
+    "Cute": "https://www.1001fonts.com//cute-fonts.html",
+    "Fancy": "https://www.1001fonts.com//fancy-fonts.html",
+    "Elegant": "https://www.1001fonts.com//elegant-fonts.html",
+    "Grunge": "https://www.1001fonts.com//grunge-fonts.html",
+    "Eroded": "https://www.1001fonts.com//eroded-fonts.html",
+    "Outlined": "https://www.1001fonts.com//outlined-fonts.html",
+    "Pixel": "https://www.1001fonts.com//pixel-fonts.html",
+    "Distorted": "https://www.1001fonts.com//distorted-fonts.html"
+  },
+  "Attitude": {
+    "Quirky": "https://www.1001fonts.com//quirky-fonts.html",
+    "Girly": "https://www.1001fonts.com//girly-fonts.html",
+    "Romantic": "https://www.1001fonts.com//romantic-fonts.html",
+    "Groovy": "https://www.1001fonts.com//groovy-fonts.html",
+    "Funky": "https://www.1001fonts.com//funky-fonts.html",
+    "Cool": "https://www.1001fonts.com//cool-fonts.html",
+    "Hipster": "https://www.1001fonts.com//hipster-fonts.html",
+    "Street": "https://www.1001fonts.com//street-fonts.html",
+    "Haute Couture": "https://www.1001fonts.com//haute-couture-fonts.html"
+  },
+  "Handwriting": {
+    "Cursive": "https://www.1001fonts.com//cursive-fonts.html",
+    "Script": "https://www.1001fonts.com//script-fonts.html",
+    "Signature": "https://www.1001fonts.com//signature-fonts.html",
+    "Feminine": "https://www.1001fonts.com//feminine-fonts.html",
+    "Masculine": "https://www.1001fonts.com//masculine-fonts.html",
+    "Formal": "https://www.1001fonts.com//formal-fonts.html",
+    "Informal": "https://www.1001fonts.com//informal-fonts.html",
+    "Messy": "https://www.1001fonts.com//messy-fonts.html",
+    "Ugly": "https://www.1001fonts.com//ugly-fonts.html",
+    "Neat": "https://www.1001fonts.com//neat-fonts.html",
+    "Brush": "https://www.1001fonts.com//brush-fonts.html",
+    "Graffiti": "https://www.1001fonts.com//graffiti-fonts.html",
+    "More": "https://www.1001fonts.com//handwritten-fonts.html"
+  },
+  "Theme": {
+    "Famous": "https://www.1001fonts.com//famous-fonts.html",
+    "Brandname": "https://www.1001fonts.com//brandname-fonts.html",
+    "Army": "https://www.1001fonts.com//army-fonts.html",
+    "Wild West": "https://www.1001fonts.com//cowboy-fonts.html",
+    "Circus": "https://www.1001fonts.com//circus-fonts.html",
+    "TV": "https://www.1001fonts.com//tv-fonts.html",
+    "Movie": "https://www.1001fonts.com//movie-fonts.html",
+    "Music": "https://www.1001fonts.com//music-fonts.html",
+    "Athletic": "https://www.1001fonts.com//athletic-fonts.html",
+    "Varsity": "https://www.1001fonts.com//varsity-fonts.html",
+    "Sport": "https://www.1001fonts.com//sport-fonts.html"
+  },
+  "Dingbat": {
+    "Icon": "https://www.1001fonts.com//dingbat+icon-fonts.html",
+    "Border": "https://www.1001fonts.com//dingbat+border-fonts.html",
+    "Frame": "https://www.1001fonts.com//dingbat+frame-fonts.html",
+    "Animal": "https://www.1001fonts.com//dingbat+animal-fonts.html",
+    "People": "https://www.1001fonts.com//dingbat+people-fonts.html",
+    "Flower": "https://www.1001fonts.com//dingbat+flower-fonts.html",
+    "Heart": "https://www.1001fonts.com//dingbat+heart-fonts.html",
+    "Food": "https://www.1001fonts.com//dingbat+food-fonts.html",
+    "More": "https://www.1001fonts.com//dingbat-fonts.html"
+  },
+  "Special": {
+    "Free Fonts for Commercial Use": "https://www.1001fonts.com//free-for-commercial-use-fonts.html",
+    "New & Fresh Fonts": "https://www.1001fonts.com//new-and-fresh-fonts.html",
+    "Most Popular Fonts": "https://www.1001fonts.com//most-popular-fonts.html",
+    "Alphabetic Fonts": "https://www.1001fonts.com//alphabetic-fonts.html",
+    "Largest Font Families": "https://www.1001fonts.com//most-styled-fonts.html",
+    "Trending Fonts": "https://www.1001fonts.com//trending-fonts.html"
+  }
+}

@@ -158,6 +158,7 @@ exports.Prisma.FontAuthorScalarFieldEnum = {
   website: 'website',
   dafontProfileUrl: 'dafontProfileUrl',
   dafontProfileInfoUrl: 'dafontProfileInfoUrl',
+  fonts1001ProfileUrl: 'fonts1001ProfileUrl',
   donation: 'donation',
   nationality: 'nationality',
   languagesSpoken: 'languagesSpoken',

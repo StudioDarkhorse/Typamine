@@ -273,6 +273,7 @@ export async function ensureD1SchemaUpdated(force = false) {
           website TEXT,
           dafontProfileUrl TEXT,
           dafontProfileInfoUrl TEXT,
+          fonts1001ProfileUrl TEXT,
           donation TEXT,
           nationality TEXT,
           languagesSpoken TEXT,
@@ -291,6 +292,7 @@ export async function ensureD1SchemaUpdated(force = false) {
     // e "Scrape Author Profile Info".
     await addCol("FontAuthor", "dafontProfileUrl", "TEXT");
     await addCol("FontAuthor", "dafontProfileInfoUrl", "TEXT");
+    await addCol("FontAuthor", "fonts1001ProfileUrl", "TEXT");
 
     // Righe di permesso fontAuthor:* — nessun seed script le crea (i permessi
     // in questo progetto vengono inseriti out-of-band), quindi le registriamo

@@ -79,3 +79,47 @@ export function matchKnownLicenseType(raw: string): string {
   );
   return trimmed;
 }
+
+// Etichette dei badge licenza di 1001fonts.com (es. "[Free for commercial
+// use](...#license)"). Tassonomia più povera di quella dafont: "free for
+// commercial use" copre sia OFL sia Creative Commons sia licenze proprietarie
+// permissive, quindi da sola non basta — vedi matchFonts1001LicenseType.
+const FONTS1001_LICENSE_LABEL_MAP: Record<string, FontLicenseType> = {
+  "100% free": "Free",
+  "free for commercial use": "Free",
+  "free for personal use": "Free for Personal Use",
+  "public domain": "Public Domain",
+  "public domain / gpl / ofl": "Open Source (SIL OFL)",
+  "donationware": "Donationware",
+  "demo": "Demo",
+  "shareware": "Demo",
+  "unknown": "Demo",
+};
+
+// L'url della licenza ("... is licensed under the [Nome](url)") è più preciso
+// del badge: distingue OFL e public domain dentro il generico "free for
+// commercial use". Si guarda quello per primo, poi il badge.
+export function matchFonts1001LicenseType(label: string | null, licenseUrl: string | null): string | null {
+  const url = (licenseUrl || "").toLowerCase();
+
+  if (url.includes("scripts.sil.org/ofl") || url.includes("openfontlicense") || url.includes("/ofl")) {
+    return "Open Source (SIL OFL)";
+  }
+  if (url.includes("publicdomain") || url.includes("creativecommons.org/publicdomain") || url.includes("/cc0")) {
+    return "Public Domain";
+  }
+
+  const trimmed = (label || "").trim();
+  if (!trimmed) return null;
+
+  const mapped = FONTS1001_LICENSE_LABEL_MAP[trimmed.toLowerCase()];
+  if (mapped) return mapped;
+
+  const exact = (FONT_LICENSE_TYPES as readonly string[]).find((t) => t.toLowerCase() === trimmed.toLowerCase());
+  if (exact) return exact;
+
+  console.warn(
+    `[Fonts1001LicenseWatch] UNMAPPED license label from 1001fonts: "${trimmed}" (url: ${licenseUrl ?? "none"}) — saving raw text as-is; add a mapping in lib/constants/fontLicenseTypes.ts if this keeps showing up.`
+  );
+  return trimmed;
+}

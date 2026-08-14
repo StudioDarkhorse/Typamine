@@ -54,3 +54,5 @@ security checks
 
 creazione bot invio mail agli author cxon mail che infgoram chi siamo e cosa facciamo. spuegagli che se accettano gli dai acesso al loro admin panel etc. [80%]
 
+
+post it che io posso creare (tasto vicino alla campanella, assegnare un colore e la visibilita) e poi minimizzare e spostare all'interno della ui

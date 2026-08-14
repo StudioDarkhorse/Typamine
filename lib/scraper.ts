@@ -67,15 +67,27 @@ export async function callDafontScraperApi(targetUrl: string): Promise<ScraperAp
 
 /**
  * Scarica un file zip da un URL gestendo gli header anti-bot base.
+ *
+ * Gli header di default sono quelli che servono a dafont (User-Agent di
+ * browser + Referer del sito). NON valgono ovunque: 1001fonts chiude la
+ * connessione se vede uno User-Agent di browser su /download/*.zip, mentre
+ * risponde 200 con un UA qualsiasi altro — vedi FONTS1001_ZIP_HEADERS.
+ *
  * @param url L'URL della rotta da scaricare.
+ * @param options Header alternativi (User-Agent/Referer) per altre sorgenti.
  * @returns Promessa che risolve nel Buffer del file ZIP.
  */
-export async function fetchZipFile(url: string): Promise<Buffer> {
+export async function fetchZipFile(
+  url: string,
+  options?: { userAgent?: string; referer?: string }
+): Promise<Buffer> {
   const response = await fetch(url, {
     method: 'GET',
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Referer': 'https://www.dafont.com/'
+      'User-Agent':
+        options?.userAgent ??
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Referer': options?.referer ?? 'https://www.dafont.com/'
     }
   });
 
@@ -257,4 +269,132 @@ export async function scrapeDafontCategoryPage(categoryUrl: string): Promise<Fon
   const result = await callDafontScraperApi(categoryUrl);
   if (result.notFound || !result.markdown) return [];
   return parseDafontPLPMarkdown({ data: { markdown: result.markdown } });
+}
+
+// ---------------------------------------------------------------------------
+// 1001fonts.com — "Import Fonts from 1001Fonts" (dashboard)
+//
+// Struttura diversa da dafont: la pagina categoria (PLP, es. serif-fonts.html)
+// elenca solo i link alle pagine dei singoli font, senza autore/licenza/zip.
+// Quelli stanno tutti sulla PDP (es. transcity-font.html), che quindi va
+// letta font per font — un giro di scraper in più rispetto a dafont, ma in
+// cambio niente pagina intermedia dell'autore: la PDP linka già il suo
+// profilo. Lo scraper HTTP condiviso è lo stesso (callDafontScraperApi).
+// ---------------------------------------------------------------------------
+
+// 1001fonts chiude la connessione se il download zip arriva con uno
+// User-Agent di browser; con un UA qualunque altro risponde 200. Referer
+// impostato sul sito per coerenza con la navigazione normale.
+export const FONTS1001_ZIP_HEADERS = {
+  userAgent: "Typamine/1.0 (+https://typamine.com)",
+  referer: "https://www.1001fonts.com/",
+};
+
+export interface Fonts1001Item {
+  /** Nome famiglia, senza i suffissi "Font"/"Font Family" del titolo pagina. */
+  name: string | null;
+  author: string | null;
+  /** Profilo autore su 1001fonts (es. https://www.1001fonts.com/users/rhesma/). */
+  authorUrl: string | null;
+  downloadLink: string | null;
+  /** Etichetta del badge licenza, es. "Free for commercial use". */
+  licenseLabel: string | null;
+  /** Url della licenza vera e propria (OFL, Creative Commons, FFP, ...). */
+  licenseUrl: string | null;
+}
+
+// Link alle PDP presenti su una pagina categoria: tutti gli url della forma
+// /<slug>-font.html, deduplicati mantenendo l'ordine della pagina.
+export function parseFonts1001PLPMarkdown(markdownText: string | null | undefined): string[] {
+  if (!markdownText) return [];
+
+  const linkRegex = /https?:\/\/(?:www\.)?1001fonts\.com\/[a-z0-9][a-z0-9._-]*-font\.html/gi;
+  const seen = new Set<string>();
+  const urls: string[] = [];
+
+  for (const match of markdownText.matchAll(linkRegex)) {
+    const url = match[0].replace(/^http:/i, "https:");
+    if (seen.has(url)) continue;
+    seen.add(url);
+    urls.push(url);
+  }
+
+  return urls;
+}
+
+// Tutti i dati di un font dalla sua PDP: titolo H1 ("Transcity Font" /
+// "Cinzel Font Family"), "By [Autore](profilo)", "[Download](....zip)" e la
+// licenza (badge "#license" + link "is licensed under the [...](url)").
+export function parseFonts1001PDPMarkdown(markdownText: string | null | undefined): Fonts1001Item {
+  const empty: Fonts1001Item = {
+    name: null,
+    author: null,
+    authorUrl: null,
+    downloadLink: null,
+    licenseLabel: null,
+    licenseUrl: null,
+  };
+  if (!markdownText) return empty;
+
+  const headingMatch = markdownText.match(/(?:^|\n)([^\n]{1,120}?)\n={3,}(?:\n|$)/);
+  const rawName = headingMatch ? headingMatch[1].trim() : null;
+  const name = rawName ? rawName.replace(/\s+Font(\s+Family)?$/i, "").trim() || rawName : null;
+
+  const downloadMatch = markdownText.match(
+    /\[Download\]\((https?:\/\/(?:www\.)?1001fonts\.com\/download\/[^)\s]+\.zip)\)/i
+  );
+  const authorMatch = markdownText.match(
+    /\bBy\s+\[([^\]]+)\]\((https?:\/\/(?:www\.)?1001fonts\.com\/users\/[^)\s]+)\)/i
+  );
+  const badgeMatch = markdownText.match(/\[([^\]]{2,60})\]\([^)\s]*#license\)/i);
+  const licensedUnderMatch = markdownText.match(/licensed under the \[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/i);
+
+  return {
+    name,
+    author: authorMatch ? authorMatch[1].trim() : null,
+    authorUrl: authorMatch ? authorMatch[2].trim() : null,
+    downloadLink: downloadMatch ? downloadMatch[1].trim() : null,
+    licenseLabel: (badgeMatch?.[1] ?? licensedUnderMatch?.[1] ?? "").trim() || null,
+    licenseUrl: licensedUnderMatch ? licensedUnderMatch[2].trim() : null,
+  };
+}
+
+// Nome di ripiego quando la PDP non ha un H1 leggibile: dallo slug dell'url
+// ("orange-avenue-demo-font.html" → "Orange Avenue Demo").
+export function fonts1001NameFromUrl(pdpUrl: string): string {
+  const slug = pdpUrl.split("/").pop()?.replace(/-font\.html$/i, "") ?? "";
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+export async function scrapeFonts1001CategoryPage(categoryUrl: string): Promise<string[]> {
+  const result = await callDafontScraperApi(categoryUrl);
+  if (result.notFound || !result.markdown) return [];
+  return parseFonts1001PLPMarkdown(result.markdown);
+}
+
+export interface Fonts1001PageScrapeResult extends Fonts1001Item {
+  notFound: boolean;
+}
+
+export async function scrapeFonts1001FontPage(pdpUrl: string): Promise<Fonts1001PageScrapeResult> {
+  const result = await callDafontScraperApi(pdpUrl);
+
+  if (result.notFound || !result.markdown) {
+    return {
+      name: null,
+      author: null,
+      authorUrl: null,
+      downloadLink: null,
+      licenseLabel: null,
+      licenseUrl: null,
+      notFound: true,
+    };
+  }
+
+  const item = parseFonts1001PDPMarkdown(result.markdown);
+  return { ...item, name: item.name ?? fonts1001NameFromUrl(pdpUrl), notFound: false };
 }

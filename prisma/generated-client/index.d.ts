@@ -5570,6 +5570,7 @@ export namespace Prisma {
     website: string | null
     dafontProfileUrl: string | null
     dafontProfileInfoUrl: string | null
+    fonts1001ProfileUrl: string | null
     donation: string | null
     nationality: string | null
     languagesSpoken: string | null
@@ -5596,6 +5597,7 @@ export namespace Prisma {
     website: string | null
     dafontProfileUrl: string | null
     dafontProfileInfoUrl: string | null
+    fonts1001ProfileUrl: string | null
     donation: string | null
     nationality: string | null
     languagesSpoken: string | null
@@ -5622,6 +5624,7 @@ export namespace Prisma {
     website: number
     dafontProfileUrl: number
     dafontProfileInfoUrl: number
+    fonts1001ProfileUrl: number
     donation: number
     nationality: number
     languagesSpoken: number
@@ -5650,6 +5653,7 @@ export namespace Prisma {
     website?: true
     dafontProfileUrl?: true
     dafontProfileInfoUrl?: true
+    fonts1001ProfileUrl?: true
     donation?: true
     nationality?: true
     languagesSpoken?: true
@@ -5676,6 +5680,7 @@ export namespace Prisma {
     website?: true
     dafontProfileUrl?: true
     dafontProfileInfoUrl?: true
+    fonts1001ProfileUrl?: true
     donation?: true
     nationality?: true
     languagesSpoken?: true
@@ -5702,6 +5707,7 @@ export namespace Prisma {
     website?: true
     dafontProfileUrl?: true
     dafontProfileInfoUrl?: true
+    fonts1001ProfileUrl?: true
     donation?: true
     nationality?: true
     languagesSpoken?: true
@@ -5801,6 +5807,7 @@ export namespace Prisma {
     website: string | null
     dafontProfileUrl: string | null
     dafontProfileInfoUrl: string | null
+    fonts1001ProfileUrl: string | null
     donation: string | null
     nationality: string | null
     languagesSpoken: string | null
@@ -5844,6 +5851,7 @@ export namespace Prisma {
     website?: boolean
     dafontProfileUrl?: boolean
     dafontProfileInfoUrl?: boolean
+    fonts1001ProfileUrl?: boolean
     donation?: boolean
     nationality?: boolean
     languagesSpoken?: boolean
@@ -5872,6 +5880,7 @@ export namespace Prisma {
     website?: boolean
     dafontProfileUrl?: boolean
     dafontProfileInfoUrl?: boolean
+    fonts1001ProfileUrl?: boolean
     donation?: boolean
     nationality?: boolean
     languagesSpoken?: boolean
@@ -5898,6 +5907,7 @@ export namespace Prisma {
     website?: boolean
     dafontProfileUrl?: boolean
     dafontProfileInfoUrl?: boolean
+    fonts1001ProfileUrl?: boolean
     donation?: boolean
     nationality?: boolean
     languagesSpoken?: boolean
@@ -5924,6 +5934,7 @@ export namespace Prisma {
     website?: boolean
     dafontProfileUrl?: boolean
     dafontProfileInfoUrl?: boolean
+    fonts1001ProfileUrl?: boolean
     donation?: boolean
     nationality?: boolean
     languagesSpoken?: boolean
@@ -5937,7 +5948,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FontAuthorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "name" | "type" | "email" | "supportEmail" | "avatarUrl" | "bannerUrl" | "bio" | "website" | "dafontProfileUrl" | "dafontProfileInfoUrl" | "donation" | "nationality" | "languagesSpoken" | "isVerified" | "socialLinks" | "metrics" | "businessInfo" | "specialties" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["fontAuthor"]>
+  export type FontAuthorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "name" | "type" | "email" | "supportEmail" | "avatarUrl" | "bannerUrl" | "bio" | "website" | "dafontProfileUrl" | "dafontProfileInfoUrl" | "fonts1001ProfileUrl" | "donation" | "nationality" | "languagesSpoken" | "isVerified" | "socialLinks" | "metrics" | "businessInfo" | "specialties" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["fontAuthor"]>
   export type FontAuthorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fonts?: boolean | FontAuthor$fontsArgs<ExtArgs>
     _count?: boolean | FontAuthorCountOutputTypeDefaultArgs<ExtArgs>
@@ -5963,6 +5974,7 @@ export namespace Prisma {
       website: string | null
       dafontProfileUrl: string | null
       dafontProfileInfoUrl: string | null
+      fonts1001ProfileUrl: string | null
       donation: string | null
       nationality: string | null
       languagesSpoken: string | null
@@ -6410,6 +6422,7 @@ export namespace Prisma {
     readonly website: FieldRef<"FontAuthor", 'String'>
     readonly dafontProfileUrl: FieldRef<"FontAuthor", 'String'>
     readonly dafontProfileInfoUrl: FieldRef<"FontAuthor", 'String'>
+    readonly fonts1001ProfileUrl: FieldRef<"FontAuthor", 'String'>
     readonly donation: FieldRef<"FontAuthor", 'String'>
     readonly nationality: FieldRef<"FontAuthor", 'String'>
     readonly languagesSpoken: FieldRef<"FontAuthor", 'String'>
@@ -17236,6 +17249,7 @@ export namespace Prisma {
     website: 'website',
     dafontProfileUrl: 'dafontProfileUrl',
     dafontProfileInfoUrl: 'dafontProfileInfoUrl',
+    fonts1001ProfileUrl: 'fonts1001ProfileUrl',
     donation: 'donation',
     nationality: 'nationality',
     languagesSpoken: 'languagesSpoken',
@@ -17709,6 +17723,7 @@ export namespace Prisma {
     website?: StringNullableFilter<"FontAuthor"> | string | null
     dafontProfileUrl?: StringNullableFilter<"FontAuthor"> | string | null
     dafontProfileInfoUrl?: StringNullableFilter<"FontAuthor"> | string | null
+    fonts1001ProfileUrl?: StringNullableFilter<"FontAuthor"> | string | null
     donation?: StringNullableFilter<"FontAuthor"> | string | null
     nationality?: StringNullableFilter<"FontAuthor"> | string | null
     languagesSpoken?: StringNullableFilter<"FontAuthor"> | string | null
@@ -17736,6 +17751,7 @@ export namespace Prisma {
     website?: SortOrderInput | SortOrder
     dafontProfileUrl?: SortOrderInput | SortOrder
     dafontProfileInfoUrl?: SortOrderInput | SortOrder
+    fonts1001ProfileUrl?: SortOrderInput | SortOrder
     donation?: SortOrderInput | SortOrder
     nationality?: SortOrderInput | SortOrder
     languagesSpoken?: SortOrderInput | SortOrder
@@ -17766,6 +17782,7 @@ export namespace Prisma {
     website?: StringNullableFilter<"FontAuthor"> | string | null
     dafontProfileUrl?: StringNullableFilter<"FontAuthor"> | string | null
     dafontProfileInfoUrl?: StringNullableFilter<"FontAuthor"> | string | null
+    fonts1001ProfileUrl?: StringNullableFilter<"FontAuthor"> | string | null
     donation?: StringNullableFilter<"FontAuthor"> | string | null
     nationality?: StringNullableFilter<"FontAuthor"> | string | null
     languagesSpoken?: StringNullableFilter<"FontAuthor"> | string | null
@@ -17793,6 +17810,7 @@ export namespace Prisma {
     website?: SortOrderInput | SortOrder
     dafontProfileUrl?: SortOrderInput | SortOrder
     dafontProfileInfoUrl?: SortOrderInput | SortOrder
+    fonts1001ProfileUrl?: SortOrderInput | SortOrder
     donation?: SortOrderInput | SortOrder
     nationality?: SortOrderInput | SortOrder
     languagesSpoken?: SortOrderInput | SortOrder
@@ -17825,6 +17843,7 @@ export namespace Prisma {
     website?: StringNullableWithAggregatesFilter<"FontAuthor"> | string | null
     dafontProfileUrl?: StringNullableWithAggregatesFilter<"FontAuthor"> | string | null
     dafontProfileInfoUrl?: StringNullableWithAggregatesFilter<"FontAuthor"> | string | null
+    fonts1001ProfileUrl?: StringNullableWithAggregatesFilter<"FontAuthor"> | string | null
     donation?: StringNullableWithAggregatesFilter<"FontAuthor"> | string | null
     nationality?: StringNullableWithAggregatesFilter<"FontAuthor"> | string | null
     languagesSpoken?: StringNullableWithAggregatesFilter<"FontAuthor"> | string | null
@@ -19059,6 +19078,7 @@ export namespace Prisma {
     website?: string | null
     dafontProfileUrl?: string | null
     dafontProfileInfoUrl?: string | null
+    fonts1001ProfileUrl?: string | null
     donation?: string | null
     nationality?: string | null
     languagesSpoken?: string | null
@@ -19086,6 +19106,7 @@ export namespace Prisma {
     website?: string | null
     dafontProfileUrl?: string | null
     dafontProfileInfoUrl?: string | null
+    fonts1001ProfileUrl?: string | null
     donation?: string | null
     nationality?: string | null
     languagesSpoken?: string | null
@@ -19113,6 +19134,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileInfoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fonts1001ProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     donation?: NullableStringFieldUpdateOperationsInput | string | null
     nationality?: NullableStringFieldUpdateOperationsInput | string | null
     languagesSpoken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19140,6 +19162,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileInfoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fonts1001ProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     donation?: NullableStringFieldUpdateOperationsInput | string | null
     nationality?: NullableStringFieldUpdateOperationsInput | string | null
     languagesSpoken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19167,6 +19190,7 @@ export namespace Prisma {
     website?: string | null
     dafontProfileUrl?: string | null
     dafontProfileInfoUrl?: string | null
+    fonts1001ProfileUrl?: string | null
     donation?: string | null
     nationality?: string | null
     languagesSpoken?: string | null
@@ -19193,6 +19217,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileInfoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fonts1001ProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     donation?: NullableStringFieldUpdateOperationsInput | string | null
     nationality?: NullableStringFieldUpdateOperationsInput | string | null
     languagesSpoken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19219,6 +19244,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileInfoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fonts1001ProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     donation?: NullableStringFieldUpdateOperationsInput | string | null
     nationality?: NullableStringFieldUpdateOperationsInput | string | null
     languagesSpoken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20706,6 +20732,7 @@ export namespace Prisma {
     website?: SortOrder
     dafontProfileUrl?: SortOrder
     dafontProfileInfoUrl?: SortOrder
+    fonts1001ProfileUrl?: SortOrder
     donation?: SortOrder
     nationality?: SortOrder
     languagesSpoken?: SortOrder
@@ -20732,6 +20759,7 @@ export namespace Prisma {
     website?: SortOrder
     dafontProfileUrl?: SortOrder
     dafontProfileInfoUrl?: SortOrder
+    fonts1001ProfileUrl?: SortOrder
     donation?: SortOrder
     nationality?: SortOrder
     languagesSpoken?: SortOrder
@@ -20758,6 +20786,7 @@ export namespace Prisma {
     website?: SortOrder
     dafontProfileUrl?: SortOrder
     dafontProfileInfoUrl?: SortOrder
+    fonts1001ProfileUrl?: SortOrder
     donation?: SortOrder
     nationality?: SortOrder
     languagesSpoken?: SortOrder
@@ -23417,6 +23446,7 @@ export namespace Prisma {
     website?: string | null
     dafontProfileUrl?: string | null
     dafontProfileInfoUrl?: string | null
+    fonts1001ProfileUrl?: string | null
     donation?: string | null
     nationality?: string | null
     languagesSpoken?: string | null
@@ -23443,6 +23473,7 @@ export namespace Prisma {
     website?: string | null
     dafontProfileUrl?: string | null
     dafontProfileInfoUrl?: string | null
+    fonts1001ProfileUrl?: string | null
     donation?: string | null
     nationality?: string | null
     languagesSpoken?: string | null
@@ -23687,6 +23718,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileInfoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fonts1001ProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     donation?: NullableStringFieldUpdateOperationsInput | string | null
     nationality?: NullableStringFieldUpdateOperationsInput | string | null
     languagesSpoken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23713,6 +23745,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dafontProfileInfoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fonts1001ProfileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     donation?: NullableStringFieldUpdateOperationsInput | string | null
     nationality?: NullableStringFieldUpdateOperationsInput | string | null
     languagesSpoken?: NullableStringFieldUpdateOperationsInput | string | null

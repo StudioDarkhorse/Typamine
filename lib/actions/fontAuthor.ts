@@ -183,6 +183,7 @@ export async function saveFontAuthor(prevState: any, formData: FormData, id?: st
     const website = (formData.get("website") as string)?.trim() || null;
     const dafontProfileUrl = (formData.get("dafontProfileUrl") as string)?.trim() || null;
     const dafontProfileInfoUrl = (formData.get("dafontProfileInfoUrl") as string)?.trim() || null;
+    const fonts1001ProfileUrl = (formData.get("fonts1001ProfileUrl") as string)?.trim() || null;
     const nationality = (formData.get("nationality") as string)?.trim() || null;
     const status = (formData.get("status") as string) || "ACTIVE";
     const isVerified = formData.get("isVerified") === "true";
@@ -230,6 +231,7 @@ export async function saveFontAuthor(prevState: any, formData: FormData, id?: st
       website,
       dafontProfileUrl,
       dafontProfileInfoUrl,
+      fonts1001ProfileUrl,
       nationality,
       status,
       isVerified,

@@ -485,6 +485,9 @@ export interface FontAuthor {
   /** Pagina profilo utente dafont con i contatti (es. https://www.dafont.com/profile.php?user=1490629) */
   dafontProfileInfoUrl?: string;
 
+  /** Profilo autore su 1001fonts (es. https://www.1001fonts.com/users/rhesma/) */
+  fonts1001ProfileUrl?: string;
+
   /** Dettagli per le donazioni / il supporto finanziario */
   donation: DonationDetails;
 

@@ -226,6 +226,34 @@ export async function findOrCreateFontAuthorByName(name: string): Promise<string
   return findOrCreateSyntheticFontAuthorByName(trimmed, "ai-discovered");
 }
 
+// Import da 1001fonts: oltre al nome arriva anche il link al profilo autore
+// sul sito, che a differenza di dafont è già la pagina con le sue info (nessun
+// passaggio intermedio). L'url viene salvato alla creazione e, sugli autori
+// già esistenti, riempito se ancora mancante — mai sovrascritto.
+export async function findOrCreateFontAuthorFromFonts1001(
+  name: string,
+  profileUrl: string | null
+): Promise<string | null> {
+  const trimmed = name.trim();
+  if (!trimmed || trimmed.toLowerCase() === "unknown") return null;
+
+  const authorId = await findOrCreateSyntheticFontAuthorByName(trimmed, "1001fonts-import");
+
+  if (profileUrl) {
+    const existing = await prisma.fontAuthor.findUnique({
+      where: { id: authorId },
+      select: { fonts1001ProfileUrl: true },
+    });
+    if (!existing?.fonts1001ProfileUrl) {
+      await prisma.fontAuthor.update({ where: { id: authorId }, data: { fonts1001ProfileUrl: profileUrl } });
+      revalidatePath("/admin/font-authors");
+      revalidateTag(CACHE_TAGS.fontAuthors, "max");
+    }
+  }
+
+  return authorId;
+}
+
 // Stesso meccanismo ma per il flow "Fill Missing Authors" in dashboard:
 // l'admin digita solo il nome, un font alla volta — nessun bypass "unknown"
 // qui, il nome e' sempre garantito non vuoto dal chiamante.
