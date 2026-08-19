@@ -92,19 +92,21 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
           stesso sfondo animato (fixedBackground: il canvas resta ancorato
           al viewport mentre scrolli). */}
       <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 p-8 sm:p-16 pt-32 min-h-dvh">
-        <h1 className="font-crenzo text-3xl sm:text-5xl font-bold uppercase tracking-[1rem] text-blue-900 dark:text-redgray-200 max-w-5xl">
-        Tools designed for Creatives and Developers
-        </h1>
-        <p className="text-zinc-700 dark:text-zinc-300 text-sm sm:text-base max-w-xl leading-relaxed font-haas font-bold">
-          {ingredient ? (
-            <>
-              Technical utilities to process, package, and integrate font assets into modern web apps. Pre-loaded with{" "}
-              <span className="uppercase font-bold text-blue dark:text-red">&quot;{ingredient.name}&quot;</span>.
-            </>
-          ) : (
-            "Technical utilities to process, package, and integrate font assets into modern web apps."
-          )}
-        </p>
+        <div className="bg-bluegray-200/20 dark:bg-redgray-800/40 backdrop-blur-md px-6 py-8 w-fit flex flex-col gap-y-4 items-center rounded-md border border-4 border-blue-800 dark:border-redgray-200 ">
+          <h1 className="font-crenzo text-3xl sm:text-5xl font-bold uppercase tracking-[1rem] text-blue-900 dark:text-redgray-200 max-w-5xl">
+            Tools designed for Creatives and Developers
+          </h1>
+          <p className="text-zinc-700 dark:text-zinc-300 text-sm sm:text-base max-w-xl leading-relaxed font-haas font-bold">
+            {ingredient ? (
+              <>
+                Technical utilities to process, package, and integrate font assets into modern web apps. Pre-loaded with{" "}
+                <span className="uppercase font-bold text-blue dark:text-red">&quot;{ingredient.name}&quot;</span>.
+              </>
+            ) : (
+              "Technical utilities to process, package, and integrate font assets into modern web apps."
+            )}
+          </p>
+        </div>
       </div>
 
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-dvh">

@@ -64,8 +64,45 @@ interface ChromeBlobHeroProps {
    * normale da hero, il canvas scorre via col contenuto).
    */
   fixedBackground?: boolean;
+  /**
+   * Risoluzione interna del canvas, come moltiplicatore massimo dei CSS pixel.
+   * Il fragment shader qui è un raymarcher: il costo è *lineare nei pixel
+   * disegnati*, quindi il pixel ratio è la leva più diretta sulle performance
+   * — ma anche l'unica cosa che determina la nitidezza dei bordi. Tutti i
+   * bordi che si vedono (silhouette del blob, glint speculari con esponente
+   * 4000, strisce del softbox) nascono dentro il fragment shader: non c'è
+   * nessun antialias di pipeline che li recuperi, quindi sotto la
+   * risoluzione nativa il compositor si limita a fare upscale bilineare e i
+   * gradini si vedono.
+   *   "auto"   → segue devicePixelRatio fino a 2× (default): nitidezza nativa
+   *              su display retina.
+   *   "high"   → identico ad "auto", esplicito quando il blob è il soggetto.
+   *   "medium" → 1.5×: ~44% dei pixel di 2×, gradini quasi invisibili su
+   *              retina. Il compromesso da preferire su pagine pesanti.
+   *   "low"    → 1×: nessun supersampling. Solo per schede deboli/mobile,
+   *              i bordi diventano visibilmente scalettati su retina.
+   */
+  quality?: ChromeBlobQuality;
+  /**
+   * Tetto di frame al secondo. L'animazione avanza a `uTime * 0.12`: è così
+   * lenta che sopra i 30fps non c'è nessun guadagno percepibile, mentre su un
+   * pannello 120/144Hz il renderer disegnerebbe 2-2.4 volte più frame del
+   * necessario. 0 = nessun limite (segue il refresh dello schermo).
+   */
+  maxFps?: number;
   className?: string;
 }
+
+export type ChromeBlobQuality = "auto" | "high" | "medium" | "low";
+
+// Tetto applicato a devicePixelRatio (non un valore assoluto: su un display
+// non-retina, dpr 1, tutti i livelli tranne "low" rendono comunque a 1×).
+const QUALITY_PIXEL_RATIO: Record<ChromeBlobQuality, number> = {
+  auto: 2,
+  high: 2,
+  medium: 1.5,
+  low: 1,
+};
 
 const ALIGN_MAP: Record<string, string> = { left: "items-start text-left", center: "items-center text-center", right: "items-end text-right" };
 const V_ALIGN_MAP: Record<string, string> = { top: "justify-start", center: "justify-center", bottom: "justify-end" };
@@ -238,6 +275,8 @@ export function ChromeBlobHero({
   heightClassName = "min-h-[100dvh]",
   contentClassName,
   fixedBackground = false,
+  quality = "auto",
+  maxFps = 30,
   className,
 }: ChromeBlobHeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -279,7 +318,25 @@ export function ChromeBlobHero({
     const initialBgVec = theme === "dark" ? darkBgVec : lightBgVec;
 
     try {
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        // Il disegno è un unico quad fullscreen: non esiste un bordo
+        // geometrico da antialiasare (tutti i bordi che si vedono nascono
+        // dentro il fragment shader), quindi l'MSAA qui costava banda e un
+        // resolve pass per niente.
+        antialias: false,
+        // Depth e stencil venivano allocati e mai usati: nessun test di
+        // profondità su un singolo quad senza occlusioni.
+        depth: false,
+        stencil: false,
+        // Nota: da three r163 il context viene creato comunque con
+        // `alpha: true` (hardcoded in WebGLRenderer), quindi questo flag
+        // governa solo l'alpha del clear color, non il canale del drawing
+        // buffer. Il canvas resta di fatto opaco perché il fragment shader
+        // scrive sempre alpha 1.0 su tutta la superficie.
+        alpha: false,
+        powerPreference: "high-performance",
+      });
     } catch {
       // WebGL non disponibile (browser/headless/GPU disattivata) — niente
       // crash, l'hero resta comunque utilizzabile senza lo sfondo animato
@@ -298,7 +355,9 @@ export function ChromeBlobHero({
 
     const initialSize = getSize();
     renderer.setSize(initialSize.width, initialSize.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Vedi la prop `quality`: il costo di questo shader è lineare nei pixel
+    // disegnati, quindi il pixel ratio è la leva più diretta che c'è.
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, QUALITY_PIXEL_RATIO[quality]));
 
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -325,15 +384,25 @@ export function ChromeBlobHero({
     // po' più a sinistra" durante il movimento. 0.22 resta morbido (niente
     // scatti) ma molto più "attaccato" al puntatore reale.
     const MOUSE_LERP = 0.22;
-    const tick = () => {
+    // Tetto di fps: si continua a chiedere un frame ad ogni rAF (così il lerp
+    // del mouse resta agganciato al refresh reale e non "scatta" a 30Hz), ma
+    // il render — l'unica parte cara — parte solo quando è passato
+    // abbastanza tempo. La tolleranza di mezzo millisecondo evita di saltare
+    // un frame per un arrotondamento quando il refresh è esattamente pari al
+    // target (60Hz con maxFps 60).
+    const frameInterval = maxFps > 0 ? 1000 / maxFps : 0;
+    let lastRenderAt = -Infinity;
+    const tick = (now: number) => {
       animationId = requestAnimationFrame(tick);
       mouse.x += (targetMouse.x - mouse.x) * MOUSE_LERP;
       mouse.y += (targetMouse.y - mouse.y) * MOUSE_LERP;
+      if (now - lastRenderAt < frameInterval - 0.5) return;
+      lastRenderAt = now;
       material.uniforms.uTime.value = performance.now() * 0.001;
       material.uniforms.uMouse.value.set(mouse.x, mouse.y);
       renderer!.render(scene, camera);
     };
-    tick();
+    animationId = requestAnimationFrame(tick);
 
     const handleResize = () => {
       const s = getSize();
@@ -387,7 +456,7 @@ export function ChromeBlobHero({
       materialRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interactive, fixedBackground]);
+  }, [interactive, fixedBackground, quality, maxFps]);
 
   // Da hero singolo: canvas/overlay assoluti al contenitore, che ha
   // overflow-hidden (il classico blocco autonomo). Da wrapper di pagina

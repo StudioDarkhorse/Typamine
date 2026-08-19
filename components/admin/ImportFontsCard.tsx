@@ -226,12 +226,13 @@ export default function ImportFontsCard() {
         `Done. Imported ${finalImported.length}, skipped ${finalSkipped.length}, failed ${finalFailed.length}.`,
       ]);
       setResults({ imported: finalImported, skipped: finalSkipped, failed: finalFailed });
-    } catch (err: any) {
-      setLogs((prev) => [...prev, `✗ ${err.message || "Unknown error"}`]);
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : "Unknown error";
+      setLogs((prev) => [...prev, `✗ ${errorMsg}`]);
       setResults({
         imported: [],
         skipped: [],
-        failed: [{ family: finalUrl, error: err.message || "Unknown error" }],
+        failed: [{ family: finalUrl, error: errorMsg }],
       });
     } finally {
       setIsRunning(false);
@@ -251,12 +252,24 @@ export default function ImportFontsCard() {
 
   return (
     <>
-      <Card roundness="lg" visualHover className="cursor-pointer" onClick={openModal}>
-        <div className="p-2 h-full flex flex-col justify-center items-center gap-2">
-          <p className="text-xl font-bold text-black dark:text-white truncate text-center">Import Fonts</p>
-          <p className="font-haas text-md text-center uppercase tracking-widest font-bold text-blue-100 dark:text-red-200 truncate">
-            DaFont / 1001Fonts
-          </p>
+      <Card
+        roundness="lg"
+        visualHover
+        className="cursor-pointer border-violet-500/20 bg-violet-500/5 hover:bg-violet-500/10 flex items-center justify-center p-6 h-fit"
+        onClick={openModal}
+      >
+        <div className="flex items-center gap-4 w-full">
+          <div className="h-10 w-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0">
+            <Download className="h-5 w-5 text-violet-500" />
+          </div>
+          <div className="min-w-0 text-left">
+            <p className="text-sm font-bold text-black dark:text-white truncate">
+              Import Fonts
+            </p>
+            <p className="font-haas text-[9px] uppercase tracking-widest font-bold text-violet-600 dark:text-violet-400 truncate mt-0.5">
+              Scrape DaFont / 1001Fonts
+            </p>
+          </div>
         </div>
       </Card>
 

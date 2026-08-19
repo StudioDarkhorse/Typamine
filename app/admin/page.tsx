@@ -135,8 +135,9 @@ export default async function AdminDashboard() {
     authorsWithoutProfileInfoCount > 0 ? (
       <ScrapeAuthorProfileInfoCard key="scrape-profile-info" count={authorsWithoutProfileInfoCount} />
     ) : null,
-    canImportFonts ? <ImportFontsCard key="import-fonts" /> : null,
   ].filter(Boolean) as React.ReactNode[];
+
+  const importFontsCard = canImportFonts ? <ImportFontsCard /> : undefined;
 
   const quickActionsPanel = (
     <div className="grid grid-cols-1 gap-4 w-full">
@@ -151,6 +152,7 @@ export default async function AdminDashboard() {
   return (
     <AdminDashboardClient
       bulkTasks={bulkTasks}
+      importFontsCard={importFontsCard}
       quickActionsPanel={quickActionsPanel}
       hasQuickActions={hasQuickActions}
     />

@@ -7,12 +7,14 @@ import AdminStatisticsView from "./AdminStatisticsView";
 
 interface AdminDashboardClientProps {
   bulkTasks: React.ReactNode[];
+  importFontsCard?: React.ReactNode;
   quickActionsPanel: React.ReactNode;
   hasQuickActions: boolean;
 }
 
 export default function AdminDashboardClient({
   bulkTasks,
+  importFontsCard,
   quickActionsPanel,
   hasQuickActions,
 }: AdminDashboardClientProps) {
@@ -70,6 +72,9 @@ export default function AdminDashboardClient({
               </div>
             </div>
           </Card>
+
+          {/* Import Fonts Card */}
+          {importFontsCard}
 
           {/* Render remaining bulk task cards */}
           {bulkTasks}
