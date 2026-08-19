@@ -70,8 +70,7 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
   const [supportEmail, setSupportEmail] = useState(initialData?.supportEmail || "");
   const [website, setWebsite] = useState(initialData?.website || "");
   const [dafontProfileUrl, setDafontProfileUrl] = useState(initialData?.dafontProfileUrl || "");
-  const [dafontProfileInfoUrl, setDafontProfileInfoUrl] = useState(initialData?.dafontProfileInfoUrl || "");
-  const [fonts1001ProfileUrl, setFonts1001ProfileUrl] = useState(initialData?.fonts1001ProfileUrl || "");
+  const [profileInfoUrl, setProfileInfoUrl] = useState(initialData?.profileInfoUrl || "");
   const [nationality, setNationality] = useState(initialData?.nationality || "");
   const [bio, setBio] = useState(initialData?.bio || "");
   const [isVerified, setIsVerified] = useState(initialData?.isVerified ?? false);
@@ -342,8 +341,10 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
           </div>
 
           {/* Popolati in automatico dalle key task "Scrape Author Dafont
-              Profiles" e "Scrape Profile Info" in dashboard, editabili a mano
-              da qui. */}
+              Profiles" e "Scrape Profile Info" in dashboard (e, per gli import
+              da 1001fonts, direttamente in fase di import), editabili a mano
+              da qui. La profile info page è la pagina da cui si legge l'email:
+              profile.php su dafont, /users/<nome>/ su 1001fonts. */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="DaFont Profile Page"
@@ -353,21 +354,13 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
               placeholder="https://www.dafont.com/mjtype.d10200"
             />
             <Input
-              label="DaFont Profile Info Page"
-              name="dafontProfileInfoUrl"
-              value={dafontProfileInfoUrl}
-              onChange={setDafontProfileInfoUrl}
+              label="Profile Info Page (email source)"
+              name="profileInfoUrl"
+              value={profileInfoUrl}
+              onChange={setProfileInfoUrl}
               placeholder="https://www.dafont.com/profile.php?user=1490629"
             />
           </div>
-
-          <Input
-            label="1001Fonts Profile Page"
-            name="fonts1001ProfileUrl"
-            value={fonts1001ProfileUrl}
-            onChange={setFonts1001ProfileUrl}
-            placeholder="https://www.1001fonts.com/users/rhesma/"
-          />
 
           <Input as="textarea" rows={4} label="Bio" name="bio" value={bio} onChange={setBio} placeholder="Short biography (Markdown supported)..." />
 

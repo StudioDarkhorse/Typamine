@@ -73,7 +73,9 @@ export default function IngredientsClient({ tags, children }: IngredientsClientP
             filtersModalTitle="Filters"
           />
         </div>
-        <ViewModeToggle />
+        <div className="hidden lg:block">
+          <ViewModeToggle />
+        </div>
       </div>
 
       {children}

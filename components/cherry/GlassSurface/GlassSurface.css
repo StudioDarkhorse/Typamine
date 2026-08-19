@@ -41,21 +41,49 @@
   z-index: -1;
 }
 
+/* NIENTE light-dark() in questo file. Lightning CSS (la pipeline CSS di questo
+   Next) lo compila nel suo polyfill
+   `var(--lightningcss-light, <chiaro>) var(--lightningcss-dark, <scuro>)`,
+   che funziona solo se quelle due variabili esistono. Qui non sono definite da
+   nessuna parte, quindi la dichiarazione diventa "due colori" in una shorthand
+   e il browser la scarta: background e box-shadow risultavano rispettivamente
+   `rgba(0,0,0,0)` e `none`, ed era il motivo per cui cambiare
+   `backgroundOpacity` non produceva alcun effetto visibile.
+   Il tema qui è a classe (.dark, vedi @custom-variant in globals.css), quindi
+   la variante scura si scrive esplicitamente. */
+
 /* Default backgrounds wrapped in :where() to make them easily overridable by Tailwind utility classes */
 :where(.glass-surface--svg) {
-  background: light-dark(hsl(0 0% 100% / var(--glass-frost, 0)), hsl(0 0% 0% / var(--glass-frost, 0)));
+  background: hsl(0 0% 100% / var(--glass-frost, 0));
 }
 
+:where(.dark .glass-surface--svg) {
+  background: hsl(0 0% 0% / var(--glass-frost, 0));
+}
+
+/* --glass-satin: sfocatura extra applicata al backdrop OLTRE alla distorsione
+   del filtro SVG. È la manopola per il "vetro smerigliato": 0 = lente pulita
+   (comportamento originale), pochi px = superficie satinata. */
 .glass-surface--svg::before {
-  backdrop-filter: var(--filter-id) saturate(var(--glass-saturation, 1));
+  backdrop-filter: var(--filter-id) saturate(var(--glass-saturation, 1)) blur(var(--glass-satin, 0px));
 }
 
 .glass-surface--svg {
   box-shadow:
-    0 0 2px 1px light-dark(color-mix(in oklch, black, transparent 85%), color-mix(in oklch, white, transparent 65%))
-      inset,
-    0 0 10px 4px light-dark(color-mix(in oklch, black, transparent 90%), color-mix(in oklch, white, transparent 85%))
-      inset,
+    0 0 2px 1px color-mix(in oklch, black, transparent 85%) inset,
+    0 0 10px 4px color-mix(in oklch, black, transparent 90%) inset,
+    0px 4px 16px rgba(17, 17, 26, 0.05),
+    0px 8px 24px rgba(17, 17, 26, 0.05),
+    0px 16px 56px rgba(17, 17, 26, 0.05),
+    0px 4px 16px rgba(17, 17, 26, 0.05) inset,
+    0px 8px 24px rgba(17, 17, 26, 0.05) inset,
+    0px 16px 56px rgba(17, 17, 26, 0.05) inset;
+}
+
+.dark .glass-surface--svg {
+  box-shadow:
+    0 0 2px 1px color-mix(in oklch, white, transparent 65%) inset,
+    0 0 10px 4px color-mix(in oklch, white, transparent 85%) inset,
     0px 4px 16px rgba(17, 17, 26, 0.05),
     0px 8px 24px rgba(17, 17, 26, 0.05),
     0px 16px 56px rgba(17, 17, 26, 0.05),
@@ -124,6 +152,10 @@
 }
 
 .glass-surface:focus-visible {
-  outline: 2px solid light-dark(#007aff, #0a84ff);
+  outline: 2px solid #007aff;
   outline-offset: 2px;
+}
+
+.dark .glass-surface:focus-visible {
+  outline-color: #0a84ff;
 }

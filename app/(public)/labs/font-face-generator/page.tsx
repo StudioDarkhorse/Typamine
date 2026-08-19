@@ -1,4 +1,4 @@
-import { getIngredientBySlug, getIngredientsPage } from "@/lib/services/font";
+import { getIngredientBySlug, getLabsFontCatalog } from "@/lib/services/font";
 import FontFaceGeneratorClient from "./FontFaceGeneratorClient";
 
 export const dynamic = "force-dynamic";
@@ -10,15 +10,15 @@ interface FontFaceGeneratorPageProps {
 export default async function FontFaceGeneratorPage({ searchParams }: FontFaceGeneratorPageProps) {
   const { ingredient: ingredientSlug } = await searchParams;
 
-  const [initialIngredient, catalogPage] = await Promise.all([
+  const [initialIngredient, catalog] = await Promise.all([
     ingredientSlug ? getIngredientBySlug(ingredientSlug) : Promise.resolve(null),
-    getIngredientsPage({ perPage: 200, sort: "name_asc" }),
+    getLabsFontCatalog(200),
   ]);
 
   return (
     <FontFaceGeneratorClient
       initialIngredient={initialIngredient}
-      catalog={catalogPage.items}
+      catalog={catalog}
       ingredientSlug={ingredientSlug}
     />
   );

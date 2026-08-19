@@ -47,7 +47,9 @@ export const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
       )}
       {!cover && <div className="absolute inset-0 bg-zinc-100 dark:bg-zinc-900" />}
 
-      <div className="relative z-10 flex-1 flex flex-col justify-between px-8 pt-8 pb-4 sm:px-12 sm:pt-12 md:px-16 md:pt-16 max-w-4xl">
+      {/* pb generoso: sotto c'è la linguetta CTA in assoluto, il testo non
+          deve finirci sotto (soprattutto "Filed by" a schermi stretti). */}
+      <div className="relative z-10 flex-1 flex flex-col justify-between px-8 pt-8 pb-24 sm:px-12 sm:pt-12 sm:pb-28 md:px-16 md:pt-16 max-w-4xl">
         <div className="grow flex flex-col gap-4">
           <div className="flex items-center gap-2">
             <span className="font-mono text-[10px] text-ocragray-800 dark:text-zinc-200 uppercase tracking-widest">
@@ -86,10 +88,27 @@ export const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-end items-end relative z-10">
-        <div className="sm:ps-12 sm:pe-8 sm:pt-10 sm:pb-4 rounded-tl-[80%] rounded-bl-[10px] rounded-tr-[25%] bg-gradient-to-r from-blue-800/80 to-bluegray-800/80 dark:from-red-800/20 dark:to-red-800/80 flex items-center gap-2 font-haas font-bold text-blue-500 dark:text-red-500">
-          {ctaLabel}
-          <MoveRight size={14} className="icon-altalenante" />
+      {/* Linguetta CTA incollata all'angolo del fascicolo. Posizionata in
+          assoluto invece che come figlio flex: così la sua forma non cambia
+          con la lunghezza dell'etichetta ("Read Article" vs "Open Case File")
+          né col passaggio da colonna a riga della card. I raggi sono in rem e
+          non in percentuale, che su una scatola auto-dimensionata dava una
+          curva diversa a ogni testo. */}
+      <div className="absolute bottom-0 right-0 z-20">
+        <div
+          className="flex items-center gap-3 pl-10 pr-7 py-4 sm:pl-14 sm:pr-9 sm:py-5
+                     rounded-tl-[2.75rem] 
+                     border-t border-l border-white/25 dark:border-white/10
+                     bg-blue-900/85 dark:bg-red-900/80 backdrop-blur-md
+                     text-white shadow-[0_-10px_30px_rgba(0,0,0,0.25)]
+                     transition-[background-color,padding] duration-300
+                     group-hover:bg-blue-800/90 dark:group-hover:bg-red-800/85
+                     sm:group-hover:pr-12"
+        >
+          <span className="font-haas text-xs sm:text-sm font-bold uppercase tracking-widest whitespace-nowrap">
+            {ctaLabel}
+          </span>
+          <MoveRight size={16} className="icon-altalenante shrink-0" />
         </div>
       </div>
     </Link>

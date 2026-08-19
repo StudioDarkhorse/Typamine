@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 import Link from "next/link";
-import { Code2, RefreshCw, ArrowRight } from "lucide-react";
+import { Code2, RefreshCw, ArrowRight, ShieldCheck } from "lucide-react";
 import { getIngredientBySlug } from "@/lib/services/font";
 import { ChromeBlobHero } from "@/components/cheyy/ChromeBlobHero";
 
@@ -59,6 +59,14 @@ const TOOLS: LabsTool[] = [
     iconClass: "text-green",
     gradient: "from-green/10 via-green/0 to-transparent",
   },
+  {
+    slug: "wcag",
+    title: "WCAG Checker",
+    description: "Audit a typeface against WCAG 2.2 before it ships. Customize size, weight, and colors, then check key accessibility criteria: contrast ratios, reflow at 320px, 200% resize, text-spacing, font overrides, and character legibility — with a copy-paste report at the end.",
+    icon: ShieldCheck,
+    iconClass: "text-orange-400",
+    gradient: "from-orange-400/10 via-orange-400/0 to-transparent",
+  },
 ];
 
 export default async function LabsPage({ searchParams }: LabsPageProps) {
@@ -84,7 +92,7 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
           stesso sfondo animato (fixedBackground: il canvas resta ancorato
           al viewport mentre scrolli). */}
       <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 p-8 sm:p-16 pt-32 min-h-dvh">
-        <h1 className="font-rollover text-3xl sm:text-5xl font-bold uppercase tracking-[1rem] text-blue-900 dark:text-redgray-200 max-w-5xl">
+        <h1 className="font-crenzo text-3xl sm:text-5xl font-bold uppercase tracking-[1rem] text-blue-900 dark:text-redgray-200 max-w-5xl">
         Tools designed for Creatives and Developers
         </h1>
         <p className="text-zinc-700 dark:text-zinc-300 text-sm sm:text-base max-w-xl leading-relaxed font-haas font-bold">
@@ -100,7 +108,8 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
       </div>
 
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-dvh">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+        {/* 4 tool: 2 righe da 2 su desktop (prima erano 3 in fila) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
           {TOOLS.map((tool) => {
             const Icon = tool.icon;
             return (

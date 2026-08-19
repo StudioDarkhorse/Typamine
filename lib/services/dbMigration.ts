@@ -272,8 +272,7 @@ export async function ensureD1SchemaUpdated(force = false) {
           bio TEXT,
           website TEXT,
           dafontProfileUrl TEXT,
-          dafontProfileInfoUrl TEXT,
-          fonts1001ProfileUrl TEXT,
+          profileInfoUrl TEXT,
           donation TEXT,
           nationality TEXT,
           languagesSpoken TEXT,
@@ -291,8 +290,19 @@ export async function ensureD1SchemaUpdated(force = false) {
     // DB già esistenti da prima delle key task "Scrape Author Dafont Profiles"
     // e "Scrape Author Profile Info".
     await addCol("FontAuthor", "dafontProfileUrl", "TEXT");
+    // Le due vecchie colonne (dafontProfileInfoUrl / fonts1001ProfileUrl)
+    // descrivevano la stessa cosa — la pagina da cui si legge l'email —
+    // distinguendosi solo per la sorgente d'import. Restano aggiunte qui per i
+    // DB che ancora non le hanno (l'ALTER è idempotente) solo il tempo di
+    // travasarle: l'applicazione ormai legge e scrive `profileInfoUrl`.
     await addCol("FontAuthor", "dafontProfileInfoUrl", "TEXT");
     await addCol("FontAuthor", "fonts1001ProfileUrl", "TEXT");
+    await addCol("FontAuthor", "profileInfoUrl", "TEXT");
+    try {
+      await prisma.$executeRawUnsafe(
+        `UPDATE FontAuthor SET profileInfoUrl = COALESCE(NULLIF(dafontProfileInfoUrl, ''), NULLIF(fonts1001ProfileUrl, '')) WHERE profileInfoUrl IS NULL OR profileInfoUrl = ''`
+      );
+    } catch {}
 
     // Righe di permesso fontAuthor:* — nessun seed script le crea (i permessi
     // in questo progetto vengono inseriti out-of-band), quindi le registriamo

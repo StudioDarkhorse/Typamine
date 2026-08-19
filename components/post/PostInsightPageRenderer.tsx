@@ -3,6 +3,7 @@
 import React from 'react';
 
 import Paragraph from '@/components/common/Paragraph';
+import Markdown from '@/components/common/Markdown';
 import ParagraphWithImage from '@/components/common/ParagraphWithImage';
 import Quote from '@/components/common/Quote';
 import SimpleHero from '@/components/common/SimpleHero';
@@ -104,6 +105,24 @@ export default function PostInsightPageRenderer({ content, section }: PostInsigh
                 >
                   {props.children}
                 </Paragraph>
+              </section>
+            );
+          }
+
+          case 'markdown': {
+            // Stesso wrap di sezione del paragraph: il modulo markdown è a
+            // tutti gli effetti un paragrafo, solo con struttura interna
+            // (liste, heading, grassetto/corsivo, br) invece che testo piatto.
+            const sectionWrap = section ? SECTION_WRAP_CLASSNAMES[section] : "";
+            return (
+              <section key={id} className={sectionWrap}>
+                <Markdown
+                  content={props.content}
+                  size={props.size}
+                  align={props.align}
+                  colorClassName={props.colorClassName}
+                  className={cn("lg:p-4", FONT_FAMILIES_MAP[props.fontFamily])}
+                />
               </section>
             );
           }

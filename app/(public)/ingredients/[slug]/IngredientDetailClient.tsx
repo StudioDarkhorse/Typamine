@@ -7,6 +7,7 @@ import MinimalLink from "@/components/common/MinimalLink";
 import { useThemeStore } from "@/store/themeStore";
 import Grainient from "@/components/cherry/Grainient";
 import { DynamicPlayground } from "@/components/font/DynamicPlayground";
+import GlyphMatrix from "@/components/font/GlyphMatrix";
 import { getDeterministicFormula } from "@/lib/utils";
 import { Cta } from "@/components/common/Cta";
 import { Button } from "@/components/common/Button";
@@ -227,13 +228,22 @@ export default function IngredientDetailClient({ ingredient, hasPairings = false
         {isDownloading ? "PREPARING..." : "DOWNLOAD WOFF2"}
       </button>
 
+      {/* Confronto glifo per glifo con Alte Haas Grotesk: mostra copertura del
+          set di caratteri e differenze di proporzioni rispetto al font di
+          sistema del sito. */}
+      <GlyphMatrix
+        fontName={ingredient.name}
+        fontFamily={fontData.fontFamily}
+        fontUrl={fontData.fontUrl}
+      />
+
       <BaseModal isOpen={isLicenseModalOpen} onClose={() => setIsLicenseModalOpen(false)} size="md">
         <BaseModal.Header onClose={() => setIsLicenseModalOpen(false)}>
-          <div className="flex items-end gap-4">
+          <div className="flex items-center gap-4">
             <div className="p-2 rounded-xl bg-amber-500/10">
-              <FileSignature className="w-6 h-6 text-amber-500" />
+              <FileSignature className="w-12 h-12 text-amber-500" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white leading-tight">Licensing In Progress</h2>
+            <h2 className="text-xl font-crenzo text-black dark:text-white leading-tight">Licensing In Progress</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>

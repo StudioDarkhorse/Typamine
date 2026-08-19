@@ -182,8 +182,7 @@ export async function saveFontAuthor(prevState: any, formData: FormData, id?: st
     const bio = (formData.get("bio") as string)?.trim() || null;
     const website = (formData.get("website") as string)?.trim() || null;
     const dafontProfileUrl = (formData.get("dafontProfileUrl") as string)?.trim() || null;
-    const dafontProfileInfoUrl = (formData.get("dafontProfileInfoUrl") as string)?.trim() || null;
-    const fonts1001ProfileUrl = (formData.get("fonts1001ProfileUrl") as string)?.trim() || null;
+    const profileInfoUrl = (formData.get("profileInfoUrl") as string)?.trim() || null;
     const nationality = (formData.get("nationality") as string)?.trim() || null;
     const status = (formData.get("status") as string) || "ACTIVE";
     const isVerified = formData.get("isVerified") === "true";
@@ -230,8 +229,7 @@ export async function saveFontAuthor(prevState: any, formData: FormData, id?: st
       bio,
       website,
       dafontProfileUrl,
-      dafontProfileInfoUrl,
-      fonts1001ProfileUrl,
+      profileInfoUrl,
       nationality,
       status,
       isVerified,
@@ -245,13 +243,20 @@ export async function saveFontAuthor(prevState: any, formData: FormData, id?: st
       metrics: id ? existingAuthor?.metrics ?? DEFAULT_METRICS : DEFAULT_METRICS,
     };
 
+    // withSafeDbQuery: la prima scrittura dopo l'introduzione di
+    //  può trovare la colonna ancora assente su D1 (P2022) —
+    // il wrapper fa partire la migrazione e ritenta.
     let author;
     if (id) {
-      author = await prisma.fontAuthor.update({ where: { id }, data: baseData });
+      author = await withSafeDbQuery(() =>
+        prisma.fontAuthor.update({ where: { id }, data: baseData })
+      );
     } else {
-      author = await prisma.fontAuthor.create({
-        data: { id: authorId, ...baseData, createdAt: new Date() },
-      });
+      author = await withSafeDbQuery(() =>
+        prisma.fontAuthor.create({
+          data: { id: authorId, ...baseData, createdAt: new Date() },
+        })
+      );
     }
 
     // R2 avatar/banner processing — dopo la scrittura DB base, stesso schema
@@ -356,8 +361,10 @@ export interface DafontProfileCandidateAuthor {
 }
 
 // Candidati: autori REALI (i placeholder d'import e "unknown after AI check"
-// non hanno una pagina dafont) senza profilo già salvato. Il filtro "ha almeno
-// un font" NON sta qui: un filtro di relazione (`fonts: { some: {} }`) o un
+// non hanno una pagina dafont) senza profilo già salvato E con almeno un font
+// arrivato da dafont — un autore importato solo da 1001fonts non ha niente da
+// cercare qui, e prima finiva comunque nella lista facendo scaricare a vuoto
+// una PDP dafont inesistente. Il filtro "ha almeno un font" NON sta nel where: un filtro di relazione (`fonts: { some: {} }`) o un
 // select annidato con orderBy/take mandano il query engine in panic
 // ("no entry found for key") sull'adapter D1. I font si leggono con una query
 // flat separata e si raggruppano in JS — vedi getFirstFontByAuthorId.
@@ -369,26 +376,48 @@ async function getDafontProfileCandidateWhere() {
   };
 }
 
-// Primo font (per data di creazione) di ciascuno degli autori passati.
+// Sorgenti d'import che NON sono dafont: un autore i cui font vengono tutti da
+// qui non ha nessuna pagina dafont da cercare (il caso tipico è 1001fonts, che
+// la sua profile info page la porta già dall'import).
+const NON_DAFONT_IMPORT_SOURCES = new Set(["1001Fonts", "Google Fonts", "Fontshare"]);
+
+// Primo font utile (per data di creazione) di ciascuno degli autori passati,
+// dove "utile" significa: importato da dafont, quindi con una PDP dafont da
+// leggere. I font con `importedFrom` vuoto valgono come ripiego — sono le
+// righe precedenti all'introduzione della colonna, di provenienza ignota —
+// mentre quelli di una sorgente diversa e nota (1001fonts, Google, Fontshare,
+// upload locali) non producono nessun candidato.
 // Nessun `authorId: { in: [...] }`: i candidati sono centinaia e D1 ha un tetto
-// basso di bound parameter per query. Si leggono tutte le righe con le sole 3
+// basso di bound parameter per query. Si leggono tutte le righe con le sole
 // colonne che servono (catalogo nell'ordine delle centinaia di font) e si
 // filtra/raggruppa in JS.
-async function getFirstFontByAuthorId(authorIds: string[]): Promise<Map<string, { id: string; name: string }>> {
-  const firstByAuthor = new Map<string, { id: string; name: string }>();
+async function getFirstDafontFontByAuthorId(
+  authorIds: string[]
+): Promise<Map<string, { id: string; name: string; fromDafont: boolean }>> {
+  const firstByAuthor = new Map<string, { id: string; name: string; fromDafont: boolean }>();
   if (authorIds.length === 0) return firstByAuthor;
 
   const wanted = new Set(authorIds);
   const fonts = await withSafeDbQuery(() =>
     prisma.ingredient.findMany({
-      select: { id: true, name: true, authorId: true },
+      select: { id: true, name: true, authorId: true, importedFrom: true },
       orderBy: { createdAt: "asc" },
     })
   );
 
   for (const font of fonts) {
-    if (!font.authorId || !wanted.has(font.authorId) || firstByAuthor.has(font.authorId)) continue;
-    firstByAuthor.set(font.authorId, { id: font.id, name: font.name });
+    if (!font.authorId || !wanted.has(font.authorId)) continue;
+
+    const source = (font.importedFrom ?? "").trim();
+    if (NON_DAFONT_IMPORT_SOURCES.has(source)) continue;
+
+    const fromDafont = source === "Dafont";
+    const current = firstByAuthor.get(font.authorId);
+    // Un font dafont esplicito batte sempre un ripiego a provenienza ignota,
+    // anche se arrivato dopo.
+    if (current && (current.fromDafont || !fromDafont)) continue;
+
+    firstByAuthor.set(font.authorId, { id: font.id, name: font.name, fromDafont });
   }
   return firstByAuthor;
 }
@@ -404,7 +433,7 @@ async function collectDafontProfileCandidates(): Promise<DafontProfileCandidateA
     })
   );
 
-  const firstByAuthor = await getFirstFontByAuthorId(authors.map((author) => author.id));
+  const firstByAuthor = await getFirstDafontFontByAuthorId(authors.map((author) => author.id));
 
   return authors.flatMap((author) => {
     const font = firstByAuthor.get(author.id);
@@ -461,15 +490,26 @@ export async function scrapeAuthorDafontProfile(authorId: string): Promise<Scrap
   if (!author) throw new Error("Font author not found");
 
   // findFirst flat invece di un select annidato con orderBy/take (che fa
-  // panicare il query engine su D1 — vedi getFirstFontByAuthorId).
-  const firstFont = await withSafeDbQuery(() =>
-    prisma.ingredient.findFirst({
-      where: { authorId: author.id },
+  // panicare il query engine su D1 — vedi getFirstDafontFontByAuthorId).
+  // Si cerca prima un font davvero importato da dafont; se l'autore ne ha solo
+  // di provenienza ignota (righe anteriori alla colonna `importedFrom`) si
+  // ripiega su quelli, mai su una sorgente diversa e nota.
+  const firstFont = await withSafeDbQuery(async () =>
+    (await prisma.ingredient.findFirst({
+      where: { authorId: author.id, importedFrom: "Dafont" },
       select: { id: true, name: true },
       orderBy: { createdAt: "asc" },
-    })
+    })) ??
+    (await prisma.ingredient.findFirst({
+      where: {
+        authorId: author.id,
+        OR: [{ importedFrom: null }, { importedFrom: "" }],
+      },
+      select: { id: true, name: true },
+      orderBy: { createdAt: "asc" },
+    }))
   );
-  if (!firstFont) throw new Error(`${author.name} has no fonts to look up.`);
+  if (!firstFont) throw new Error(`${author.name} has no dafont-imported fonts to look up.`);
 
   const fontUrl = buildDafontUrl(firstFont.name);
   console.log(`[DafontAuthorProfile] "${author.name}" → via font "${firstFont.name}" (${fontUrl})`);
@@ -501,13 +541,18 @@ export async function scrapeAuthorDafontProfile(authorId: string): Promise<Scrap
 //
 // Secondo salto della catena dafont, dopo "Scrape Author Dafont Profiles":
 //   pagina autore (dafontProfileUrl, es. /mjtype.d10200)
-//     → pagina profilo utente (dafontProfileInfoUrl, es. /profile.php?user=1490629)
+//     → profile info page (profileInfoUrl, es. /profile.php?user=1490629)
 //       → email di contatto, se l'autore l'ha resa pubblica
+// La profile info page non è un concetto dafont: per gli import da 1001fonts
+// è la pagina utente del sito, già nota dall'import (vedi
+// findOrCreateFontAuthorFromFonts1001) — stessa colonna, nessun secondo salto
+// da fare. Per questo i candidati qui sotto partono da chi HA la pagina autore
+// dafont: sono esattamente quelli a cui manca ancora il secondo salto.
 // Ogni passo scrive subito su DB: l'url del profilo utente viene salvato anche
 // quando la mail poi non c'è (così un secondo giro non rifà il primo scrape).
 // ---------------------------------------------------------------------------
 
-export interface DafontProfileInfoCandidateAuthor {
+export interface ProfileInfoCandidateAuthor {
   id: string;
   name: string;
   /** Pagina autore da cui parte il lookup. */
@@ -520,20 +565,20 @@ export interface DafontProfileInfoCandidateAuthor {
 // profilo utente. Solo filtri scalari, nessuna relazione (vedi il commento su
 // getDafontProfileCandidateWhere: le relazioni fanno panicare il query engine
 // sull'adapter D1).
-const DAFONT_PROFILE_INFO_CANDIDATE_WHERE = {
+const PROFILE_INFO_CANDIDATE_WHERE = {
   AND: [
     { NOT: { dafontProfileUrl: null } },
     { NOT: { dafontProfileUrl: "" } },
-    { OR: [{ dafontProfileInfoUrl: null }, { dafontProfileInfoUrl: "" }] },
+    { OR: [{ profileInfoUrl: null }, { profileInfoUrl: "" }] },
   ],
 };
 
-export async function getAuthorsNeedingDafontProfileInfo(): Promise<DafontProfileInfoCandidateAuthor[]> {
+export async function getAuthorsNeedingProfileInfo(): Promise<ProfileInfoCandidateAuthor[]> {
   await checkPermission("fontAuthor:read");
 
   const authors = await withSafeDbQuery(() =>
     prisma.fontAuthor.findMany({
-      where: DAFONT_PROFILE_INFO_CANDIDATE_WHERE,
+      where: PROFILE_INFO_CANDIDATE_WHERE,
       select: { id: true, name: true, email: true, dafontProfileUrl: true },
       orderBy: { name: "asc" },
     })
@@ -547,14 +592,14 @@ export async function getAuthorsNeedingDafontProfileInfo(): Promise<DafontProfil
   }));
 }
 
-export async function getAuthorsNeedingDafontProfileInfoCount(): Promise<number> {
+export async function getAuthorsNeedingProfileInfoCount(): Promise<number> {
   await checkPermission("fontAuthor:read");
   return withD1Retry(() =>
-    withSafeDbQuery(() => prisma.fontAuthor.count({ where: DAFONT_PROFILE_INFO_CANDIDATE_WHERE }))
+    withSafeDbQuery(() => prisma.fontAuthor.count({ where: PROFILE_INFO_CANDIDATE_WHERE }))
   );
 }
 
-export interface ScrapeAuthorDafontProfileInfoResult {
+export interface ScrapeAuthorProfileInfoResult {
   id: string;
   name: string;
   /** Pagina autore interrogata. */
@@ -584,13 +629,13 @@ export interface ScrapeAuthorDafontProfileInfoResult {
  * utente → email. Ritorna il punto esatto in cui si è fermata, così la modale
  * può distinguere "profilo non linkato", "profilo 404" e "profilo senza email".
  */
-export async function scrapeAuthorDafontProfileInfo(authorId: string): Promise<ScrapeAuthorDafontProfileInfoResult> {
+export async function scrapeAuthorProfileInfo(authorId: string): Promise<ScrapeAuthorProfileInfoResult> {
   await checkPermission("fontAuthor:update");
 
   const author = await withSafeDbQuery(() =>
     prisma.fontAuthor.findUnique({
       where: { id: authorId },
-      select: { id: true, name: true, email: true, dafontProfileUrl: true, dafontProfileInfoUrl: true },
+      select: { id: true, name: true, email: true, dafontProfileUrl: true, profileInfoUrl: true },
     })
   );
   if (!author) throw new Error("Font author not found");
@@ -617,7 +662,7 @@ export async function scrapeAuthorDafontProfileInfo(authorId: string): Promise<S
 
   const profileInfoUrl = profileResult.profileInfoUrl;
   await withSafeDbQuery(() =>
-    prisma.fontAuthor.update({ where: { id: author.id }, data: { dafontProfileInfoUrl: profileInfoUrl } })
+    prisma.fontAuthor.update({ where: { id: author.id }, data: { profileInfoUrl } })
   );
 
   const emailResult = await scrapeDafontProfileEmail(profileInfoUrl);

@@ -101,7 +101,7 @@ export default function IngredientHeader({
           order-1 su mobile: nome/autore per primi, sopra a score e voto. */}
       <div className="relative z-10 p-3 md:p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 w-full order-1 md:order-2">
         <div className="space-y-1">
-          <h1 className="flex flex-col lg:flex-row items-start lg:items-baseline gap-x-2 gap-y-1 font-haas text-3xl lg:text-2xl font-bold text-glow-cyan dark:text-glow-red text-blue dark:text-red">
+          <h1 className="flex flex-col lg:flex-row items-start lg:items-baseline gap-x-2 gap-y-1 font-haas text-3xl lg:text-2xl font-bold dark:text-glow-red text-blue dark:text-red">
             {ingredient.name.replaceAll('_', " ")}
             {ingredient.author && (
               <>

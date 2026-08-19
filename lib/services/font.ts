@@ -147,6 +147,33 @@ export const getIngredientsPage = unstable_cache(
   { revalidate: 60, tags: [CACHE_TAGS.ingredients] }
 );
 
+// Catalogo completo per i tool /labs (select "carica dal catalogo").
+// Non si può chiedere in un colpo solo: con `include` di variants/tags/author
+// Prisma emette una query per relazione con un `IN (...)` che contiene un
+// binding per ogni id — su D1 il limite è 100 variabili per query, quindi una
+// pagina da 200 font fa fallire tutto con
+// "D1_ERROR: too many SQL variables". Impaginiamo a blocchi da 50 e
+// concateniamo: 4 query invece di una che non parte.
+const LABS_CATALOG_CHUNK = 50;
+
+export const getLabsFontCatalog = unstable_cache(
+  async (limit = 200): Promise<Ingredient[]> => {
+    const items: Ingredient[] = [];
+    for (let page = 1; items.length < limit; page++) {
+      const chunk = await getIngredientsPage({
+        page,
+        perPage: Math.min(LABS_CATALOG_CHUNK, limit - items.length),
+        sort: "name_asc",
+      });
+      items.push(...chunk.items);
+      if (page >= chunk.totalPages || chunk.items.length === 0) break;
+    }
+    return items;
+  },
+  ["labs-font-catalog"],
+  { revalidate: 300, tags: [CACHE_TAGS.ingredients] }
+);
+
 export const getIngredientsByAuthorId = unstable_cache(
   async (authorId: string): Promise<Ingredient[]> => {
     const records = await withCreatedAtBackfill(() =>

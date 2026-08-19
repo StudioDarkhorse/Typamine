@@ -61,14 +61,16 @@ model FontAuthor {
   // "Scrape Author Dafont Profiles", che la ricava dalla PDP del primo font
   // dell'autore invece che indovinare uno slug (dafont usa id numerici).
   dafontProfileUrl String?
-  // Pagina profilo utente dafont (dafont.com/profile.php?user=NNNN), linkata
-  // dalla pagina autore sopra: è quella che, quando l'autore l'ha resa
-  // pubblica, contiene la sua email di contatto.
-  dafontProfileInfoUrl String?
-  // Profilo autore su 1001fonts (es. https://www.1001fonts.com/users/rhesma/),
-  // letto direttamente dalla pagina del font: lì non serve il passaggio
-  // intermedio che dafont richiede per arrivare ai contatti.
-  fonts1001ProfileUrl String?
+  // Pagina profilo con i contatti dell'autore — quella da cui si estrae la
+  // sua email. NON è legata a una singola sorgente:
+  //   dafont     → dafont.com/profile.php?user=NNNN, raggiungibile solo
+  //                passando per `dafontProfileUrl` qui sopra (pagina autore);
+  //   1001fonts  → 1001fonts.com/users/<nome>/, letta già in fase di import
+  //                dalla pagina del font (nessun passaggio intermedio).
+  // Prima erano due colonne separate (dafontProfileInfoUrl /
+  // fonts1001ProfileUrl) che rappresentavano la stessa identica cosa: unite
+  // qui, con backfill in lib/services/dbMigration.ts.
+  profileInfoUrl String?
   donation        String?
   nationality     String?
   languagesSpoken String?

@@ -4,7 +4,7 @@ import { PageHeading } from "@/components/common/PageHeading";
 import { useThemeStore } from "@/store/themeStore";
 import { useLabsGrainientOptions } from "./labsShared";
 
-export type LabsHeaderTool = "fontface" | "tailwind" | "converter";
+export type LabsHeaderTool = "fontface" | "tailwind" | "converter" | "wcag";
 
 const TOOL_COPY: Record<"hub" | LabsHeaderTool, { title: string; subtitle: string }> = {
   hub: {
@@ -22,6 +22,10 @@ const TOOL_COPY: Record<"hub" | LabsHeaderTool, { title: string; subtitle: strin
   converter: {
     title: "FORMAT_CONVERTER // WOFF2 ⇄ WOFF ⇄ TTF/OTF",
     subtitle: "Upload a font file — or auto-load one straight from the catalog — and get back all 3 formats: download individually, bundled as a .zip, or send straight into the @font-face generator.",
+  },
+  wcag: {
+    title: "WCAG CHECKER // Accessibility Audit for Type",
+    subtitle: "Set font, size, weight, spacing and colors, then run the full WCAG 2.2 check: contrast (1.4.3 / 1.4.6), resize to 200% (1.4.4), text-spacing overrides (1.4.12), reflow at 320px (1.4.10), font substitution, fallback stack and glyph distinguishability.",
   },
 };
 

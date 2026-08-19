@@ -101,12 +101,21 @@ export const Footer: React.FC<FooterProps> = ({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 w-full flex flex-col md:flex-row items-center gap-4">
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+        <div className="w-full flex flex-wrap justify-between items-center gap-x-4 gap-y-1">
           <span>© {new Date().getFullYear()} TYPAMINE STUDIO - ALL RIGHTS RESERVED.</span>
-          <span className="text-ocragray-800 dark:text-zinc-200">|</span>
-          <span className="hover:text-blue transition-colors cursor-pointer">TERMS_OF_SERVICE</span>
-          <span className="text-ocragray-800 dark:text-zinc-200">|</span>
-          <span className="hover:text-blue transition-colors cursor-pointer">PRIVACY_POLICY</span>
+          <div className="flex gap-4">
+            <Link href="/terms" className="hover:text-blue dark:hover:text-red transition-colors">
+              TERMS OF SERVICE
+            </Link>
+            <span className="text-ocragray-800 dark:text-zinc-200">|</span>
+            <Link href="/privacy" className="hover:text-blue dark:hover:text-red transition-colors">
+              PRIVACY POLICY
+            </Link>
+            <span className="text-ocragray-800 dark:text-zinc-200">|</span>
+            <Link href="/cookie" className="hover:text-blue dark:hover:text-red transition-colors">
+              COOKIE POLICY
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

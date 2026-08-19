@@ -12,7 +12,7 @@ import {
 } from "@/lib/actions/font";
 import {
   getAuthorsNeedingDafontProfileCount,
-  getAuthorsNeedingDafontProfileInfoCount,
+  getAuthorsNeedingProfileInfoCount,
 } from "@/lib/actions/fontAuthor";
 import AIFontQualityButton from "@/components/admin/AIFontQualityButton";
 import AIFontIdentityButton from "@/components/admin/AIFontIdentityButton";
@@ -21,8 +21,7 @@ import FillMissingLicensesCard from "@/components/admin/FillMissingLicensesCard"
 import ForceDafontScrapingCard from "@/components/admin/ForceDafontScrapingCard";
 import ScrapeAuthorProfilesCard from "@/components/admin/ScrapeAuthorProfilesCard";
 import ScrapeAuthorProfileInfoCard from "@/components/admin/ScrapeAuthorProfileInfoCard";
-import ScrapeFromDafontCard from "@/components/admin/ScrapeFromDafontCard";
-import ScrapeFrom1001FontsCard from "@/components/admin/ScrapeFrom1001FontsCard";
+import ImportFontsCard from "@/components/admin/ImportFontsCard";
 import { Card } from "@/components/common/Card";
 import AdminDashboardClient from "@/components/admin/AdminDashboardClient";
 
@@ -78,7 +77,7 @@ export default async function AdminDashboard() {
   const dafontScrapeCount = canReadFonts ? await getFontsNeedingDafontScrapeCount() : 0;
   const canReadAuthors = hasPermission(session, "fontAuthor", "read");
   const authorsWithoutDafontProfileCount = canReadAuthors ? await getAuthorsNeedingDafontProfileCount() : 0;
-  const authorsWithoutProfileInfoCount = canReadAuthors ? await getAuthorsNeedingDafontProfileInfoCount() : 0;
+  const authorsWithoutProfileInfoCount = canReadAuthors ? await getAuthorsNeedingProfileInfoCount() : 0;
   const canImportFonts = hasPermission(session, "font", "create");
 
   // Archive/blog/pairings/collections condividono il permesso "font" per la
@@ -136,8 +135,7 @@ export default async function AdminDashboard() {
     authorsWithoutProfileInfoCount > 0 ? (
       <ScrapeAuthorProfileInfoCard key="scrape-profile-info" count={authorsWithoutProfileInfoCount} />
     ) : null,
-    canImportFonts ? <ScrapeFromDafontCard key="scrape-dafont" /> : null,
-    canImportFonts ? <ScrapeFrom1001FontsCard key="scrape-1001" /> : null,
+    canImportFonts ? <ImportFontsCard key="import-fonts" /> : null,
   ].filter(Boolean) as React.ReactNode[];
 
   const quickActionsPanel = (

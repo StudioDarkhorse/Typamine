@@ -143,7 +143,7 @@ export default function ScrapeAuthorProfilesCard({ count }: { count: number }) {
       <Card roundness="lg" visualHover className="cursor-pointer" onClick={openModal}>
         <div className="p-2 h-full flex flex-col justify-center items-center gap-2">
           <p className="text-xl font-bold text-black dark:text-white truncate text-center">
-            {count} author{count !== 1 ? "s" : ""} without a DaFont profile
+            {count} dafont-imported author{count !== 1 ? "s" : ""} without a profile page
           </p>
            <p className="font-haas text-md text-center uppercase tracking-widest font-bold text-blue-200 dark:text-red-400 truncate">
             Run Dafont Scraping

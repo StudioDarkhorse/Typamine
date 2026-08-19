@@ -6,9 +6,9 @@ import { Button } from "@/components/common/Button";
 import { Card } from "@/components/common/Card";
 import BaseModal from "@/components/common/BaseModal";
 import {
-  getAuthorsNeedingDafontProfileInfo,
-  scrapeAuthorDafontProfileInfo,
-  type DafontProfileInfoCandidateAuthor,
+  getAuthorsNeedingProfileInfo,
+  scrapeAuthorProfileInfo,
+  type ProfileInfoCandidateAuthor,
 } from "@/lib/actions/fontAuthor";
 
 type Phase = "idle" | "loading-candidates" | "ready" | "running" | "done";
@@ -22,14 +22,17 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// "Scrape Author Profile Info" in dashboard — secondo salto della catena
-// dafont: dalla pagina autore già salvata (dafontProfileUrl) al link del
-// profilo utente (dafontProfileInfoUrl, /profile.php?user=NNNN) e da lì, se
-// pubblica, all'email di contatto, che sostituisce quella dell'autore.
+// "Scrape Profile Info" in dashboard — secondo salto della catena dafont:
+// dalla pagina autore già salvata (dafontProfileUrl) al link della profile
+// info page (profileInfoUrl, /profile.php?user=NNNN) e da lì, se pubblica,
+// all'email di contatto, che sostituisce quella dell'autore.
+// I candidati sono per costruzione solo autori arrivati da dafont: chi viene
+// da 1001fonts la profile info page ce l'ha già dall'import e non compare
+// mai in questa lista.
 export default function ScrapeAuthorProfileInfoCard({ count }: { count: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const [phase, setPhase] = useState<Phase>("idle");
-  const [candidates, setCandidates] = useState<DafontProfileInfoCandidateAuthor[]>([]);
+  const [candidates, setCandidates] = useState<ProfileInfoCandidateAuthor[]>([]);
   const [progress, setProgress] = useState(0);
   const [logs, setLogs] = useState<string[]>([]);
   const [results, setResults] = useState<{
@@ -59,7 +62,7 @@ export default function ScrapeAuthorProfileInfoCard({ count }: { count: number }
     cancelRequestedRef.current = false;
     setIsCancelling(false);
     try {
-      const authors = await getAuthorsNeedingDafontProfileInfo();
+      const authors = await getAuthorsNeedingProfileInfo();
       setCandidates(authors);
       setPhase("ready");
     } catch (err: any) {
@@ -95,7 +98,7 @@ export default function ScrapeAuthorProfileInfoCard({ count }: { count: number }
       );
 
       try {
-        const result = await scrapeAuthorDafontProfileInfo(author.id);
+        const result = await scrapeAuthorProfileInfo(author.id);
 
         if (result.notFound) {
           notFound.push({ name: author.name });
@@ -172,7 +175,7 @@ export default function ScrapeAuthorProfileInfoCard({ count }: { count: number }
       <Card roundness="lg" visualHover className="cursor-pointer" onClick={openModal}>
         <div className="p-2 h-full flex flex-col justify-center items-center gap-2">
           <p className="text-xl font-bold text-black dark:text-white truncate text-center">
-            {count} author{count !== 1 ? "s" : ""} without profile info
+            {count} dafont author{count !== 1 ? "s" : ""} without profile info
           </p>
         <p className="font-haas text-md text-center uppercase tracking-widest font-bold text-blue-200 dark:text-red-400 truncate">
             Run Dafont Scraping

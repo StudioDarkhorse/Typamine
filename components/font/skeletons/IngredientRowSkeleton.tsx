@@ -12,9 +12,12 @@ export const IngredientRowSkeleton: React.FC = () => {
         </div>
       </div>
 
-      <div className="my-4 h-24 rounded-xl border border-zinc-200 dark:border-zinc-900 bg-zinc-100 dark:bg-zinc-900" />
+      {/* Stessa altezza del box preview di IngredientRow (h-[260px]): un
+          placeholder più basso faceva saltare la lista di ~160px per riga
+          quando arrivavano i dati. */}
+      <div className="my-4 h-[260px] rounded-md border border-zinc-200 dark:border-zinc-900 bg-zinc-100 dark:bg-zinc-900" />
 
-      <div className="pt-3 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
+      <div className="pt-3 flex justify-between items-center border-t border-zinc-400/50">
         <div className="h-2.5 w-24 rounded bg-zinc-200 dark:bg-zinc-800" />
         <div className="h-2.5 w-16 rounded bg-zinc-200 dark:bg-zinc-800" />
       </div>

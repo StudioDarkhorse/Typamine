@@ -57,7 +57,7 @@ export const DynamicLogo: React.FC<DynamicLogoProps> = ({
   // Logica di calcolo proporzionale
   const normalHeight = propHeight !== undefined ? propHeight : 90;
   const desktopWidth = propWidth !== undefined ? propWidth : (propHeight !== undefined ? propHeight * 2 : 180);
-  const mobileWidth = propHeight !== undefined ? Math.round(propHeight * 0.65) : 58;
+  const mobileWidth = propHeight !== undefined ? Math.round(propHeight * 0.8) : 72;
 
   const collapsedHeight = 56;
   const collapsedWidth = 56;
@@ -103,12 +103,18 @@ export const DynamicLogo: React.FC<DynamicLogoProps> = ({
           width: ${currentSquareSize}px;
           height: ${currentSquareSize}px;
         }
+        .dyn-logo-letter-t {
+          font-size: ${hasCustomTSize ? `${letterTFontSizePercent * 1.5}%` : "150%"};
+        }
         @media (min-width: 640px) {
           .dyn-logo-container {
             width: ${effectiveDesktopWidth}px;
           }
           .dyn-logo-square {
             left: ${desktopSquareLeft}px;
+          }
+          .dyn-logo-letter-t {
+            font-size: ${hasCustomTSize ? `${letterTFontSizePercent}%` : "inherit"};
           }
         }
       `}</style>
@@ -131,11 +137,7 @@ export const DynamicLogo: React.FC<DynamicLogoProps> = ({
             verticalAlign: "bottom",
           }}
         >
-          <span
-            style={{
-              fontSize: hasCustomTSize ? `${letterTFontSizePercent}%` : undefined,
-            }}
-          >
+          <span className="dyn-logo-letter-t inline-block">
             T
           </span>
           {!iconOnly && (

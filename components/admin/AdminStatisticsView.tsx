@@ -38,7 +38,7 @@ export default function AdminStatisticsView() {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3">
         <Loader2 className="h-10 w-10 text-blue-500 animate-spin" />
-        <p className="text-xs font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-400">
+        <p className="text-sm font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-400">
           Calculating metrics...
         </p>
       </div>
@@ -49,7 +49,7 @@ export default function AdminStatisticsView() {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3 text-red-500">
         <AlertCircle className="h-10 w-10" />
-        <p className="text-sm font-bold">Failed to load system statistics.</p>
+        <p className="text-base font-bold">Failed to load system statistics.</p>
         <p className="text-xs opacity-75">{error?.message || "Unknown error"}</p>
       </div>
     );
@@ -116,10 +116,10 @@ export default function AdminStatisticsView() {
           <Card roundness="xl" className="p-6 md:p-8">
             <div className="flex justify-between items-start border-b border-black/5 dark:border-white/5 pb-3 mb-5">
               <div>
-                <h3 className="text-lg font-crenzo font-black uppercase tracking-widest text-black dark:text-white leading-none">
+                <h3 className="text-xl font-crenzo font-black uppercase tracking-widest text-black dark:text-white leading-none">
                   License Type Distribution
                 </h3>
-                <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-400 mt-1">
+                <p className="text-xs uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-400 mt-1.5">
                   Overview of available fonts grouped by licensing models
                 </p>
               </div>
@@ -166,7 +166,7 @@ export default function AdminStatisticsView() {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.85 }}
                             transition={{ duration: 0.15 }}
-                            className="text-3xl sm:text-4xl font-extrabold text-blue-600 dark:text-red-200 leading-none font-crenzo select-none"
+                            className="text-4xl sm:text-5xl font-extrabold text-blue-600 dark:text-red-200 leading-none font-crenzo select-none"
                           >
                             {hoveredIndex !== null ? licenseStats[hoveredIndex].count : totalFonts}
                           </motion.span>
@@ -183,7 +183,7 @@ export default function AdminStatisticsView() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -5 }}
                           transition={{ duration: 0.15 }}
-                          className="text-xs font-black text-black dark:text-white uppercase tracking-widest font-haas select-none text-center"
+                          className="text-sm font-black text-black dark:text-white uppercase tracking-widest font-haas select-none text-center"
                         >
                           {hoveredIndex !== null ? licenseStats[hoveredIndex].label : "Total Fonts"}
                         </motion.span>
@@ -192,7 +192,7 @@ export default function AdminStatisticsView() {
                   </div>
 
                   {/* Legend list in grid format to save space (lg:col-span-7) */}
-                  <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     {licenseStats.map((stat, idx) => {
                       const percentage = totalFonts > 0 ? (stat.count / totalFonts) * 100 : 0;
                       const isHovered = hoveredIndex === idx;
@@ -201,7 +201,7 @@ export default function AdminStatisticsView() {
                           key={stat.label}
                           onMouseEnter={() => setHoveredIndex(idx)}
                           onMouseLeave={() => setHoveredIndex(null)}
-                          className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl border border-transparent transition-all duration-150 ${
+                          className={`flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent transition-all duration-150 ${
                             isHovered
                               ? "bg-zinc-100 dark:bg-zinc-800 border-zinc-200/50 dark:border-zinc-700/50 scale-[1.02] shadow-xs"
                               : "opacity-85 hover:opacity-100"
@@ -209,12 +209,12 @@ export default function AdminStatisticsView() {
                         >
                           <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: stat.color }} />
                           <div className="flex-1 min-w-0">
-                            <p className="text-xs font-bold text-black dark:text-white truncate font-haas leading-tight">
+                            <p className="text-xs sm:text-sm font-bold text-black dark:text-white truncate font-haas leading-tight">
                               {stat.label}
                             </p>
                           </div>
-                          <div className="text-xs font-extrabold text-zinc-600 dark:text-zinc-400 font-haas tabular-nums shrink-0">
-                            {stat.count} <span className="opacity-50 ml-0.5">({percentage.toFixed(0)}%)</span>
+                          <div className="text-xs sm:text-sm font-extrabold text-zinc-600 dark:text-zinc-400 font-haas tabular-nums shrink-0">
+                            {stat.count} <span className="opacity-50 ml-0.5 font-bold">({percentage.toFixed(0)}%)</span>
                           </div>
                         </div>
                       );
@@ -233,7 +233,7 @@ export default function AdminStatisticsView() {
               {/* Total Authors Card */}
               <Card roundness="xl" className="p-6 bg-zinc-50/50 dark:bg-zinc-900/50 border border-black/5 dark:border-white/5 min-h-[140px] flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-400">
+                  <p className="text-xs uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-400">
                     Total Authors
                   </p>
                   <div className="h-9 w-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
@@ -244,7 +244,7 @@ export default function AdminStatisticsView() {
                   <p className="text-4xl font-extrabold text-black dark:text-white font-crenzo leading-none">
                     {authors.total}
                   </p>
-                  <p className="text-[9px] text-zinc-500 uppercase tracking-wider font-bold mt-1.5 select-none">
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-bold mt-1.5 select-none">
                     Registered creators
                   </p>
                 </div>
@@ -253,7 +253,7 @@ export default function AdminStatisticsView() {
               {/* Real Contacts Card */}
               <Card roundness="xl" className="p-6 bg-zinc-50/50 dark:bg-zinc-900/50 border border-black/5 dark:border-white/5 min-h-[140px] flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-400">
+                  <p className="text-xs uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-400">
                     Real Contacts
                   </p>
                   <div className="h-9 w-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
@@ -265,7 +265,7 @@ export default function AdminStatisticsView() {
                     <p className="text-4xl font-extrabold text-black dark:text-white font-crenzo leading-none">
                       {authors.realEmail}
                     </p>
-                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
+                    <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
                       ({realEmailPercent.toFixed(0)}%)
                     </span>
                   </div>
@@ -281,7 +281,7 @@ export default function AdminStatisticsView() {
               {/* Verified Status Card */}
               <Card roundness="xl" className="p-6 bg-zinc-50/50 dark:bg-zinc-900/50 border border-black/5 dark:border-white/5 min-h-[140px] flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-400">
+                  <p className="text-xs uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-400">
                     Verified Status
                   </p>
                   <div className="h-9 w-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
@@ -293,7 +293,7 @@ export default function AdminStatisticsView() {
                     <p className="text-4xl font-extrabold text-black dark:text-white font-crenzo leading-none">
                       {authors.verified}
                     </p>
-                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400 tabular-nums">
+                    <span className="text-sm font-bold text-purple-600 dark:text-purple-400 tabular-nums">
                       ({verifiedPercent.toFixed(0)}%)
                     </span>
                   </div>
@@ -311,10 +311,10 @@ export default function AdminStatisticsView() {
             <Card roundness="xl" className="p-5 border border-black/5 dark:border-white/5">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="text-left space-y-1">
-                  <h4 className="text-xs font-bold text-black dark:text-white uppercase tracking-wider">
+                  <h4 className="text-sm font-bold text-black dark:text-white uppercase tracking-wider">
                     Verification Breakdown
                   </h4>
-                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">
+                  <p className="text-xs text-zinc-500 uppercase tracking-widest font-bold">
                     Proportion of verified creators versus unverified profiles
                   </p>
                 </div>
@@ -328,7 +328,7 @@ export default function AdminStatisticsView() {
                       className="h-full bg-zinc-400 dark:bg-zinc-600 flex-1 transition-all duration-500"
                     />
                   </div>
-                  <div className="flex justify-between text-[10px] font-bold text-zinc-500 uppercase tracking-wider font-haas">
+                  <div className="flex justify-between text-xs font-bold text-zinc-500 uppercase tracking-wider font-haas">
                     <span>Verified ({authors.verified})</span>
                     <span>Unverified ({authors.total - authors.verified})</span>
                   </div>
@@ -336,7 +336,7 @@ export default function AdminStatisticsView() {
               </div>
             </Card>
 
-            <p className="text-[9px] uppercase tracking-widest text-center font-bold text-ocragray-800 dark:text-ocragray-200 mt-2 select-none">
+            <p className="text-xs uppercase tracking-widest text-center font-bold text-ocragray-800 dark:text-ocragray-200 mt-2 select-none">
               Verified authors are active designers whose profiles have been confirmed.
             </p>
           </div>
@@ -355,11 +355,11 @@ export default function AdminStatisticsView() {
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <h3 className="text-md font-crenzo font-black uppercase tracking-widest text-black dark:text-white leading-none">
+              <div className="space-y-2">
+                <h3 className="text-lg font-crenzo font-black uppercase tracking-widest text-black dark:text-white leading-none">
                   Analytics Offline
                 </h3>
-                <p className="text-xs text-zinc-600 dark:text-zinc-400 font-haas leading-relaxed">
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 font-haas leading-relaxed">
                   Real-time website traffic metrics, page views, and download analytics are currently offline. 
                   Connect your web analytics provider (Google Analytics or Meta Pixel) in Settings to activate this tab.
                 </p>
@@ -367,14 +367,14 @@ export default function AdminStatisticsView() {
 
               <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto pt-2">
                 <Link href="/admin/settings" className="w-full sm:w-auto">
-                  <button className="w-full px-5 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-zinc-200 text-[10px] font-bold text-white dark:text-black uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-1.5">
+                  <button className="w-full px-5 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-zinc-200 text-xs font-bold text-white dark:text-black uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-1.5">
                     <Compass className="h-4 w-4" />
                     Configure Integrations
                   </button>
                 </Link>
                 <button 
                   onClick={() => alert("Mock Analytics data will be available in future releases.")} 
-                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-zinc-300 hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800 text-[10px] font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-1.5"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-zinc-300 hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800 text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-1.5"
                 >
                   <FileText className="h-4 w-4" />
                   View Mock Data

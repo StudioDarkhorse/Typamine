@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { SeventiesThemeToggle } from '@/components/common/SeventiesThemeToggle';
 
 export interface StaggeredMenuItem {
   label: string;
@@ -33,42 +34,7 @@ export interface StaggeredMenuProps {
   onMenuClose?: () => void;
 }
 
-/**
-  Icona dello stato APERTO: Piastra di Petri (Canva Pagina 2)
-  Cerchio vettoriale con colonie di coltura biologica.
- */
-export function PetriDishIcon({ className = "w-7 h-7" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 36 36"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      {/* Disco esterno */}
-      <circle cx="18" cy="18" r="16" fill="currentColor" />
 
-      {/* Cerchi concentrici interni del bordo in vetro */}
-      <circle cx="18" cy="18" r="14.5" stroke="var(--sm-bg-color, #ffffff)" strokeWidth="0.8" fill="none" opacity="0.6" />
-      <circle cx="18" cy="18" r="13" stroke="var(--sm-bg-color, #ffffff)" strokeWidth="0.8" fill="none" opacity="0.8" />
-
-      {/* Colturazione batterica / macchie di Petri */}
-      <circle cx="13" cy="12" r="2.4" fill="var(--sm-bg-color, #ffffff)" />
-      <circle cx="16" cy="11" r="1.5" fill="var(--sm-bg-color, #ffffff)" />
-      <circle cx="11" cy="15" r="1.6" fill="var(--sm-bg-color, #ffffff)" />
-
-      <circle cx="23" cy="22" r="2.6" fill="var(--sm-bg-color, #ffffff)" />
-      <circle cx="20" cy="24" r="1.5" fill="var(--sm-bg-color, #ffffff)" />
-      <circle cx="25" cy="19" r="1.4" fill="var(--sm-bg-color, #ffffff)" />
-
-      <circle cx="22" cy="11" r="1.2" fill="var(--sm-bg-color, #ffffff)" />
-      <circle cx="13" cy="22" r="1.3" fill="var(--sm-bg-color, #ffffff)" />
-      <circle cx="17" cy="25" r="1.1" fill="var(--sm-bg-color, #ffffff)" />
-      <circle cx="10" cy="11" r="0.9" fill="var(--sm-bg-color, #ffffff)" />
-      <circle cx="26" cy="25" r="1" fill="var(--sm-bg-color, #ffffff)" />
-    </svg>
-  );
-}
 
 export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   position = 'right',
@@ -152,6 +118,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     ? (openMenuButtonColor || menuButtonColor)
     : menuButtonColor;
 
+
   return (
     <div
       className={`sm-scope z-40 ${isFixed ? 'fixed left-0 w-screen overflow-hidden pointer-events-none' : 'w-full h-full'}`}
@@ -216,7 +183,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
             <button
               ref={toggleBtnRef}
-              className="sm-toggle relative inline-flex items-center justify-center w-9 h-9 bg-transparent border-0 cursor-pointer pointer-events-auto select-none rounded-md transition-colors duration-300"
+              className="sm-toggle relative inline-flex items-center justify-center w-9 h-9 bg-transparent border-0 cursor-pointer pointer-events-auto select-none rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/70 focus-visible:outline-offset-4 leading-none overflow-visible"
               style={{ color: buttonColor }}
               aria-label={open ? 'Close menu' : 'Open menu'}
               aria-expanded={open}
@@ -224,45 +191,17 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               onClick={toggleMenu}
               type="button"
             >
-              {/* Contenitore Oreo Stack con 4 strati indipendenti + 3D Flip sul disco 1 */}
-              <div className="sm-oreo-container relative w-7 h-7 flex items-center justify-center shrink-0">
-                {/* STRATO 1 (Disco Superiore): Ruota in 3D (rotateX) e rivela la Piastra di Petri a menu aperto */}
-                <div className="sm-layer-1 absolute inset-0 z-10">
-                  <div className="sm-flip-inner relative w-full h-full">
-                    {/* Faccia Anteriore: Disco superiore Oreo Stack */}
-                    <div className="sm-flip-front absolute inset-0 flex items-center justify-center">
-                      <svg viewBox="0 0 36 36" fill="none" className="w-7 h-7 text-current">
-                        <path d="M 3 8.5 C 3 3, 33 3, 33 8.5 C 24 11, 12 11, 3 8.5 Z" fill="currentColor" />
-                      </svg>
-                    </div>
-
-                    {/* Faccia Posteriore: Piastra di Petri */}
-                    <div className="sm-flip-back absolute inset-0 flex items-center justify-center">
-                      <PetriDishIcon className="w-7 h-7 text-current" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* STRATO 2 (Barra Intermedia Superiore): Trasla in basso su Y e sfuma */}
-                <div className="sm-layer-2 absolute inset-0 z-2 pointer-events-none">
-                  <svg viewBox="0 0 36 36" fill="none" className="w-7 h-7 text-current">
-                    <path d="M 3 13 C 12 15.5, 24 15.5, 33 13 C 24 18.5, 12 18.5, 3 13 Z" fill="currentColor" />
-                  </svg>
-                </div>
-
-                {/* STRATO 3 (Barra Intermedia Inferiore): Trasla in basso su Y e sfuma */}
-                <div className="sm-layer-3 absolute inset-0 z-3 pointer-events-none">
-                  <svg viewBox="0 0 36 36" fill="none" className="w-7 h-7 text-current">
-                    <path d="M 3 20 C 12 22.5, 24 22.5, 33 20 C 24 25.5, 12 25.5, 3 20 Z" fill="currentColor" />
-                  </svg>
-                </div>
-
-                {/* STRATO 4 (Disco Inferiore): Trasla in basso su Y e sfuma */}
-                <div className="sm-layer-4 absolute inset-0 z-4 pointer-events-none">
-                  <svg viewBox="0 0 36 36" fill="none" className="w-7 h-7 text-current">
-                    <path d="M 3 27 C 12 29.5, 24 29.5, 33 27 C 33 34, 3 34, 3 27 Z" fill="currentColor" />
-                  </svg>
-                </div>
+              {/* Contenitore nav-icon-1 con 9 punti (3x3 grid) */}
+              <div className={`nav-icon-1 ${open ? "open" : ""}`}>
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
               </div>
             </button>
           </div>
@@ -272,7 +211,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         <aside
           id="staggered-menu-panel"
           ref={panelRef}
-          className="staggered-menu-panel absolute top-0 right-0 h-full bg-white dark:bg-black flex flex-col p-[6em_2em_2em_2em] overflow-y-auto z-10 backdrop-blur-[16px] pointer-events-auto"
+          className="staggered-menu-panel absolute top-0 right-0 h-full bg-white dark:bg-black flex flex-col p-[6em_2em_2em_2em] max-lg:pb-[1.5rem] overflow-y-auto z-10 backdrop-blur-[16px] pointer-events-auto"
           aria-hidden={!open}
         >
           <div className="sm-panel-inner flex-1 flex flex-col gap-5">
@@ -308,6 +247,17 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               )}
             </ul>
 
+            {/* Theme Toggle (non-minimizzato, posizionato in basso rispetto alla lista dei link) */}
+            <div
+              className={`w-full mt-auto pt-4 border-t border-black/10 dark:border-white/10 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                open
+                  ? "opacity-100 translate-y-0 delay-[560ms]"
+                  : "opacity-0 translate-y-4 duration-0"
+              }`}
+            >
+              <SeventiesThemeToggle variant="full" size={32} />
+            </div>
+
             {displaySocials && socialItems && socialItems.length > 0 && (
               <div className="sm-socials mt-auto pt-8 flex flex-col gap-3" aria-label="Social links">
                 <h3 className="sm-socials-title m-0 text-base font-medium [color:var(--sm-accent,#ff3131)]">Socials</h3>
@@ -342,75 +292,62 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 .sm-scope .sm-logo { display: flex; align-items: center; user-select: none; }
 .sm-scope .sm-logo-img { display: block; height: 32px; width: auto; object-fit: contain; }
 
-.sm-scope .sm-toggle {
+/* nav-icon-1 */
+.sm-scope .nav-icon-1 {
+  width: 30px;
+  height: 30px;
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
+  transition: transform 0.2s cubic-bezier(0.8, 0.5, 0.2, 1.4), color 0.3s ease;
   cursor: pointer;
-  line-height: 1;
-  overflow: visible;
+  display: inline-block;
 }
-.sm-scope .sm-toggle:focus-visible { outline: 2px solid #ffffffaa; outline-offset: 4px; border-radius: 4px; }
-
-/* --- COREOGRAFIA TOGGLE ICON --- */
-/* Strato 1: Rotazione 3D Flip (rotateX) */
-.sm-scope .sm-flip-inner {
-  perspective: 600px;
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+.sm-scope .nav-icon-1.open {
+  transform: rotate(180deg);
 }
-.sm-scope .sm-flip-front,
-.sm-scope .sm-flip-back {
+.sm-scope .nav-icon-1 span {
+  width: 5px;
+  height: 5px;
+  background-color: currentColor;
+  display: block;
+  border-radius: 50%;
   position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transition: opacity 0.35s ease;
+  transition: 
+    left 0.35s cubic-bezier(0.8, 0.5, 0.2, 1.4) 0s,
+    top 0.35s cubic-bezier(0.8, 0.5, 0.2, 1.4) 0s,
+    right 0.35s cubic-bezier(0.8, 0.5, 0.2, 1.4) 0s,
+    bottom 0.35s cubic-bezier(0.8, 0.5, 0.2, 1.4) 0s,
+    transform 0.35s cubic-bezier(0.8, 0.5, 0.2, 1.4) 0s,
+    background-color 0.3s ease 0s;
 }
-.sm-scope .sm-flip-front {
-  transform: rotateX(0deg);
-  opacity: 1;
+.sm-scope .nav-icon-1:hover span {
+  transform: scale(1.2);
+  transition: transform 0.35s cubic-bezier(0.8, 0.5, 0.2, 1.4);
 }
-.sm-scope .sm-flip-back {
-  transform: rotateX(180deg);
-  opacity: 0;
-}
-.sm-scope .staggered-menu-wrapper[data-open] .sm-flip-inner {
-  transform: rotateX(180deg);
-}
-.sm-scope .staggered-menu-wrapper[data-open] .sm-flip-front {
-  opacity: 0;
-}
-.sm-scope .staggered-menu-wrapper[data-open] .sm-flip-back {
-  opacity: 1;
-}
+.sm-scope .nav-icon-1 span:nth-child(1) { left: 0; top: 0; }
+.sm-scope .nav-icon-1 span:nth-child(2) { left: 12px; top: 0; }
+.sm-scope .nav-icon-1 span:nth-child(3) { right: 0; top: 0; }
+.sm-scope .nav-icon-1 span:nth-child(4) { left: 0; top: 12px; }
+.sm-scope .nav-icon-1 span:nth-child(5) { left: 12px; top: 12px; }
+.sm-scope .nav-icon-1 span:nth-child(6) { right: 0; top: 12px; }
+.sm-scope .nav-icon-1 span:nth-child(7) { left: 0; bottom: 0; }
+.sm-scope .nav-icon-1 span:nth-child(8) { left: 12px; bottom: 0; }
+.sm-scope .nav-icon-1 span:nth-child(9) { right: 0; bottom: 0; }
 
-/* Strati 2, 3 e 4: Traslazione verso il basso sull'asse Y e dissolve alla riapertura */
-.sm-scope .sm-layer-2,
-.sm-scope .sm-layer-3,
-.sm-scope .sm-layer-4 {
-  transform: translateY(0%);
-  opacity: 1;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+.sm-scope .nav-icon-1.open span {
+  transition: 
+    left 0.5s cubic-bezier(0.8, 0.5, 0.2, 1.4) 0.2s,
+    top 0.5s cubic-bezier(0.8, 0.5, 0.2, 1.4) 0.2s,
+    right 0.5s cubic-bezier(0.8, 0.5, 0.2, 1.4) 0.2s,
+    bottom 0.5s cubic-bezier(0.8, 0.5, 0.2, 1.4) 0.2s,
+    transform 0.5s cubic-bezier(0.8, 0.5, 0.2, 1.4) 0.2s,
+    background-color 0.3s ease 0s;
 }
-.sm-scope .staggered-menu-wrapper[data-open] .sm-layer-2 {
-  transform: translateY(14px);
-  opacity: 0;
-  transition-delay: 0s;
-}
-.sm-scope .staggered-menu-wrapper[data-open] .sm-layer-3 {
-  transform: translateY(24px);
-  opacity: 0;
-  transition-delay: 0.04s;
-}
-.sm-scope .staggered-menu-wrapper[data-open] .sm-layer-4 {
-  transform: translateY(34px);
-  opacity: 0;
-  transition-delay: 0.08s;
-}
+.sm-scope .nav-icon-1.open span:nth-child(2) { left: 6px; top: 6px; }
+.sm-scope .nav-icon-1.open span:nth-child(4) { left: 6px; top: 18px; }
+.sm-scope .nav-icon-1.open span:nth-child(6) { right: 6px; top: 6px; }
+.sm-scope .nav-icon-1.open span:nth-child(8) { left: 18px; bottom: 6px; }
+
+
 
 /* Prelayers (sfondi a cascata colorati) */
 .sm-scope .sm-prelayers {
@@ -536,7 +473,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 .sm-scope .sm-socials-link:hover { color: var(--sm-accent, #ff3131); }
 
 @media (max-width: 1024px) {
-  .sm-scope .staggered-menu-panel { width: 100%; left: 0; right: 0; }
+  .sm-scope .staggered-menu-panel { width: 100%; left: 0; right: 0; padding-bottom: 1.5rem; }
   .sm-scope .staggered-menu-wrapper[data-open] .sm-logo-img { filter: invert(100%); }
 }
       `}</style>

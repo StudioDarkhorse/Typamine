@@ -2,7 +2,8 @@ import { getIngredientsPage, IngredientSort } from "@/lib/services/font";
 import { IngredientCard } from "@/components/font/IngredientCard";
 import { IngredientRow } from "@/components/font/IngredientRow";
 import { ListPagination } from "@/components/common/ListHandlers";
-import type { ViewMode } from "@/components/common/ViewModeToggle";
+import type { ViewMode } from "@/lib/constants/viewMode";
+import { ViewModeToggle } from "@/components/common/ViewModeToggle";
 
 interface IngredientsResultsProps {
   page: number;
@@ -32,9 +33,14 @@ export default async function IngredientsResults({
 
   return (
     <>
-      <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
-        {`TOTAL INGREDIENTS: ${total}`}
-      </p>
+      <div className="flex items-center justify-between">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
+          {`TOTAL INGREDIENTS: ${total}`}
+        </p>
+        <div className="lg:hidden">
+          <ViewModeToggle />
+        </div>
+      </div>
 
       {view === "row" ? (
         // Vista riga: sempre a colonna singola, ogni riga occupa l'intera

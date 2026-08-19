@@ -264,7 +264,7 @@ export function parseDafontProfileEmail(markdownText: string | null | undefined)
 
 // Scrape di una pagina categoria/tema dafont (theme.php?cat=NNN[&page=N]) —
 // usata da "Scrape From Dafont" (browse per macro/sotto-categoria, vedi
-// components/admin/ScrapeFromDafontCard.tsx e lib/data/dafontUrls.json).
+// components/admin/ImportFontsCard.tsx e lib/data/dafontUrls.json).
 export async function scrapeDafontCategoryPage(categoryUrl: string): Promise<FontItem[]> {
   const result = await callDafontScraperApi(categoryUrl);
   if (result.notFound || !result.markdown) return [];

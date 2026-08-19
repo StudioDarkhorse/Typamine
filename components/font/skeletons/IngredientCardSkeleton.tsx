@@ -24,10 +24,11 @@ export const IngredientCardSkeleton: React.FC = () => {
                 </div>
             </div>
 
-            {/* Live Preview placeholder — same footprint as LivePreview's compact mode */}
-            <div className="my-4 h-[110px] rounded-xl border border-zinc-200 dark:border-zinc-900 bg-zinc-100 dark:bg-zinc-900" />
+            {/* Live Preview placeholder — same footprint as LivePreview's
+                compact mode (h-[110px], rounded-md, margini lg:mx-1). */}
+            <div className="my-4 lg:mx-1 h-[110px] rounded-md border border-zinc-200 dark:border-zinc-900 bg-zinc-100 dark:bg-zinc-900" />
 
-            <div className="pt-2 pe-2 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
+            <div className="pt-2 pe-2 mx-2 flex justify-between items-center border-t border-zinc-400/50">
                 <div className="h-2.5 w-20 rounded bg-zinc-200 dark:bg-zinc-800" />
                 <div className="h-2.5 w-16 rounded bg-zinc-200 dark:bg-zinc-800" />
             </div>

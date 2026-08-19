@@ -31,7 +31,7 @@ export default function PillsClient({ tags, children }: PillsClientProps) {
     <DoubleHero bgImage={dynamicArchiveBgImageUrl} fullWidth>
       <DoubleHero.FirstViewport className="pt-24 pb-12 px-6 md:px-12 flex flex-col justify-end">
         <div className="max-w-3xl flex flex-col space-y-4 text-center items-center mx-auto">
-          <h1 className="font-haas text-2xl md:text-5xl font-bold tracking-tight text-foreground text-glow-blue dark:text-glow-red">
+          <h1 className="text-2xl md:text-5xl font-bold tracking-tight text-foreground text-glow-blue dark:text-glow-red">
             <span className="text-blue-800 dark:text-red-400 font-rollover">Typamine Pills</span>
           </h1>
 

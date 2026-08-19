@@ -14,6 +14,13 @@ export interface GlassSurfaceProps {
   blur?: number;
   displace?: number;
   backgroundOpacity?: number;
+  /**
+   * Sfocatura in px applicata al backdrop oltre alla distorsione del filtro
+   * SVG: 0 = vetro trasparente (default, comportamento originale), 2-6px =
+   * superficie satinata. Va in coppia con `backgroundOpacity`, che regola
+   * quanto velo bianco/nero appoggiare sopra.
+   */
+  satinBlur?: number;
   saturation?: number;
   distortionScale?: number;
   redOffset?: number;
@@ -55,6 +62,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   blur = 11,
   displace = 0,
   backgroundOpacity = 0,
+  satinBlur = 0,
   saturation = 1,
   distortionScale = -180,
   redOffset = 0,
@@ -205,6 +213,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     height: typeof height === 'number' ? `${height}px` : height,
     borderRadius: `${borderRadius}px`,
     '--glass-frost': backgroundOpacity,
+    '--glass-satin': `${satinBlur}px`,
     '--glass-saturation': saturation,
     '--filter-id': `url(#${filterId})`
   } as React.CSSProperties;

@@ -211,7 +211,7 @@ export function SearchSortFilter({
           size="md"
           roundness="md"
           onClick={openFilterModal}
-          className="flex items-center gap-2 shrink-0"
+          className="flex items-center gap-2 shrink-0 font-normal border-bluegray-200 hover:border-bluegray-400 dark:border-redgray-800 dark:text-white dark:hover:border-redgray-600 dark:hover:text-white"
         >
           <FilterIcon className="h-3.5 w-3.5" />
           {filtersModalTitle}
@@ -224,7 +224,7 @@ export function SearchSortFilter({
       )}
 
       {hasFilterModal && (
-        <BaseModal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)} size="md">
+        <BaseModal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)} size="xl">
           <BaseModal.Header onClose={() => setIsFilterModalOpen(false)}>
             {filtersModalTitle}
           </BaseModal.Header>

@@ -44,7 +44,7 @@ export default function StarRating({
               height={size}
               className={cn(
                 "transition-colors",
-                active >= n ? "fill-yellow-400 text-yellow-400" : "text-zinc-300 dark:text-zinc-600"
+                active >= n ? "fill-yellow-400 text-yellow-400" : "text-zinc-400"
               )}
             />
           </button>

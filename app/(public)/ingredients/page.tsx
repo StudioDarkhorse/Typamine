@@ -1,11 +1,17 @@
 import { Suspense } from "react";
+import { cookies } from "next/headers";
 import IngredientsClient from "./IngredientsClient";
 import IngredientsResults from "./IngredientsResults";
 import { IngredientCardSkeleton } from "@/components/font/skeletons/IngredientCardSkeleton";
 import { IngredientRowSkeleton } from "@/components/font/skeletons/IngredientRowSkeleton";
 import { getTags } from "@/lib/services/tag";
 import { IngredientSort } from "@/lib/services/font";
-import type { ViewMode } from "@/components/common/ViewModeToggle";
+import {
+  DEFAULT_VIEW_MODE,
+  VIEW_MODE_COOKIE,
+  parseViewMode,
+  type ViewMode,
+} from "@/lib/constants/viewMode";
 
 const PER_PAGE = 12;
 
@@ -50,7 +56,11 @@ export default async function IngredientsPage({ searchParams }: IngredientsPageP
   const tagNames = (resolved.tags || "").split(",").filter(Boolean);
   const search = resolved.search || "";
   const sort = (resolved.sort || "recent") as IngredientSort;
-  const view: ViewMode = resolved.view === "row" ? "row" : "card";
+  // Precedenza: parametro in URL (link condiviso / scelta appena fatta) →
+  // cookie della preferenza salvata → default di sistema (riga).
+  const cookieStore = await cookies();
+  const view: ViewMode =
+    parseViewMode(resolved.view) ?? parseViewMode(cookieStore.get(VIEW_MODE_COOKIE)?.value) ?? DEFAULT_VIEW_MODE;
 
   const tags = await getTags();
   // L'URL usa il nome del tag (human-readable) — conversione a id qui,

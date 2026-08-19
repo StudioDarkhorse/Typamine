@@ -7,6 +7,7 @@ import {
   MoveRight,
   ExternalLink,
   Minus,
+  FileText,
 } from "lucide-react";
 import { Module as GenericModule } from "@/components/admin/common/content-modules/shared";
 import SimpleHeroModule from "@/components/admin/common/content-modules/SimpleHeroModule";
@@ -17,15 +18,18 @@ import ParagraphWithImageModule from "@/components/admin/common/content-modules/
 import HorizontalSliderModule from "@/components/admin/common/content-modules/HorizontalSliderModule";
 import ActionCtaModule from "@/components/admin/common/content-modules/ActionCtaModule";
 import SpacerModule from "@/components/admin/common/content-modules/SpacerModule";
+import MarkdownModule from "@/components/admin/common/content-modules/MarkdownModule";
 
 // Registro unico dei content-module — prima duplicato 3 volte (ArchivePostForm,
 // PairingForm, BlogForm) con lo stesso identico switch/default-props/icone.
-// Usato da PostForm con MODULE_OPTIONS_FULL per postType "BLOG" (tutte le 8
-// varianti) e MODULE_OPTIONS_BASIC per postType "ARCHIVE" (le 3 storiche).
+// Usato da PostForm con MODULE_OPTIONS_FULL per postType "BLOG" (tutte le 9
+// varianti, markdown incluso) e MODULE_OPTIONS_BASIC per postType "ARCHIVE"
+// (le 3 storiche).
 // PairingForm mantiene la propria copia locale, fuori scope di questo refactor.
 
 export type ModuleType =
   | "paragraph"
+  | "markdown"
   | "paragraphWithImage"
   | "quote"
   | "simpleHero"
@@ -65,6 +69,8 @@ export function getModuleDefaultProps(type: ModuleType): Record<string, any> {
       };
     case "paragraph":
       return { children: '', as: 'p', size: 'md', weight: 'normal', variant: 'default', align: 'left', colorClassName: 'text-black/100 dark:text-white/100', fontFamily: 'standard' };
+    case "markdown":
+      return { content: '', size: 'md', align: 'left', colorClassName: 'text-black/100 dark:text-white/100', fontFamily: 'standard' };
     case "quote":
       return { children: '', author: '', authorDates: '', authorInfo: '', colorClassName: 'text-black/100 dark:text-white/100', bgColorClassName: 'bg-white/20 dark:bg-black/20', fontFamily: 'standard' };
     case "paragraphWithImage":
@@ -91,6 +97,7 @@ export function getModuleIcon(type: ModuleType) {
   switch (type) {
     case "simpleHero": return <ImageIcon className="h-5 w-5" />;
     case "paragraph": return <Type className="h-5 w-5" />;
+    case "markdown": return <FileText className="h-5 w-5" />;
     case "quote": return <QuoteIcon className="h-5 w-5" />;
     case "paragraphWithImage": return <Columns className="h-5 w-5" />;
     case "gridHero": return <Layout className="h-5 w-5" />;
@@ -109,6 +116,8 @@ export function ModuleEditorForm({ module, onChange }: { module: Module; onChang
       return <GridHeroModule module={module} onChange={onChange} />;
     case "paragraph":
       return <ParagraphModule module={module} onChange={onChange} />;
+    case "markdown":
+      return <MarkdownModule module={module} onChange={onChange} />;
     case "quote":
       return <QuoteModule module={module} onChange={onChange} />;
     case "paragraphWithImage":
@@ -134,6 +143,7 @@ export const MODULE_OPTIONS_FULL = [
   { type: "simpleHero" as ModuleType, label: "Simple Hero", icon: <ImageIcon className="h-6 w-6" /> },
   { type: "gridHero" as ModuleType, label: "Grid Hero", icon: <Layout className="h-6 w-6" /> },
   { type: "paragraph" as ModuleType, label: "Paragraph", icon: <Type className="h-6 w-6" /> },
+  { type: "markdown" as ModuleType, label: "Markdown", icon: <FileText className="h-6 w-6" /> },
   { type: "paragraphWithImage" as ModuleType, label: "Text + Image", icon: <Columns className="h-6 w-6" /> },
   { type: "quote" as ModuleType, label: "Quote", icon: <QuoteIcon className="h-6 w-6" /> },
   { type: "horizontalSlider" as ModuleType, label: "Slider", icon: <MoveRight className="h-6 w-6" /> },

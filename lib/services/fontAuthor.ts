@@ -227,9 +227,11 @@ export async function findOrCreateFontAuthorByName(name: string): Promise<string
 }
 
 // Import da 1001fonts: oltre al nome arriva anche il link al profilo autore
-// sul sito, che a differenza di dafont è già la pagina con le sue info (nessun
-// passaggio intermedio). L'url viene salvato alla creazione e, sugli autori
-// già esistenti, riempito se ancora mancante — mai sovrascritto.
+// sul sito, che a differenza di dafont è già la "profile info page" (la pagina
+// con i contatti) — nessun passaggio intermedio da fare dopo. Finisce quindi
+// nella stessa colonna generica `profileInfoUrl` che la catena dafont riempie
+// al secondo salto. Salvato alla creazione e, sugli autori già esistenti,
+// riempito se ancora mancante — mai sovrascritto.
 export async function findOrCreateFontAuthorFromFonts1001(
   name: string,
   profileUrl: string | null
@@ -240,12 +242,16 @@ export async function findOrCreateFontAuthorFromFonts1001(
   const authorId = await findOrCreateSyntheticFontAuthorByName(trimmed, "1001fonts-import");
 
   if (profileUrl) {
-    const existing = await prisma.fontAuthor.findUnique({
-      where: { id: authorId },
-      select: { fonts1001ProfileUrl: true },
-    });
-    if (!existing?.fonts1001ProfileUrl) {
-      await prisma.fontAuthor.update({ where: { id: authorId }, data: { fonts1001ProfileUrl: profileUrl } });
+    const existing = await withSafeDbQuery(() =>
+      prisma.fontAuthor.findUnique({
+        where: { id: authorId },
+        select: { profileInfoUrl: true },
+      })
+    );
+    if (!existing?.profileInfoUrl) {
+      await withSafeDbQuery(() =>
+        prisma.fontAuthor.update({ where: { id: authorId }, data: { profileInfoUrl: profileUrl } })
+      );
       revalidatePath("/admin/font-authors");
       revalidateTag(CACHE_TAGS.fontAuthors, "max");
     }

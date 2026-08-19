@@ -216,7 +216,7 @@ export interface Tag {
 // Stringhe libere a livello DB/tipo (stessa convenzione di `category`) — le
 // opzioni ammesse in UI sono vincolate dalla select in FontForm, non da un
 // enum Prisma.
-export type ImportedFrom = 'Google Fonts' | 'Fontshare' | 'Local Single Upload' | 'Local Bulk Upload' | 'Dafont';
+export type ImportedFrom = 'Google Fonts' | 'Fontshare' | 'Local Single Upload' | 'Local Bulk Upload' | 'Dafont' | '1001Fonts';
 export type LicenseType =
   | 'Free'
   | 'Free for Personal Use'
@@ -482,11 +482,12 @@ export interface FontAuthor {
   /** Pagina profilo dell'autore su dafont.com (es. https://www.dafont.com/mjtype.d10200) */
   dafontProfileUrl?: string;
 
-  /** Pagina profilo utente dafont con i contatti (es. https://www.dafont.com/profile.php?user=1490629) */
-  dafontProfileInfoUrl?: string;
-
-  /** Profilo autore su 1001fonts (es. https://www.1001fonts.com/users/rhesma/) */
-  fonts1001ProfileUrl?: string;
+  /**
+   * Pagina con i contatti dell'autore, da cui viene estratta l'email —
+   * indipendente dalla sorgente: dafont.com/profile.php?user=NNNN per gli
+   * import da dafont, 1001fonts.com/users/<nome>/ per quelli da 1001fonts.
+   */
+  profileInfoUrl?: string;
 
   /** Dettagli per le donazioni / il supporto finanziario */
   donation: DonationDetails;
