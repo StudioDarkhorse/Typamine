@@ -15,7 +15,7 @@ export const PrescriptionCard: React.FC<PrescriptionCardProps> = ({ prescription
     ? prescription.fonts
     : [prescription.primaryFont, prescription.secondaryFont].filter(Boolean) as any[];
 
-  const fontNames = fontList.map(f => f.name).join(" + ");
+  const fontNames = fontList.map(f => f.name).join(" + ").replaceAll('_', ' ');
 
   return (
     <Link
@@ -58,7 +58,7 @@ export const PrescriptionCard: React.FC<PrescriptionCardProps> = ({ prescription
             )}
           </div>
           <h3 className="font-haas text-2xl font-bold text-foreground leading-tight">{prescription.name}</h3>
-          <p className="font-haas text-lg mt-1">{fontNames}</p>
+          <p className="font-haas text-lg mt-1 capitalize">{fontNames}</p>
         </div>
 
         <div className="flex-1 flex flex-col justify-end mt-4">
@@ -69,8 +69,8 @@ export const PrescriptionCard: React.FC<PrescriptionCardProps> = ({ prescription
             </p>
           )}
           <div className="flex items-center justify-between border-t border-zinc-200/50 dark:border-zinc-800/50 pt-3">
-            <span className="font-haas text-[10px] text-bluegray-800 dark:text-redgray-200 uppercase">Typamine Studio</span>
-            <div className="flex flex-row items-center gap-2 font-haas text-lg font-bold  dark:text-red transition-colors pe-4 hover:underline">
+            <span className="font-x-typewriter font-bold text-[10px] text-bluegray-800 dark:text-redgray-200 uppercase">Typamine Studio</span>
+            <div className="flex flex-row items-center gap-2 font-x-typewriter font-bold text-lg font-bold  dark:text-red transition-colors pe-4 hover:underline">
               View
               <MoveRight size={12} className="icon-altalenante" />
             </div>

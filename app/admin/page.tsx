@@ -21,7 +21,6 @@ import FillMissingLicensesCard from "@/components/admin/FillMissingLicensesCard"
 import ForceDafontScrapingCard from "@/components/admin/ForceDafontScrapingCard";
 import ScrapeAuthorProfilesCard from "@/components/admin/ScrapeAuthorProfilesCard";
 import ScrapeAuthorProfileInfoCard from "@/components/admin/ScrapeAuthorProfileInfoCard";
-import ImportFontsCard from "@/components/admin/ImportFontsCard";
 import { Card } from "@/components/common/Card";
 import AdminDashboardClient from "@/components/admin/AdminDashboardClient";
 
@@ -137,8 +136,6 @@ export default async function AdminDashboard() {
     ) : null,
   ].filter(Boolean) as React.ReactNode[];
 
-  const importFontsCard = canImportFonts ? <ImportFontsCard /> : undefined;
-
   const quickActionsPanel = (
     <div className="grid grid-cols-1 gap-4 w-full">
       {showAIQualityReview && <AIFontQualityButton />}
@@ -152,7 +149,7 @@ export default async function AdminDashboard() {
   return (
     <AdminDashboardClient
       bulkTasks={bulkTasks}
-      importFontsCard={importFontsCard}
+      canImportFonts={canImportFonts}
       quickActionsPanel={quickActionsPanel}
       hasQuickActions={hasQuickActions}
     />

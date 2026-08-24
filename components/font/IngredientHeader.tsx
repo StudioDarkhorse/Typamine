@@ -137,7 +137,7 @@ export default function IngredientHeader({
             <button
               onClick={handleDownloadClick}
               disabled={!sourceUrl || isDownloading}
-              className="px-5 py-2.5 bg-red text-black font-haas font-bold text-xs rounded hover:bg-red-600 transition-colors glow-red disabled:opacity-50 disabled:pointer-events-none flex items-center gap-2"
+              className="px-5 py-2.5 bg-red text-black font-x-typewriter font-bold font-bold text-xs rounded hover:bg-red-600 transition-colors glow-red disabled:opacity-50 disabled:pointer-events-none flex items-center gap-2"
             >
               {isDownloading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
               {isDownloading ? "PREPARING..." : "DOWNLOAD WOFF2"}

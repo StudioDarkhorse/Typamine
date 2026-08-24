@@ -35,6 +35,16 @@ const SORT_OPTIONS = [
   { label: "TOP RATED", value: "rating_desc" },
 ];
 
+const LICENSE_OPTIONS = [
+  { label: "FREE", value: "Free" },
+  { label: "FREE FOR PERSONAL USE", value: "Free for Personal Use" },
+  { label: "DEMO", value: "Demo" },
+  { label: "DONATIONWARE", value: "Donationware" },
+  { label: "PUBLIC DOMAIN", value: "Public Domain" },
+  { label: "OPEN SOURCE (SIL OFL)", value: "Open Source (SIL OFL)" },
+  { label: "COMMERCIAL", value: "Commercial" },
+];
+
 interface IngredientsClientProps {
   tags: { id: string; name: string }[];
   children: React.ReactNode;
@@ -69,6 +79,8 @@ export default function IngredientsClient({ tags, children }: IngredientsClientP
             sortOptions={SORT_OPTIONS}
             categoryOptions={CATEGORY_OPTIONS}
             ratingOptions={RATING_OPTIONS}
+            licenseOptions={LICENSE_OPTIONS}
+            licenseParamKey="license"
             tags={tags}
             filtersModalTitle="Filters"
           />

@@ -23,6 +23,7 @@ const HEX_MAP: Record<string, string> = {
   green: "#00d27a",
   stone: "#ada799",
   bluegray: "#383a43",
+  ocra: "#D5943A",
 };
 
 // Inverso di colorMap in components/admin/common/content-modules/shared.tsx:
@@ -36,6 +37,7 @@ const REVERSE_COLOR_MAP: Record<string, string> = {
   green: "green",
   "stone-500": "stone",
   "bluegray-500": "bluegray",
+  "ocra-500": "ocra",
 };
 
 function hexToRgba(hex: string, opacityPct: number): string {

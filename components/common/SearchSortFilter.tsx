@@ -34,6 +34,8 @@ export interface SearchSortFilterProps {
   categoryParamKey?: string;
   ratingOptions?: SearchSortFilterOption[];
   ratingParamKey?: string;
+  licenseOptions?: SearchSortFilterOption[];
+  licenseParamKey?: string;
   /** Tag disponibili per il filtro multiplo — selezione a "OR": più tag scelti, più risultati (unione, non intersezione). */
   tags?: SearchSortFilterTag[];
   tagsParamKey?: string;
@@ -57,6 +59,8 @@ export function SearchSortFilter({
   categoryParamKey = "category",
   ratingOptions = [],
   ratingParamKey = "rating",
+  licenseOptions = [],
+  licenseParamKey = "license",
   tags = [],
   tagsParamKey = "tags",
   toggleOptions = [],
@@ -72,6 +76,7 @@ export function SearchSortFilter({
   const currentSort = searchParams.get(sortParamKey) || sortOptions[0]?.value || "";
   const currentCategory = searchParams.get(categoryParamKey) || categoryOptions[0]?.value || "ALL";
   const currentRating = searchParams.get(ratingParamKey) || ratingOptions[0]?.value || "ALL";
+  const currentLicenseTypes = (searchParams.get(licenseParamKey) || "").split(",").filter(Boolean);
   // Il param URL usa il NOME del tag (human-readable, es. ?tags=Serif)
   // invece dell'id — le pagine che consumano questo param convertono a id
   // internamente prima di interrogare il DB (vedi lib/services/tag.ts).
@@ -81,7 +86,12 @@ export function SearchSortFilter({
     currentToggles[opt.paramKey] = searchParams.get(opt.paramKey) === "true";
   });
 
-  const hasFilterModal = categoryOptions.length > 0 || ratingOptions.length > 0 || tags.length > 0 || toggleOptions.length > 0;
+  const hasFilterModal =
+    categoryOptions.length > 0 ||
+    ratingOptions.length > 0 ||
+    licenseOptions.length > 0 ||
+    tags.length > 0 ||
+    toggleOptions.length > 0;
 
   const updateParams = (updates: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -121,12 +131,14 @@ export function SearchSortFilter({
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [draftCategory, setDraftCategory] = useState(currentCategory);
   const [draftRating, setDraftRating] = useState(currentRating);
+  const [draftLicenseTypes, setDraftLicenseTypes] = useState<string[]>(currentLicenseTypes);
   const [draftTagNames, setDraftTagNames] = useState<string[]>(currentTagNames);
   const [draftToggles, setDraftToggles] = useState<Record<string, boolean>>(currentToggles);
 
   const openFilterModal = () => {
     setDraftCategory(currentCategory);
     setDraftRating(currentRating);
+    setDraftLicenseTypes(currentLicenseTypes);
     setDraftTagNames(currentTagNames);
     setDraftToggles(currentToggles);
     setIsFilterModalOpen(true);
@@ -150,6 +162,7 @@ export function SearchSortFilter({
     updateParams({
       [categoryParamKey]: categoryOptions.length > 0 ? draftCategory : null,
       [ratingParamKey]: ratingOptions.length > 0 ? draftRating : null,
+      [licenseParamKey]: licenseOptions.length > 0 && draftLicenseTypes.length > 0 ? draftLicenseTypes.join(",") : null,
       [tagsParamKey]: draftTagNames.length > 0 ? draftTagNames.join(",") : null,
       ...toggleUpdates,
     });
@@ -159,6 +172,7 @@ export function SearchSortFilter({
   const clearFilters = () => {
     setDraftCategory(categoryOptions[0]?.value || "ALL");
     setDraftRating(ratingOptions[0]?.value || "ALL");
+    setDraftLicenseTypes([]);
     setDraftTagNames([]);
     setDraftToggles({});
     const toggleUpdates: Record<string, string | null> = {};
@@ -168,6 +182,7 @@ export function SearchSortFilter({
     updateParams({
       [categoryParamKey]: null,
       [ratingParamKey]: null,
+      [licenseParamKey]: null,
       [tagsParamKey]: null,
       ...toggleUpdates,
     });
@@ -177,6 +192,7 @@ export function SearchSortFilter({
   const activeFilterCount =
     (categoryOptions.length > 0 && currentCategory !== (categoryOptions[0]?.value || "ALL") ? 1 : 0) +
     (ratingOptions.length > 0 && currentRating !== (ratingOptions[0]?.value || "ALL") ? 1 : 0) +
+    currentLicenseTypes.length +
     currentTagNames.length +
     toggleOptions.filter((opt) => currentToggles[opt.paramKey]).length;
 
@@ -230,10 +246,27 @@ export function SearchSortFilter({
           </BaseModal.Header>
           <BaseModal.Body>
             <div className="space-y-6">
-              {categoryOptions.length > 0 && (
-                <div>
-                  <Label>Category</Label>
-                  <Select options={categoryOptions} value={draftCategory} onChange={setDraftCategory} />
+              {(categoryOptions.length > 0 || licenseOptions.length > 0) && (
+                <div className={categoryOptions.length > 0 && licenseOptions.length > 0 ? "grid grid-cols-1 sm:grid-cols-2 gap-4" : "w-full"}>
+                  {categoryOptions.length > 0 && (
+                    <div>
+                      <Label>Category</Label>
+                      <Select options={categoryOptions} value={draftCategory} onChange={setDraftCategory} />
+                    </div>
+                  )}
+
+                  {licenseOptions.length > 0 && (
+                    <div>
+                      <Label>License Type</Label>
+                      <Select
+                        mode="multiselect"
+                        options={licenseOptions}
+                        value={draftLicenseTypes}
+                        onChange={setDraftLicenseTypes}
+                        placeholder="Select licenses..."
+                      />
+                    </div>
+                  )}
                 </div>
               )}
 

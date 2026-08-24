@@ -88,11 +88,44 @@ export interface GetIngredientsPageOptions {
   category?: string;
   /** Soglia minima (es. "8.0") — confronto lessicografico su stringhe "X.Y", coerente con i dati esistenti. */
   rating?: string;
+  licenseType?: string;
   /** Font che hanno ALMENO UNO di questi tag (unione, non intersezione). */
   tagIds?: string[];
   search?: string;
   sort?: IngredientSort;
 }
+
+export const getIngredientsCount = unstable_cache(
+  async (
+    category?: string,
+    rating?: string,
+    licenseType?: string,
+    tagIdsSerialized?: string,
+    search?: string
+  ): Promise<number> => {
+    const where: Prisma.IngredientWhereInput = {};
+    if (category && category !== "ALL") where.category = category;
+    if (rating && rating !== "ALL") where.rating = { gte: rating };
+    if (licenseType && licenseType !== "ALL") {
+      const licenses = licenseType.split(",").filter(Boolean);
+      if (licenses.length > 0) {
+        where.licenseType = { in: licenses };
+      }
+    }
+    const tagIds = tagIdsSerialized ? tagIdsSerialized.split(",").filter(Boolean) : [];
+    if (tagIds.length > 0) where.tags = { some: { id: { in: tagIds } } };
+    if (search) {
+      where.OR = [
+        { name: { contains: search } },
+        { formula: { contains: search } },
+        { creator: { contains: search } },
+      ];
+    }
+    return withCreatedAtBackfill(() => prisma.ingredient.count({ where }));
+  },
+  ["ingredients-count"],
+  { revalidate: 60, tags: [CACHE_TAGS.ingredients] }
+);
 
 export const getIngredientsPage = unstable_cache(
   async ({
@@ -100,48 +133,60 @@ export const getIngredientsPage = unstable_cache(
     perPage = 12,
     category,
     rating,
+    licenseType,
     tagIds,
     search,
     sort = "recent",
   }: GetIngredientsPageOptions = {}): Promise<IngredientsPageResult> => {
-  const where: Prisma.IngredientWhereInput = {};
-  if (category && category !== "ALL") where.category = category;
-  if (rating && rating !== "ALL") where.rating = { gte: rating };
-  if (tagIds && tagIds.length > 0) where.tags = { some: { id: { in: tagIds } } };
-  if (search) {
-    where.OR = [
-      { name: { contains: search } },
-      { formula: { contains: search } },
-      { creator: { contains: search } },
-    ];
-  }
+    const where: Prisma.IngredientWhereInput = {};
+    if (category && category !== "ALL") where.category = category;
+    if (rating && rating !== "ALL") where.rating = { gte: rating };
+    if (licenseType && licenseType !== "ALL") {
+      const licenses = licenseType.split(",").filter(Boolean);
+      if (licenses.length > 0) {
+        where.licenseType = { in: licenses };
+      }
+    }
+    if (tagIds && tagIds.length > 0) where.tags = { some: { id: { in: tagIds } } };
+    if (search) {
+      where.OR = [
+        { name: { contains: search } },
+        { formula: { contains: search } },
+        { creator: { contains: search } },
+      ];
+    }
 
-  const orderBy: Prisma.IngredientOrderByWithRelationInput =
-    sort === "name_asc" ? { name: "asc" }
-    : sort === "name_desc" ? { name: "desc" }
-    : sort === "rating_desc" ? { rating: "desc" }
-    : { createdAt: "desc" };
+    const orderBy: Prisma.IngredientOrderByWithRelationInput =
+      sort === "name_asc" ? { name: "asc" }
+      : sort === "name_desc" ? { name: "desc" }
+      : sort === "rating_desc" ? { rating: "desc" }
+      : { createdAt: "desc" };
 
-  const [records, total] = await withCreatedAtBackfill(() =>
-    Promise.all([
+    const total = await getIngredientsCount(
+      category,
+      rating,
+      licenseType,
+      tagIds?.join(","),
+      search
+    );
+
+    const records = await withCreatedAtBackfill(() =>
       prisma.ingredient.findMany({
         where,
         include: { variants: true, tags: true, author: true },
         orderBy,
         skip: (page - 1) * perPage,
         take: perPage,
-      }),
-      prisma.ingredient.count({ where }),
-    ])
-  );
+      })
+    );
 
-  return {
-    items: records.map(toIngredient),
-    total,
-    page,
-    perPage,
-    totalPages: Math.max(1, Math.ceil(total / perPage)),
-  };
+    return {
+      items: records.map(toIngredient),
+      total,
+      page,
+      perPage,
+      totalPages: Math.max(1, Math.ceil(total / perPage)),
+    };
   },
   ["ingredients-page"],
   { revalidate: 60, tags: [CACHE_TAGS.ingredients] }

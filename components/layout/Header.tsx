@@ -88,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({ letterTFont, letterTFontSizePerc
           </div>
 
           {/* Navigation Menu */}
-          <nav className="flex relative space-x-5 font-crenzo text-sm rounded-sm transition-colors duration-300">
+          <nav className="flex relative space-x-5 font-x-typewriter text-md font-bol rounded-sm transition-colors duration-300">
             {/* Sfondo del track "tagliato" 3px sopra e sotto: non un box-shadow
                 disegnato sopra lo sfondo, ma uno strato retrostante rientrato
                 che lascia una fascia trasparente reale — si vede cosa c'è

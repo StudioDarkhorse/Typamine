@@ -80,12 +80,12 @@ export default function Quote({
         {(author || authorDates || authorInfo) && (
           <div className="mt-16 lg:mt-8 pb-8 flex flex-col items-center text-center">
             {author && (
-              <p className="text-xl font-rezland text-current">
+              <p className="text-xl font-crenzo text-current">
                 {author}
               </p>
             )}
             {(authorDates || authorInfo) && (
-              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-current/40 mt-1">
+              <p className="text-xs uppercase tracking-[0.2em] font-bold text-current/40 mt-1">
                 {authorDates && <span>{authorDates}</span>}
                 {authorDates && authorInfo && <span className="mx-2">&bull;</span>}
                 {authorInfo && <span>{authorInfo}</span>}

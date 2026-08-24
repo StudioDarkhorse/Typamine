@@ -36,7 +36,7 @@ export const Footer: React.FC<FooterProps> = ({
   } as React.CSSProperties;
 
   return (
-    <footer className="relative min-h-[100dvh] w-full flex flex-col border-t border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-[#09090b]/40 font-haas text-[10px] text-ocragray-800 dark:text-zinc-200 transition-colors duration-300">
+    <footer className="relative min-h-[100dvh] w-full flex flex-col border-t border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-[#09090b]/40 font-haas text-ocragray-800 dark:text-zinc-200 transition-colors duration-300">
       <div className="relative flex-1 flex items-center justify-center px-4 overflow-hidden">
         <div className="relative inline-block text-[clamp(3rem,14vw,14rem)] text-blue dark:text-red">
           {hasCustomTFont && (
@@ -74,22 +74,22 @@ export const Footer: React.FC<FooterProps> = ({
               sempre, autore solo se non è un placeholder d'import/AI, vedi
               resolveLetterTFont in lib/services/adminSettings.ts). */}
           {letterTFont && (
-            <div className="absolute flex gap-x-1 items-baseline top-full right-0 mt-2 sm:mt-3 text-blue-600 dark:text-red text-right text-[10px] sm:text-sm leading-relaxed whitespace-nowrap">
-              <p>
+            <div className="absolute flex flex-col sm:flex-row gap-y-0.5 sm:gap-x-1 items-end sm:items-baseline top-full right-0 mt-2 sm:mt-3 text-blue-600 dark:text-red text-right text-xs sm:text-md leading-relaxed font-x-typewriter font-bold">
+              <p className="whitespace-nowrap">
                 This month&apos;s font:{" "}
                 <Link
                   href={`/ingredients/${letterTFont.slug}`}
-                  className="font-bold uppercase text-md text-black dark:text-white hover:text-blue dark:hover:text-red transition-colors"
+                  className="font-bold uppercase text-xs sm:text-md text-black dark:text-white hover:text-blue dark:hover:text-red transition-colors"
                 >
                   {letterTFont.name.replace('_', " ")}
                 </Link>
               </p>
               {letterTFont.author && (
-                <p>
+                <p className="whitespace-nowrap">
                   by{" "}
                   <Link
                     href={`/author/${letterTFont.author.slug}`}
-                    className="font-bold uppercase text-md text-black dark:text-white hover:text-blue dark:hover:text-red transition-colors"
+                    className="font-bold uppercase text-xs sm:text-md text-black dark:text-white hover:text-blue dark:hover:text-red transition-colors"
                   >
                     {letterTFont.author.name}
                   </Link>
@@ -100,18 +100,18 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 w-full flex flex-col md:flex-row items-center gap-4">
-        <div className="w-full flex flex-wrap justify-between items-center gap-x-4 gap-y-1">
-          <span>© {new Date().getFullYear()} TYPAMINE STUDIO - ALL RIGHTS RESERVED.</span>
-          <div className="flex gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 w-full z-20">
+        <div className="w-full flex flex-col md:flex-row justify-between items-center md:items-end text-center md:text-left gap-y-4 md:gap-y-0 gap-x-4 font-x-typewriter font-bold">
+          <span className="text-sm sm:text-md">© {new Date().getFullYear()} TYPAMINE STUDIO - ALL RIGHTS RESERVED.</span>
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-2 sm:gap-x-4 text-xs sm:text-sm text-ocragray-800 dark:text-zinc-200">
             <Link href="/terms" className="hover:text-blue dark:hover:text-red transition-colors">
               TERMS OF SERVICE
             </Link>
-            <span className="text-ocragray-800 dark:text-zinc-200">|</span>
+            <span className="opacity-40">|</span>
             <Link href="/privacy" className="hover:text-blue dark:hover:text-red transition-colors">
               PRIVACY POLICY
             </Link>
-            <span className="text-ocragray-800 dark:text-zinc-200">|</span>
+            <span className="opacity-40">|</span>
             <Link href="/cookie" className="hover:text-blue dark:hover:text-red transition-colors">
               COOKIE POLICY
             </Link>

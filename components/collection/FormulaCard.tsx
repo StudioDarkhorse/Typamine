@@ -47,7 +47,7 @@ export const FormulaCard: React.FC<FormulaCardProps> = ({ formula, isCurated = f
           <h3 className="font-haas text-lg font-bold text-foreground">{formula.name}</h3>
         </div>
         <p className="text-ocragray-800 dark:text-zinc-200 line-clamp-2">{formula.description}</p>
-        <p className="font-haas text-sm text-ocragray-800 dark:text-zinc-200 mt-2">INGREDIENTS: {formula.fonts.slice(0, 2).map(f => f.name).join(" + ") + "..."} </p>
+        <p className="font-haas text-sm text-ocragray-800 dark:text-zinc-200 capitalize mt-2">INGREDIENTS: {formula.fonts.slice(0, 2).map(f => f.name).join(" + ").replaceAll('_', " ") + "..."} </p>
       </div>
 
       <div className="shrink-0 font-haas text-[10px] flex flex-col items-end justify-between border-t sm:border-t-0 border-zinc-200 dark:border-zinc-800 pt-2 sm:pt-0.5 sm:pb-1 gap-2 sm:gap-0">
@@ -61,7 +61,7 @@ export const FormulaCard: React.FC<FormulaCardProps> = ({ formula, isCurated = f
           <div />
         )}
 
-        <div className="flex flex-row items-center gap-2 font-haas text-lg font-bold text-red transition-colors pe-4 whitespace-nowrap hover:underline">
+        <div className="flex flex-row items-center gap-2 font-x-typewriter font-bold text-lg font-bold text-red transition-colors pe-4 whitespace-nowrap hover:underline">
           View All
           <MoveRight size={12} className="icon-altalenante" />
         </div>

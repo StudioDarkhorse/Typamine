@@ -157,7 +157,7 @@ export default function HomeClient({ recentIngredients = [], recentPairings = []
             }}
           >
             <Link href="/pills" className="inline-block">
-              <Button variant="secondary">READ THE BLOG</Button>
+              <Button variant="metallic" ringColor="ring-blue-200 dark:ring-red-200">READ THE BLOG</Button>
             </Link>
           </Cta>
         </div>

@@ -42,7 +42,7 @@ export default async function PrescriptionsResults({ page, perPage, tagIds, sear
 
   return (
     <>
-      <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
+    <p className="text-sm font-x-typewriter uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
         {`TOTAL PRESCRIPTIONS: ${totalCount}`}
       </p>
 

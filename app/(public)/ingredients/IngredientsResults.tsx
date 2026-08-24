@@ -9,6 +9,7 @@ interface IngredientsResultsProps {
   page: number;
   category: string;
   rating: string;
+  license: string;
   tagIds: string[];
   search: string;
   sort: IngredientSort;
@@ -23,18 +24,19 @@ export default async function IngredientsResults({
   page,
   category,
   rating,
+  license,
   tagIds,
   search,
   sort,
   perPage,
   view,
 }: IngredientsResultsProps) {
-  const { items, total } = await getIngredientsPage({ page, perPage, category, rating, tagIds, search, sort });
+  const { items, total } = await getIngredientsPage({ page, perPage, category, rating, licenseType: license, tagIds, search, sort });
 
   return (
     <>
       <div className="flex items-center justify-between">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
+ <p className="text-sm font-x-typewriter uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
           {`TOTAL INGREDIENTS: ${total}`}
         </p>
         <div className="lg:hidden">

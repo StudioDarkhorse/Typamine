@@ -9,41 +9,52 @@ export interface SelectOption {
   value: string;
 }
 
-interface SelectProps {
-  label?: string; // Nuova prop aggiunta
+interface BaseSelectProps {
+  label?: string;
   options: SelectOption[];
-  value: string;
-  onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
 }
 
-export const Select: React.FC<SelectProps> = ({
-  label,
-  options,
-  value,
-  onChange,
-  placeholder = "Select...",
-  className = "",
-}) => {
+interface SimpleSelectProps extends BaseSelectProps {
+  mode?: "simple";
+  value: string;
+  onChange: (value: string) => void;
+}
+
+interface MultiSelectProps extends BaseSelectProps {
+  mode: "multiselect";
+  value: string[];
+  onChange: (value: string[]) => void;
+}
+
+export type SelectProps = SimpleSelectProps | MultiSelectProps;
+
+export const Select: React.FC<SelectProps> = (props) => {
+  const {
+    label,
+    options,
+    placeholder = "Select...",
+    className = "",
+    mode = "simple",
+  } = props;
+
+  const value = props.value;
+  const onChange = props.onChange;
+
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0, width: 180 });
   const triggerRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  const selectedOption = options.find((opt) => opt.value === value);
+  const isMultiselect = mode === "multiselect";
+  const selectedValues = isMultiselect ? (value as string[] || []) : [value as string];
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Il menu opzioni va renderizzato in un portal su document.body: da dentro
-  // le card/colonne del form (ognuna con il proprio "relative z-N" per gestire
-  // ombre/overlap tra loro) l'elenco assoluto restava confinato allo stacking
-  // context del genitore, finendo dietro le card con z-index maggiore anche
-  // se il suo z-index locale era più alto. Il portal + posizionamento fixed
-  // calcolato dal bounding rect del trigger risolve il problema ovunque.
   const updatePosition = useCallback(() => {
     const rect = triggerRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -62,8 +73,6 @@ export const Select: React.FC<SelectProps> = ({
     };
   }, [isOpen, updatePosition]);
 
-  // Close dropdown on outside click (trigger e lista portalata sono in due
-  // sottoalberi DOM separati, vanno esclusi entrambi)
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
@@ -78,9 +87,40 @@ export const Select: React.FC<SelectProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleSelectOption = (optionValue: string) => {
+    if (isMultiselect) {
+      const isSelected = selectedValues.includes(optionValue);
+      let newValues: string[];
+      if (isSelected) {
+        newValues = selectedValues.filter((v) => v !== optionValue);
+      } else {
+        newValues = [...selectedValues, optionValue];
+      }
+      (onChange as (val: string[]) => void)(newValues);
+    } else {
+      (onChange as (val: string) => void)(optionValue);
+      setIsOpen(false);
+    }
+  };
+
+  const getDisplayText = () => {
+    if (isMultiselect) {
+      if (selectedValues.length === 0) return placeholder;
+      const selectedLabels = options
+        .filter((opt) => selectedValues.includes(opt.value))
+        .map((opt) => opt.label);
+      if (selectedLabels.length <= 2) {
+        return selectedLabels.join(", ");
+      }
+      return `${selectedLabels.length} items selected`;
+    } else {
+      const selectedOption = options.find((opt) => opt.value === value);
+      return selectedOption ? selectedOption.label : placeholder;
+    }
+  };
+
   return (
     <div className={`space-y-1.5 w-full ${className}`}>
-
       {label && (
         <div className="flex justify-between items-center select-none mb-0">
           <Label className="mb-0 select-none">{label}</Label>
@@ -89,26 +129,27 @@ export const Select: React.FC<SelectProps> = ({
 
       <div className="relative" ref={triggerRef}>
         <div
-className={`
-    flex items-center justify-between w-full
-    bg-bluegray-100 dark:bg-redgray-900/50
-    border rounded-md px-3 py-2 transition-all duration-200
-    cursor-pointer
-    /* Gestione dinamica dei bordi */
-    ${isOpen
-      ? "border-blue dark:border-red"
-      : "border-bluegray-200 dark:border-redgray-800 hover:border-bluegray-400 dark:hover:border-redgray-600"
-    }
-  `}
+          className={`
+            flex items-center justify-between w-full
+            bg-bluegray-100 dark:bg-redgray-900/50
+            border rounded-md px-3 py-2 transition-all duration-200
+            cursor-pointer font-x-typewriter font-bold
+            ${isOpen
+              ? "border-blue dark:border-red"
+              : "border-bluegray-200 dark:border-redgray-800 hover:border-bluegray-400 dark:hover:border-redgray-600"
+            }
+          `}
           onClick={() => setIsOpen(!isOpen)}
         >
           <button
             type="button"
-            className="flex items-center justify-between w-full bg-transparent text-bluegray-900 dark:text-redgray-200 outline-none cursor-pointer"
+            className="flex items-center justify-between w-full bg-transparent text-bluegray-900 dark:text-redgray-200 outline-none cursor-pointer text-left font-x-typewriter font-normal"
           >
-            <span className="truncate">{selectedOption ? selectedOption.label : placeholder}</span>
+            <span className="truncate">{getDisplayText()}</span>
             <svg
-              className={`w-3 h-3 ml-2 transition-transform duration-200 ${isOpen ? "rotate-180 text-blue dark:text-red" : "text-bluegray-900 dark:text-redgray-200"}`}
+              className={`w-3 h-3 ml-2 transition-transform duration-200 shrink-0 ${
+                isOpen ? "rotate-180 text-blue dark:text-red" : "text-bluegray-900 dark:text-redgray-200"
+              }`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -125,30 +166,34 @@ className={`
           style={{ position: "fixed", top: position.top, left: position.left, width: position.width }}
           className="z-[9999] bg-bluegray-100 dark:bg-redgray-900 border border-bluegray-200 dark:border-redgray-800 rounded-lg shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-100"
         >
-          {options.map((option) => (
-            <li key={option.value}>
-              <button
-                type="button"
-                className={`w-full text-left px-4 py-2.5 text-xs font-haas transition-colors flex items-center justify-between ${
-                  value === option.value
-                    ? "bg-blue/20 dark:bg-red/10 text-black dark:text-red font-bold"
-                    : "text-bluegray-800 dark:text-redgray-200 hover:bg-blue/10 dark:hover:bg-red/5 hover:text-black dark:hover:text-white"
-                }`}
-                onClick={() => {
-                  onChange(option.value);
-                  setIsOpen(false);
-                }}
-              >
-                {option.label}
-                {value === option.value && (
-                  <span className="text-blue dark:text-red text-[10px] tracking-widest">[✓]</span>
-                )}
-              </button>
-            </li>
-          ))}
+          {options.map((option) => {
+            const isSelected = isMultiselect
+              ? selectedValues.includes(option.value)
+              : value === option.value;
+            return (
+              <li key={option.value}>
+                <button
+                  type="button"
+                  className={`w-full text-left px-4 py-2.5 text-xs font-haas transition-colors flex items-center justify-between ${
+                    isSelected
+                      ? "bg-blue/20 dark:bg-red/10 text-black dark:text-red font-bold"
+                      : "text-bluegray-800 dark:text-redgray-200 hover:bg-blue/10 dark:hover:bg-red/5 hover:text-black dark:hover:text-white"
+                  }`}
+                  onClick={() => handleSelectOption(option.value)}
+                >
+                  <span className="truncate pr-2">{option.label}</span>
+                  {isSelected && (
+                    <span className="text-blue dark:text-red text-[10px] tracking-widest shrink-0">[✓]</span>
+                  )}
+                </button>
+              </li>
+            );
+          })}
         </ul>,
         document.body
       )}
     </div>
   );
 };
+
+export default Select;

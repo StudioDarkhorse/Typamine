@@ -384,7 +384,9 @@ export default function PairingForm({ initialData, tags }: PairingFormProps) {
     ctx.fillStyle = secondaryColor;
     ctx.font = "14px sans-serif";
     ctx.textAlign = "right";
-    ctx.fillText(`${primaryFontObj?.name || "Primary"} + ${secondaryFontObj?.name || "Secondary"}`, width - 70, 80);
+    const primaryName = (primaryFontObj?.name || "Primary").replace(/_/g, " ");
+    const secondaryName = (secondaryFontObj?.name || "Secondary").replace(/_/g, " ");
+    ctx.fillText(`${primaryName} + ${secondaryName}`, width - 70, 80);
 
     // Determine font families for Title and Body text based on swapFonts setting
     const titleFamily = swapFonts ? secondaryFamilyName : primaryFamilyName;

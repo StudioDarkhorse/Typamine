@@ -222,7 +222,7 @@ export default function IngredientDetailClient({ ingredient, hasPairings = false
       <button
         onClick={handleDownloadClick}
         disabled={!sourceUrl || isDownloading}
-        className="md:hidden w-full px-5 py-3 bg-red text-black font-haas font-bold text-xs rounded hover:bg-red-600 transition-colors glow-red disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
+        className="md:hidden w-full px-5 py-3 bg-red text-black font-x-typewriter font-bold font-bold text-xs rounded hover:bg-red-600 transition-colors glow-red disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
       >
         {isDownloading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
         {isDownloading ? "PREPARING..." : "DOWNLOAD WOFF2"}
@@ -240,10 +240,8 @@ export default function IngredientDetailClient({ ingredient, hasPairings = false
       <BaseModal isOpen={isLicenseModalOpen} onClose={() => setIsLicenseModalOpen(false)} size="md">
         <BaseModal.Header onClose={() => setIsLicenseModalOpen(false)}>
           <div className="flex items-center gap-4">
-            <div className="p-2 rounded-xl bg-amber-500/10">
-              <FileSignature className="w-12 h-12 text-amber-500" />
-            </div>
-            <h2 className="text-xl font-crenzo text-black dark:text-white leading-tight">Licensing In Progress</h2>
+   
+            <h2 className="text-4xl w-fit text-center leading-[1.6rem] font-x-typewriter text-black dark:text-white">Licensing In Progress</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>

@@ -20,6 +20,7 @@ interface IngredientsPageProps {
     page?: string;
     category?: string;
     rating?: string;
+    license?: string;
     tags?: string;
     search?: string;
     sort?: string;
@@ -53,6 +54,7 @@ export default async function IngredientsPage({ searchParams }: IngredientsPageP
   const page = parseInt(resolved.page || "1", 10);
   const category = resolved.category || "ALL";
   const rating = resolved.rating || "ALL";
+  const license = resolved.license || "ALL";
   const tagNames = (resolved.tags || "").split(",").filter(Boolean);
   const search = resolved.search || "";
   const sort = (resolved.sort || "recent") as IngredientSort;
@@ -69,11 +71,12 @@ export default async function IngredientsPage({ searchParams }: IngredientsPageP
 
   return (
     <IngredientsClient tags={tags}>
-      <Suspense key={`${page}-${category}-${rating}-${tagIds.join(",")}-${search}-${sort}-${view}`} fallback={<ResultsSkeleton view={view} />}>
+      <Suspense key={`${page}-${category}-${rating}-${license}-${tagIds.join(",")}-${search}-${sort}-${view}`} fallback={<ResultsSkeleton view={view} />}>
         <IngredientsResults
           page={page}
           category={category}
           rating={rating}
+          license={license}
           tagIds={tagIds}
           search={search}
           sort={sort}

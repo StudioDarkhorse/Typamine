@@ -220,8 +220,8 @@ export function ListPagination({
   if (totalCount === 0 || totalPages <= 1) return null;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between px-8 py-5 border-t  bg-bluegray-100 dark:bg-redgray-900/50  border-black/5 dark:border-white/5 gap-4">
-      <div className="text-xs text-ocragray-800 dark:text-zinc-200">
+    <div className="flex flex-col sm:flex-row items-center justify-between px-8 py-5 border-t  bg-bluegray-100 dark:bg-redgray-900/50  border-black/5 dark:border-white/5 rounded-b-md gap-4">
+      <div className="text-xm text-ocragray-800 dark:text-zinc-200 font-x-typewriter">
         Showing{" "}
         <span className="font-bold text-black dark:text-white">
           {(page - 1) * perPage + 1}
@@ -241,7 +241,7 @@ export function ListPagination({
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
-        <span className="text-sm font-bold text-black dark:text-white px-2">
+        <span className="text-sm font-bold font-x-typewriter text-black dark:text-white px-2">
           Page {page} of {totalPages}
         </span>
         <button

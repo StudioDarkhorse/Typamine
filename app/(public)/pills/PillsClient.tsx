@@ -29,13 +29,13 @@ export default function PillsClient({ tags, children }: PillsClientProps) {
     const dynamicArchiveBgImageUrl = theme === "dark" ? "/images/pills/double-hero/hero-bg-dark.png" : "/images/pills/double-hero/hero-bg-light.png";
   return (
     <DoubleHero bgImage={dynamicArchiveBgImageUrl} fullWidth>
-      <DoubleHero.FirstViewport className="pt-24 pb-12 px-6 md:px-12 flex flex-col justify-end">
+      <DoubleHero.FirstViewport className="pt-24 pb-12 px-6 md:px-12 flex flex-col justify-center">
         <div className="max-w-3xl flex flex-col space-y-4 text-center items-center mx-auto">
           <h1 className="text-2xl md:text-5xl font-bold tracking-tight text-foreground text-glow-blue dark:text-glow-red">
-            <span className="text-blue-800 dark:text-red-400 font-rollover">Typamine Pills</span>
+            <span className="text-blue-800 dark:text-red-400 font-crenzo">Typamine Pills</span>
           </h1>
 
-          <p className="text-zinc-700 dark:text-zinc-300 text-xs md:text-base max-w-xl leading-relaxed">
+          <p className="text-zinc-700 dark:text-zinc-300 text-xs md:text-xl max-w-2xl leading-relaxed font-x-typewriter">
             Bite-sized essays, deep dives and behind-the-scenes notes on typography, type design, and everything we build here at Typamine.
           </p>
         </div>

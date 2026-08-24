@@ -68,7 +68,7 @@ export default async function FormulasResults({ page, perPage, sort, search, cat
 
   return (
     <>
-      <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
+      <p className="text-sm font-x-typewriter uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
         {`TOTAL FORMULAS: ${total}`}
       </p>
 

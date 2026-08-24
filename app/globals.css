@@ -44,6 +44,19 @@
   --color-blue-900: #005454;
   --color-blue-950: #003636;
 
+  /* Ocra — brand palette */
+  --color-ocra-50: #FCF6ED;
+  --color-ocra-100: #F8EBD7;
+  --color-ocra-200: #EFD7B2;
+  --color-ocra-300: #E6C089;
+  --color-ocra-400: #DDA95F;
+  --color-ocra-500: #D5943A;
+  --color-ocra-600: #B77824;
+  --color-ocra-700: #8F5C1A;
+  --color-ocra-800: #694011;
+  --color-ocra-900: #42280A;
+  --color-ocra-950: #281705;
+
   /* Neutro caldo (uso generico: outline, ghost, muted, accent) */
   --color-stone-100: #f5f4ef;
   --color-stone-200: #e9e7df;
@@ -226,6 +239,24 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'X Typewriter';
+  src: url('/fonts/x-typewriter/XTypewriter-Regular.otf') format('opentype'),
+       url('/fonts/x-typewriter/XTypewriter-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'X Typewriter';
+  src: url('/fonts/x-typewriter/XTypewriter-Bold.otf') format('opentype'),
+       url('/fonts/x-typewriter/XTypewriter-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 
 
@@ -252,10 +283,12 @@
   --font-revert: 'Revert';
   --font-revertro: 'Revertro';
   --font-neuropol: 'Neuropol';
+  --font-x-typewriter: 'X Typewriter';
 
   --color-red: #ff3131;
   --color-blue: #00cece;
   --color-green: #00d27a;
+  --color-ocra: #D5943A;
 
   /* Redefining Tailwind's core custom properties at root */
   --color-white: #EEF0F2;
@@ -431,6 +464,7 @@
   --font-revert: var(--font-revert), sans-serif;
   --font-revertro: var(--font-revertro), sans-serif;
   --font-neuropol: var(--font-neuropol), sans-serif;
+  --font-x-typewriter: var(--font-x-typewriter), sans-serif;
 
   /* Standard system mappings */
   --font-sans: var(--font-sans);
@@ -594,6 +628,10 @@ h3 {
   font-family: var(--font-neuropol);
 }
 
+.font-x-typewriter {
+  font-family: var(--font-x-typewriter);
+}
+
 /* Colore/sfondo dinamico per i content module (blog, pairing insight, ecc.):
    il valore reale (rgba o gradiente) arriva via inline style da
    lib/dynamicStyle.ts, calcolato a runtime da dati nel DB — Tailwind non
@@ -613,6 +651,125 @@ h3 {
 
 .dark .dyn-bg {
   background: var(--dyn-bg-dark, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+   Metallic button — <Button variant="metallic" />
+   Due pezzi: la ghiera esterna (.metallic-bezel, che è il <button>) e la
+   piastra interna (.metallic-plate, che contiene testo e icone). Il padding
+   della ghiera è lo stacco fra bordo e piastra.
+   Il metallo non è una scala di grigi piatta ma tre layer sovrapposti:
+   conic-gradient a 4 lobi (periodo 90°, scuro su alto/destra/basso/sinistra)
+   che converge al centro e genera da solo il punto di luce dello "spun metal",
+   un radiale che allarga quel punto, e una vignetta orizzontale che scurisce
+   le due estremità del pill.
+   Il bordo da 2px NON sta sul perimetro esterno: sta sulla piastra, cioè
+   nello stacco fra ghiera e metallo. È quello che si colora in hover.
+   Il colore si sceglie con le utility `ring-*` di Tailwind, passate alla prop
+   `ringColor` del Button (es. "ring-blue-300 dark:ring-red-100"): quelle
+   scrivono --tw-ring-color, che è da dove --metallic-ring legge. Stesso
+   colore quindi anche per il focus ring da tastiera.
+   --------------------------------------------------------------------------- */
+.metallic-bezel {
+  --metallic-ring: var(--tw-ring-color, #ff3131);
+  padding: 6px;
+  background: linear-gradient(180deg, #e6e8ea 0%, #eef0f1 45%, #fbfbfc 100%);
+  box-shadow:
+    inset 0 2px 3px rgba(20, 22, 25, 0.1),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 1px rgba(20, 22, 25, 0.06),
+    0 10px 20px -8px rgba(20, 22, 25, 0.3);
+}
+
+.metallic-bezel:hover:not(:disabled) .metallic-plate {
+  border-color: var(--metallic-ring);
+}
+
+.metallic-plate {
+  border: 2px solid #b9bdc2;
+  /* Il bordo colorato in hover vive qui, non sulla ghiera: la transition deve
+     stare sulla piastra o il colore scatta secco. 700ms come la ghiera. */
+  transition: border-color 700ms ease;
+  color: #26292d;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(88, 93, 98, 0.22) 0%,
+      rgba(88, 93, 98, 0) 20%,
+      rgba(88, 93, 98, 0) 80%,
+      rgba(88, 93, 98, 0.22) 100%
+    ),
+    radial-gradient(
+      48% 125% at 50% 50%,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0.3) 25%,
+      rgba(255, 255, 255, 0) 60%
+    ),
+    conic-gradient(
+      from 0deg at 50% 50%,
+      #b6babf 0deg,
+      #f0f2f4 45deg,
+      #b6babf 90deg,
+      #f0f2f4 135deg,
+      #b6babf 180deg,
+      #f0f2f4 225deg,
+      #b6babf 270deg,
+      #f0f2f4 315deg,
+      #b6babf 360deg
+    );
+  box-shadow:
+    inset 0 2px 3px rgba(20, 22, 25, 0.22),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.metallic-bezel:active:not(:disabled) .metallic-plate {
+  filter: brightness(0.96);
+  box-shadow: inset 0 3px 5px rgba(20, 22, 25, 0.38);
+}
+
+.dark .metallic-bezel {
+  background: linear-gradient(180deg, #34373c 40%, #212327 60%, #3d4045 100%);
+  box-shadow:
+    inset 0 2px 3px rgba(0, 0, 0, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    0 10px 22px -10px rgba(0, 0, 0, 0.8);
+}
+
+/* Stesso metallo, luminosità abbassata per non "bucare" il tema scuro. */
+.dark .metallic-plate {
+  border-color: #55595e;
+  color: #1d1f22;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(20, 22, 25, 0.3) 0%,
+      rgba(20, 22, 25, 0) 20%,
+      rgba(20, 22, 25, 0) 80%,
+      rgba(20, 22, 25, 0.3) 100%
+    ),
+    radial-gradient(
+      48% 125% at 50% 50%,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.26) 25%,
+      rgba(255, 255, 255, 0) 60%
+    ),
+    conic-gradient(
+      from 0deg at 50% 50%,
+      #8e9398 0deg,
+      #dfe2e5 45deg,
+      #8e9398 90deg,
+      #dfe2e5 135deg,
+      #8e9398 180deg,
+      #dfe2e5 225deg,
+      #8e9398 270deg,
+      #dfe2e5 315deg,
+      #8e9398 360deg
+    );
+  box-shadow:
+    inset 0 2px 3px rgba(0, 0, 0, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.3);
 }
 
 /* Technical / Laboratory Styling Helpers */

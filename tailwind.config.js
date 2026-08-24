@@ -18,6 +18,10 @@ module.exports = {
           100: "#b3f3f3", 200: "#80eeee", 300: "#4de8e8", 400: "#1ae3e3",
           500: "#00cece", 600: "#00afaf", 700: "#009090", 800: "#007272", 900: "#005454", 950: "#003636",
         },
+        ocra: {
+          50: "#FCF6ED", 100: "#F8EBD7", 200: "#EFD7B2", 300: "#E6C089", 400: "#DDA95F",
+          500: "#D5943A", 600: "#B77824", 700: "#8F5C1A", 800: "#694011", 900: "#42280A", 950: "#281705",
+        },
         // Scale Neutre con sottotono giallo/ocra
         stone: {
           100: "#f5f4ef", 200: "#e9e7df", 300: "#dcd9cf", 400: "#c7c2b6",
@@ -51,6 +55,7 @@ module.exports = {
         revert: ["var(--font-revert)", "sans-serif"],
         revertro: ["var(--font-revertro)", "sans-serif"],
         neuropol: ["var(--font-neuropol)", "sans-serif"],
+        "x-typewriter": ["var(--font-x-typewriter)", "sans-serif"],
       },
       keyframes: {
         "bounce-x": {

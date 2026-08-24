@@ -1,43 +1,48 @@
 "use client";
 
 import { useState } from "react";
-import { TrendingUp, ArrowLeft } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { Card } from "@/components/common/Card";
 import AdminStatisticsView from "./AdminStatisticsView";
+import AdminImportFontsView from "./AdminImportFontsView";
+import AdminViewHeader from "./AdminViewHeader";
+import ImportFontsCard from "./ImportFontsCard";
+
+// Le sezioni pesanti (statistiche, import fonts) non sono modali: la dashboard
+// si svuota e la sezione prende tutta la viewport, con "Back to Dashboard" in
+// testa.
+type DashboardView = "dashboard" | "stats" | "import";
 
 interface AdminDashboardClientProps {
   bulkTasks: React.ReactNode[];
-  importFontsCard?: React.ReactNode;
+  canImportFonts: boolean;
   quickActionsPanel: React.ReactNode;
   hasQuickActions: boolean;
 }
 
 export default function AdminDashboardClient({
   bulkTasks,
-  importFontsCard,
+  canImportFonts,
   quickActionsPanel,
   hasQuickActions,
 }: AdminDashboardClientProps) {
-  const [showStats, setShowStats] = useState(false);
+  const [view, setView] = useState<DashboardView>("dashboard");
 
-  if (showStats) {
+  const backToDashboard = () => setView("dashboard");
+
+  if (view === "stats") {
     return (
       <div className="w-full space-y-4 animate-in fade-in zoom-in duration-300">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-black/5 dark:border-white/5 pb-2.5">
-          <button
-            onClick={() => setShowStats(false)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-xs font-bold text-black dark:text-white uppercase tracking-wider transition-colors border border-black/5 dark:border-white/5"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
-          </button>
-          <h2 className="text-2xl md:text-3xl font-crenzo font-black uppercase tracking-widest text-center text-black dark:text-white leading-none">
-            System Statistics
-          </h2>
-          <div className="hidden sm:block w-[140px]" /> {/* Spacer to center heading visually */}
-        </div>
-
+        <AdminViewHeader title="System Statistics" onBack={backToDashboard} />
         <AdminStatisticsView />
+      </div>
+    );
+  }
+
+  if (view === "import") {
+    return (
+      <div className="w-full animate-in fade-in zoom-in duration-300">
+        <AdminImportFontsView onBack={backToDashboard} />
       </div>
     );
   }
@@ -56,7 +61,7 @@ export default function AdminDashboardClient({
             roundness="lg"
             visualHover
             className="cursor-pointer border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 flex items-center justify-center p-6 h-fit"
-            onClick={() => setShowStats(true)}
+            onClick={() => setView("stats")}
           >
             <div className="flex items-center gap-4 w-full">
               <div className="h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
@@ -74,7 +79,7 @@ export default function AdminDashboardClient({
           </Card>
 
           {/* Import Fonts Card */}
-          {importFontsCard}
+          {canImportFonts && <ImportFontsCard onClick={() => setView("import")} />}
 
           {/* Render remaining bulk task cards */}
           {bulkTasks}

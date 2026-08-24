@@ -25,7 +25,7 @@ export const DynamicPlayground: React.FC<DynamicPlaygroundProps> = ({
       {/* Header of the Sandbox Panel */}
       <div className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black px-4 py-3 md:px-8 md:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 
-        <h2 className="font-haas text-xs font-bold tracking-widest text-blue uppercase">
+        <h2 className="font-haas text-md font-bold tracking-widest text-blue uppercase">
           Live Test
         </h2>
 

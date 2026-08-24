@@ -93,18 +93,25 @@ export const GetSymbol = ({ fontName }: { fontName: string }): string => {
 };
 
 export const IngredientCard: React.FC<FontCardProps> = ({ font, idx, linklabel = "Test Now", fontSize, className = "" }) => {
+    const isRealAuthor = font.author && !NON_REAL_FONT_AUTHOR_SLUGS.includes(font.author.slug);
+
     return (
-        <Link
-            href={"/ingredients/" + font.slug}
+        <div
             className={"border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/20 hover:border-zinc-400 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-900/40 rounded-lg p-2 transition-all flex flex-col justify-between group relative overflow-hidden " + className}
         >
+            {/* Invisible link covering the entire card container */}
+            <Link
+                href={"/ingredients/" + font.slug}
+                className="absolute inset-0 z-10"
+            />
+
             {/* Corner tag index */}
-            <div className="absolute top-2 right-2 pe-2 font-haas text-[10px] text-ocragray-800 dark:text-zinc-200">
+            <div className="absolute top-2 right-2 pe-2 font-haas text-[10px] text-ocra-600/80 dark:text-ocra-200/80 z-20 pointer-events-none">
                 REF-0{idx + 1}
             </div>
 
             {/* Chemical Element layout */}
-            <div className="space-y-4 mt-4">
+            <div className="space-y-4 mt-4 relative z-20 pointer-events-none">
                 <div className="flex items-start justify-between">
                     <div className="w-12 h-12 ml-2 border border-blue/30 rounded bg-zinc-100 dark:bg-zinc-950 flex items-center justify-center font-haas font-bold text-lg text-blue group-hover:border-blue group-hover:glow-cyan transition-all">
                         {GetSymbol({ fontName: font.name })}
@@ -120,30 +127,44 @@ export const IngredientCard: React.FC<FontCardProps> = ({ font, idx, linklabel =
                 <div>
                     <h3 className="ps-2 font-haas font-bold text-sm text-foreground">{font.name.replaceAll('_', " ")}</h3>
                     {/* Sempre renderizzato (anche senza creator) per non far scattare l'altezza della card */}
-                    <p className="ps-2 font-haas text-[10px] text-ocragray-800 dark:text-zinc-200 mt-0.5">CREATOR: {getPublicCreatorLabel(font)}</p>
+                    <p className="ps-2 font-haas text-[10px] text-ocragray-800 dark:text-zinc-200 mt-0.5">
+                        CREATOR:{" "}
+                        {isRealAuthor ? (
+                            <Link
+                                href={"/author/" + font.author!.slug}
+                                className="text-foreground font-bold underline relative z-30 pointer-events-auto"
+                            >
+                                {getPublicCreatorLabel(font)}
+                            </Link>
+                        ) : (
+                            <span className="text-foreground font-bold">{getPublicCreatorLabel(font)}</span>
+                        )}
+                    </p>
                 </div>
             </div>
 
             {/* Live Preview Sample */}
-            <LivePreview
-                fontName={font.variants?.[0]?.fontFamilyName || font.name}
-                fontUrl={font.variants?.[0]?.woff2Url}
-                initialSize={fontSize || 18}
-                showToolbar={false}
-                showControls={false}
-                showBackgroundGlow={false}
-                editable={false}
-                compact
-                className="my-4"
-            />
+            <div className="relative z-20 pointer-events-none">
+                <LivePreview
+                    fontName={font.variants?.[0]?.fontFamilyName || font.name}
+                    fontUrl={font.variants?.[0]?.woff2Url}
+                    initialSize={fontSize || 18}
+                    showToolbar={false}
+                    showControls={false}
+                    showBackgroundGlow={false}
+                    editable={false}
+                    compact
+                    className="my-4"
+                />
+            </div>
 
-            <div className="pt-2 pe-2 mx-2 flex justify-between items-center border-t border-zinc-400/50">
-                <span className="font-haas text-[10px] text-ocragray-800 dark:text-zinc-200">OUR SCORE: <span className="text-blue font-bold">{font.rating}</span></span>
-                <span className="flex flex-row items-center gap-2 font-haas text-sm text-red hover:underline transition-colors pe-4">
+            <div className="pt-2 pe-2 mx-2 flex justify-between items-center border-t border-zinc-400/50 relative z-20 pointer-events-none">
+                <span className="font-haas text-[10px] text-ocragray-800 dark:text-zinc-200">OUR SCORE: <span className="text-ocra-400 font-x-typewriter font-bold">{font.rating}</span></span>
+                <span className="flex flex-row items-center gap-2 font-x-typewriter font-bold text-sm text-red hover:underline transition-colors pe-1">
                     {linklabel}
                     <MoveRight size={12} className="icon-altalenante" />
                 </span>
             </div>
-        </Link>
+        </div>
     );
 };

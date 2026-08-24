@@ -21,7 +21,7 @@ export default async function PillsResults({ page, perPage, tagIds, search, sort
 
   return (
     <div className="space-y-8">
-      <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
+      <p className="text-sm font-x-typewriter uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
         {`${total} PILL${total === 1 ? "" : "S"} PUBLISHED`}
       </p>
 
@@ -34,8 +34,8 @@ export default async function PillsResults({ page, perPage, tagIds, search, sort
       )}
 
       {posts.length === 0 && (
-        <div className="text-center py-16 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-lg text-ocragray-800 dark:text-zinc-200 font-haas">
-          <p className="font-rezland text-2xl text-black dark:text-white mb-2">No pills yet</p>
+        <div className="text-center py-16 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-lg text-ocragray-800 dark:text-zinc-200 mb-16">
+          <p className="font-x-typewriter font-bold text-2xl text-black dark:text-white mb-2">No pills yet</p>
           <p className="text-sm">
             {hasActiveFilters ? "No posts match this search." : "No posts have been published yet."}
           </p>

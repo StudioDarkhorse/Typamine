@@ -113,8 +113,8 @@ export default function GlyphMatrix({ fontName, fontFamily, fontUrl }: GlyphMatr
 
       <div className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black px-4 py-3 md:px-8 md:py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h2 className="font-haas text-xs font-bold tracking-widest text-blue uppercase">Glyph Matrix</h2>
-          <p className="text-[10px] font-haas text-ocragray-800 dark:text-zinc-400 mt-0.5">
+          <h2 className="font-haas text-md font-bold tracking-widest text-blue uppercase">Glyph Matrix</h2>
+          <p className="text-sm font-haas text-ocragray-800 dark:text-zinc-400 mt-0.5">
             {fontName} {mode === "split" ? "vs Alte Haas Grotesk " : ""}&middot;{" "}
             <span className="tabular-nums">
               {missing.size > 0 ? `${availableCount} of ${ALL_GLYPHS.length}` : ALL_GLYPHS.length}
@@ -131,13 +131,13 @@ export default function GlyphMatrix({ fontName, fontFamily, fontUrl }: GlyphMatr
               title={label}
               aria-pressed={mode === value}
               className={cn(
-                "flex items-center gap-1.5 px-2.5 py-1.5 rounded text-[10px] font-haas font-bold uppercase tracking-widest transition-colors",
+                "flex items-center gap-1.5 px-2.5 py-1.5 rounded font-x-typewriter font-bold text-sm uppercase tracking-widest transition-colors",
                 mode === value
                   ? "bg-red text-black"
                   : "text-ocragray-800 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
               )}
             >
-              <Icon className="h-3 w-3" />
+              <Icon className="h-4 w-4" />
               <span className="hidden md:inline">{label}</span>
             </button>
           ))}

@@ -99,13 +99,13 @@ export const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
           className="flex items-center gap-3 pl-10 pr-7 py-4 sm:pl-14 sm:pr-9 sm:py-5
                      rounded-tl-[2.75rem] 
                      border-t border-l border-white/25 dark:border-white/10
-                     bg-blue-900/85 dark:bg-red-900/80 backdrop-blur-md
+                     bg-ocra-700/80 dark:bg-ocra-800/80 backdrop-blur-md
                      text-white shadow-[0_-10px_30px_rgba(0,0,0,0.25)]
                      transition-[background-color,padding] duration-300
-                     group-hover:bg-blue-800/90 dark:group-hover:bg-red-800/85
+                     group-hover:bg-ocra-600 dark:group-hover:bg-ocra-700
                      sm:group-hover:pr-12"
         >
-          <span className="font-haas text-xs sm:text-sm font-bold uppercase tracking-widest whitespace-nowrap">
+          <span className="font-haas text-xs sm:text-sm font-bold uppercase tracking-widest whitespace-nowrap font-x-typewriter font-bold">
             {ctaLabel}
           </span>
           <MoveRight size={16} className="icon-altalenante shrink-0" />

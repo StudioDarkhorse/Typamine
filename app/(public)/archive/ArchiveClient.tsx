@@ -28,13 +28,13 @@ export default function ArchiveClient({ tags, children }: ArchiveClientProps) {
 
   return (
     <DoubleHero bgImage={dynamicArchiveBgImageUrl} fullWidth>
-      <DoubleHero.FirstViewport className="pt-24 pb-12 px-6 md:px-12 flex flex-col justify-end">
-        <div className="max-w-3xl flex flex-col space-y-4 text-center items-center mx-auto">
+      <DoubleHero.FirstViewport className="pt-24 pb-12 px-6 md:px-12 flex flex-col justify-center">
+        <div className="max-w-5xl flex flex-col space-y-4 text-center items-center mx-auto">
           <h1 className="font-haas text-2xl md:text-5xl font-bold tracking-tight text-foreground text-glow-blue dark:text-glow-red">
-            <span className="text-blue-800 dark:text-red-400 font-rollover">The Typography&apos;s Wayback Machine</span>
+            <span className="text-blue-800 dark:text-red-400 font-crenzo">The Typography&apos;s Wayback Machine</span>
           </h1>
 
-          <p className="text-zinc-700 dark:text-zinc-300 text-xs md:text-base max-w-xl leading-relaxed">
+          <p className="text-zinc-700 dark:text-zinc-300 text-xs md:text-xl max-w-2xl leading-relaxed font-x-typewriter">
             Browse a vast catalog of fonts, find expert pairings, generate custom assets on the fly, and read our latest typographic prescriptions. Built for modern creators and developers.
           </p>
         </div>

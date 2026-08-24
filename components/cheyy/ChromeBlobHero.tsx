@@ -125,7 +125,15 @@ const FRAGMENT_SHADER = `
   varying vec2 vUv;
 
   #define MAX_STEPS 90
-  #define MAX_DIST 40.0
+  // I corpi sono confinati in un raggio di ~7.2 dall'origine (i micro-bead
+  // arrivano a x 5.2 / y 3.6, piu' raggio e allargamento dello smooth-min) e
+  // la camera sta a z = -8.2: nessun raggio puo' incontrare qualcosa oltre
+  // ~15.2. I 40 di prima facevano marciare ogni pixel di sfondo per 25 unita'
+  // di vuoto (o, piu' spesso, gli facevano esaurire tutti i 90 step).
+  #define MAX_DIST 16.0
+  // Raggio della bounding sphere usata per il rigetto analitico: 8.0 lascia
+  // margine sopra i ~7.2 effettivi, cosi' non taglia mai la silhouette.
+  #define SCENE_RADIUS 8.0
   #define SURF_DIST 0.001
 
   float smin(float a, float b, float k) {
@@ -205,12 +213,48 @@ const FRAGMENT_SHADER = `
     vec3 ro = vec3(0.0, 0.0, -8.2);
     vec3 rd = normalize(vec3(uv, 3.2));
 
-    float dTotal = 0.0;
-    for(int i = 0; i < MAX_STEPS; i++) {
-        vec3 p = ro + rd * dTotal;
-        float dS = getSceneSDF(p);
-        dTotal += dS;
-        if(dTotal > MAX_DIST || abs(dS) < SURF_DIST) break;
+    // Rigetto analitico contro la bounding sphere della scena, prima di
+    // toccare il raymarcher: la SDF costa 24 sfere + uno smooth-min per
+    // valutazione, quindi un raggio di sfondo che non intersecava nulla
+    // bruciava fino a 90 x 24 length() per niente. Qui bastano una decina di
+    // istruzioni per saperlo, e i pixel di sfondo — la maggioranza — escono
+    // subito.
+    float b = dot(ro, rd);
+    float c = dot(ro, ro) - SCENE_RADIUS * SCENE_RADIUS;
+    float h = b * b - c;
+
+    // Fuori dalla sfera non c'e' geometria: dTotal oltre MAX_DIST marca il
+    // pixel come sfondo senza entrare nel loop. Non si esce con un return
+    // anticipato perche' la correzione gamma in fondo va applicata anche allo
+    // sfondo.
+    float dTotal = MAX_DIST + 1.0;
+
+    if(h > 0.0) {
+        h = sqrt(h);
+        // Si parte dall'ingresso nella sfera (mai dietro la camera) e si
+        // smette all'uscita: il vuoto prima e dopo non va marciato.
+        float tExit = min(MAX_DIST, -b + h);
+        dTotal = max(0.0, -b - h);
+
+        // Epsilon di superficie proporzionale all'impronta del pixel: mezzo
+        // pixel proiettato alla distanza corrente (il piano immagine sta a
+        // 3.2, quindi un pixel vale 1/uResolution.y in unita' uv). Con una
+        // soglia fissa a 0.001 i raggi lontani continuavano a fare passi
+        // sub-pixel per una precisione che lo schermo non puo' rappresentare.
+        float epsSlope = 0.5 / (uResolution.y * 3.2);
+
+        for(int i = 0; i < MAX_STEPS; i++) {
+            vec3 p = ro + rd * dTotal;
+            float dS = getSceneSDF(p);
+            float eps = SURF_DIST + dTotal * epsSlope;
+            dTotal += dS;
+            if(dTotal > tExit || abs(dS) < eps) break;
+        }
+
+        // tExit puo' essere piu' vicino di MAX_DIST: senza normalizzare, un
+        // raggio uscito dalla sfera senza colpire nulla passerebbe comunque
+        // il test "dTotal < MAX_DIST" qui sotto e verrebbe ombreggiato.
+        if(dTotal > tExit) dTotal = MAX_DIST + 1.0;
     }
 
     vec3 col = uBgColor;

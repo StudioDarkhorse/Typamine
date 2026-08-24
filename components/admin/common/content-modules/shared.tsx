@@ -38,6 +38,7 @@ export const COLOR_PAIRS = [
   { id: 'red-black', label: 'Red / Black', classes: 'bg-red-100 text-black dark:bg-red-950 dark:text-white' },
   { id: 'stone-black', label: 'Stone / Black', classes: 'bg-stone-100 text-black dark:bg-black dark:text-white' },
   { id: 'black-red', label: 'Black / Red', classes: 'bg-black text-red-500 dark:bg-red-950 dark:text-white' },
+  { id: 'ocra-black', label: 'Ocra / Black', classes: 'bg-ocra-100 text-black dark:bg-ocra-950 dark:text-white' },
 ];
 
 export const PAGE_THEMES = [
@@ -47,6 +48,7 @@ export const PAGE_THEMES = [
   { id: 'blue-black', label: 'Blue / Black', classes: 'bg-blue-100 dark:bg-blue-950' },
   { id: 'stone-black', label: 'Stone / Black', classes: 'bg-stone-100 dark:bg-black' },
   { id: 'bluegray-redgray', label: 'Bluegray / Redgray', classes: 'bg-bluegray-100 dark:bg-redgray-950' },
+  { id: 'ocra-black', label: 'Ocra / Black', classes: 'bg-ocra-50 dark:bg-ocra-950' },
 ];
 
 // Font disponibili sul sito (tutte le famiglie che Typamine mostra/vende come
@@ -60,6 +62,7 @@ export const FONT_FAMILIES = [
   { id: 'ikosdubOutline', label: 'Ikos Dub Outline', class: 'font-ikosdub-outline' },
   { id: 'ikosdubSolid', label: 'Ikos Dub Solid', class: 'font-ikosdub-solid' },
   { id: 'neuropol', label: 'Neuropol', class: 'font-neuropol' },
+  { id: 'xtypewriter', label: 'X Typewriter', class: 'font-x-typewriter' },
 ];
 
 export const SITE_COLORS = [
@@ -71,6 +74,7 @@ export const SITE_COLORS = [
   { id: 'green', label: 'Green' },
   { id: 'stone', label: 'Stone' },
   { id: 'bluegray', label: 'Blue Gray' },
+  { id: 'ocra', label: 'Ocra' },
 ];
 
 export const colorMap: Record<string, string> = {
@@ -82,6 +86,7 @@ export const colorMap: Record<string, string> = {
   'green': 'green',
   'stone': 'stone-500',
   'bluegray': 'bluegray-500',
+  'ocra': 'ocra-500',
 };
 
 export const reverseColorMap: Record<string, string> = {
@@ -93,6 +98,7 @@ export const reverseColorMap: Record<string, string> = {
   'green': 'green',
   'stone-500': 'stone',
   'bluegray-500': 'bluegray',
+  'ocra-500': 'ocra',
 };
 
 export const resolveMediaUrl = (url: string | null | undefined): string | null => {
@@ -826,6 +832,7 @@ export function GranularBGColorPickerButton({ label, value = "", onChange, theme
     'green': '#00d27a',
     'stone': '#ada799',
     'bluegray': '#383a43',
+    'ocra': '#D5943A',
   };
 
   const getRgba = (color: string, opacity: number) => {

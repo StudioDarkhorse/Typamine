@@ -96,7 +96,7 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
           <h1 className="font-crenzo text-3xl sm:text-5xl font-bold uppercase tracking-[1rem] text-blue-900 dark:text-redgray-200 max-w-5xl">
             Tools designed for Creatives and Developers
           </h1>
-          <p className="text-zinc-700 dark:text-zinc-300 text-sm sm:text-base max-w-xl leading-relaxed font-haas font-bold">
+          <p className="text-zinc-700 dark:text-zinc-300 text-sm sm:text-base max-w-xl leading-relaxed font-x-typewriter font-bold">
             {ingredient ? (
               <>
                 Technical utilities to process, package, and integrate font assets into modern web apps. Pre-loaded with{" "}
@@ -118,7 +118,7 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
               <Link
                 key={tool.slug}
                 href={`/labs/${tool.slug}${qs}`}
-                className="group relative overflow-hidden border border-zinc-300 dark:border-zinc-800 rounded-lg p-6 flex flex-col gap-4 backdrop-blur-md shadow-sm hover:shadow-xl hover:border-zinc-400 dark:hover:border-zinc-600 transition-all"
+                className="group relative overflow-hidden border border-2 border-blue-800/60 dark:border-redgray-200/60 rounded-lg p-6 flex flex-col gap-4 bg-bluegray-100/60 dark:bg-redgray-800/60 backdrop-blur-md shadow-sm hover:shadow-xl hover:border-blue-800 dark:hover:border-redgray-200 transition-all"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
@@ -132,7 +132,7 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
                 />
 
                 <div className="relative z-10 flex items-center justify-end gap-2">
-                  <h3 className="font-rezland text-4xl font-bold text-black dark:text-white">{tool.title}</h3>
+                  <h3 className="font-crenzo text-2xl font-bold text-black dark:text-white">{tool.title}</h3>
                 </div>
 
                 <p className="relative z-10 text-black/80 dark:text-white/80 text-md leading-relaxed flex-1">

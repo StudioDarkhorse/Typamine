@@ -21,7 +21,7 @@ export default async function ArchivePostsResults({ page, perPage, tagIds, searc
 
   return (
     <div className="space-y-8">
-      <p className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
+       <p className="text-sm font-x-typewriter uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">
         {`${total} CASE FILE${total === 1 ? "" : "S"} IN THE ARCHIVE`}
       </p>
 
@@ -34,8 +34,8 @@ export default async function ArchivePostsResults({ page, perPage, tagIds, searc
       )}
 
       {posts.length === 0 && (
-        <div className="text-center py-16 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-lg text-ocragray-800 dark:text-zinc-200 font-haas">
-          <p className="font-rezland text-2xl text-black dark:text-white mb-2">The archive is silent</p>
+        <div className="text-center py-16 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-lg text-ocragray-800 dark:text-zinc-200 mb-16">
+          <p className="font-x-typewriter font-bold text-2xl text-black dark:text-white mb-2">The archive is silent</p>
           <p className="text-sm">
             {hasActiveFilters ? "No case files match this search." : "No dispatches have been filed yet."}
           </p>

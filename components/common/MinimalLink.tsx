@@ -34,7 +34,7 @@ export const MinimalLink: React.FC<MinimalLinkProps> = ({
         <Link
             href={href}
             onClick={onClick}
-            className={`group hidden lg:inline-flex flex-row items-center gap-1.5 font-haas text-xs font-bold uppercase tracking-wider transition-colors ${className}`}
+            className={`group hidden lg:inline-flex flex-row items-center gap-1.5 font-x-typewriter text-sm font-bold uppercase tracking-wider transition-colors ${className}`}
         >
             {iconPosition === 'left' && displayIcon}
             {children || label}

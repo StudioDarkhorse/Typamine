@@ -8,7 +8,8 @@ type ButtonVariant =
   | "success"
   | "outline"
   | "ghost"
-  | "glass";
+  | "glass"
+  | "metallic";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -19,6 +20,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   roundness?: "none" | "sm" | "md" | "lg" | "full";
   isLoading?: boolean;
+  /**
+   * Solo per variant="metallic": colore del bordo in hover (e del focus ring),
+   * espresso con le utility `ring-*` di Tailwind. Accetta più classi e i
+   * variant, es. `"ring-blue-300 dark:ring-red-100"`.
+   * Default se omessa: il rosso del brand.
+   */
+  ringColor?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -30,11 +38,12 @@ export const Button: React.FC<ButtonProps> = ({
   fullWidth = false,
   roundness = "md",
   isLoading = false,
+  ringColor,
   disabled,
   ...props
 }) => {
   const base =
-    "inline-flex items-center justify-center gap-2 font-haas font-bold uppercase tracking-wide " +
+    "inline-flex items-center justify-center gap-2 font-haas font-semibold uppercase tracking-wide text-black/80" +
     "border transition-all duration-200 outline-none select-none " +
     // focus-visible invece di focus: il ring appare solo da tastiera, non ad ogni click del mouse
     "focus-visible:ring-2 focus-visible:ring-offset-2 " +
@@ -104,6 +113,18 @@ export const Button: React.FC<ButtonProps> = ({
       "bg-white/10 backdrop-blur-md backdrop-saturate-150 border-white/20 text-white hover:bg-white/20 " +
       "dark:bg-black/20 dark:border-white/10 dark:hover:bg-black/30 " +
       "focus-visible:ring-white/60 ring-offset-transparent",
+
+    // METALLIC — ghiera + piastra in metallo "spun". A differenza delle altre
+    // varianti non è un fondo piatto: il gradiente conico e le ombre stanno in
+    // globals.css (.metallic-bezel / .metallic-plate) perché servono più layer
+    // di background di quanti ne esprima comodamente una utility Tailwind.
+    // Qui il <button> è solo la ghiera: padding, testo e min-height vivono
+    // sulla piastra interna, e il bordo da 2px sta fra le due (border-0 toglie
+    // quello perimetrale che arriva da `base`).
+    // Nessun ring-color fisso qui: --metallic-ring legge --tw-ring-color, così
+    // le `ring-*` passate via `ringColor` colorano bordo in hover e focus ring
+    // insieme. Senza, resta il default rosso brand definito in .metallic-bezel.
+    metallic: "metallic-bezel border-0 ring-offset-white dark:ring-offset-black duration-700",
   };
 
   const roundnessStyles = {
@@ -116,17 +137,38 @@ export const Button: React.FC<ButtonProps> = ({
 
   const shadowClass = shadowed ? "shadow-md hover:shadow-lg" : "";
 
+  // Il metallico è sempre a pillola: ghiera e piastra devono restare
+  // concentriche, e con raggi squadrati lo stacco fra le due si legge male.
+  // Per questo `roundness` non si applica a questa variante.
+  const isMetallic = variant === "metallic";
+
+  const content = (
+    <>
+      {isLoading && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
+      {children}
+    </>
+  );
+
   return (
     <button
-      className={`${base} ${sizes[size]} ${variants[variant]} ${roundnessStyles[roundness]} ${shadowClass} ${
+      className={`${base} ${isMetallic ? "" : sizes[size]} ${variants[variant]} ${
+        isMetallic ? "rounded-full" : roundnessStyles[roundness]
+      } ${isMetallic && ringColor ? ringColor : ""} ${shadowClass} ${
         fullWidth ? "w-full" : ""
       } ${className}`}
       disabled={disabled || isLoading}
       aria-busy={isLoading}
       {...props}
     >
-      {isLoading && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
-      {children}
+      {isMetallic ? (
+        <span
+          className={`metallic-plate inline-flex w-full items-center justify-center gap-2 rounded-full ${sizes[size]}`}
+        >
+          {content}
+        </span>
+      ) : (
+        content
+      )}
     </button>
   );
 };

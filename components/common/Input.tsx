@@ -46,7 +46,7 @@ export const Input: React.FC<InputProps> = ({
   rows = 4,
   ...props
 }) => {
-  const fieldClassName = `w-full bg-bluegray-100 dark:bg-bluegray-900/50 border border-bluegray-200 dark:border-redgray-800 hover:border-bluegray-400 dark:hover:border-redgray-600 focus:border-blue dark:focus:border-red rounded-md px-3 py-2 text-foreground outline-none transition-colors ${
+  const fieldClassName = `w-full bg-bluegray-100 dark:bg-bluegray-900/50 border border-bluegray-200 dark:border-redgray-800 hover:border-bluegray-400 dark:hover:border-redgray-600 focus:border-blue dark:focus:border-red rounded-md px-3 py-2 font-x-typewriter font-bold text-foreground outline-none transition-colors ${
     error ? "border-red-500 focus:border-red-500 dark:focus:border-red-500" : ""
   } ${leftIcon ? "pl-10" : ""} ${rightIcon ? "pr-10" : ""} ${className}`;
 

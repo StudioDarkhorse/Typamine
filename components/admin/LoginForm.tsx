@@ -114,7 +114,7 @@ export default function LoginForm() {
   return (
     <div className="flex items-center justify-center p-6">
       <div className="min-w-xl">
-        <div className="mb-16 text-center flex flex-col items-center justify-center scale-125">
+        <div className="mb-8 text-center flex flex-col items-center justify-center scale-125">
           <DynamicLogo height={200} className="select-none" />
         </div>
 
