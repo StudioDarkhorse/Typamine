@@ -10,7 +10,7 @@ import SavingOverlay from "@/components/admin/common/SavingOverlay";
 import { useFilePreview } from "@/components/admin/common/useFilePreview";
 import ImageDropInput from "@/components/admin/common/ImageDropInput";
 import { Select } from "@/components/common/Select";
-import { Input } from "@/components/common/Input";
+import { Input, Label } from "@/components/common/Input";
 import type { SocialPlatform } from "@/types";
 
 const TYPE_OPTIONS = [
@@ -291,44 +291,38 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
 
         {/* Identity */}
         <div className="lg:col-span-8 border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-xl backdrop-blur-xl bg-white/50 dark:bg-zinc-950/50 space-y-5">
-          <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
+          <h3 className="text-xl font-crenzo font-bold text-black/80 dark:text-white/80 pb-3 border-b border-black/5 dark:border-white/5">
             Author Identity
           </h3>
 
           <Input label="Name *" name="name" required value={name} onChange={handleNameChange} placeholder="e.g. Dalton Maag" />
 
-          <div>
-            <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">
-              Slug *
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                name="slug"
-                required
-                value={slug}
-                onChange={(e) => {
-                  setSlug(e.target.value);
-                  setAutoSlug(false);
-                }}
-                placeholder="dalton-maag"
-                className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
-              />
-              {!autoSlug && (
+          <Input
+            label="Slug *"
+            name="slug"
+            required
+            value={slug}
+            onChange={(val) => {
+              setSlug(val);
+              setAutoSlug(false);
+            }}
+            placeholder="dalton-maag"
+            rightIcon={
+              !autoSlug ? (
                 <button
                   type="button"
                   onClick={() => {
                     setAutoSlug(true);
                     handleNameChange(name);
                   }}
-                  className="p-2.5 border border-black/10 dark:border-white/10 rounded-lg text-xs font-bold hover:bg-black/5 dark:hover:bg-white/5"
+                  className="p-1 hover:bg-black/5 dark:hover:bg-white/5 rounded transition-colors text-bluegray-800 dark:text-redgray-200"
                   title="Auto-generate from Name"
                 >
                   <RefreshCw className="w-4 h-4" />
                 </button>
-              )}
-            </div>
-          </div>
+              ) : undefined
+            }
+          />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input label="Email *" name="email" type="email" required value={email} onChange={setEmail} placeholder="hello@foundry.com" />
@@ -374,7 +368,7 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
 
         {/* Taxonomy & visibility */}
         <div className="lg:col-span-4 border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-xl backdrop-blur-xl bg-white/50 dark:bg-zinc-950/50 space-y-5">
-          <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
+          <h3 className="text-xl font-crenzo font-bold text-black/80 dark:text-white/80 text-center pb-3 border-b border-black/5 dark:border-white/5">
             Type &amp; Status
           </h3>
 
@@ -419,12 +413,12 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
 
         {/* Avatar & Banner */}
         <div className="lg:col-span-12 border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-xl backdrop-blur-xl bg-white/50 dark:bg-zinc-950/50 space-y-5">
-          <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
+          <h3 className="text-xl font-crenzo font-bold text-black/80 dark:text-white/80 pb-3 border-b border-black/5 dark:border-white/5">
             Avatar &amp; Banner
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">Avatar</p>
+          <div className="flex flex-col md:flex-row gap-6 items-start">
+            <div className="shrink-0 w-[220px] mx-auto md:mx-0">
+              <Label>Avatar</Label>
               <ImageDropInput
                 name="avatar"
                 inputRef={avatarPreview.inputRef}
@@ -439,13 +433,13 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
                   if (avatarPreview.previewUrl) avatarPreview.clear();
                   else setRemoveAvatar(true);
                 }}
-                containerClassName="aspect-square rounded-2xl w-full max-w-[220px]"
+                containerClassName="w-[220px] h-[220px] rounded-2xl"
                 label="Upload avatar"
                 helperText="Square image recommended"
               />
             </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">Banner</p>
+            <div className="flex-1 w-full">
+              <Label>Banner</Label>
               <ImageDropInput
                 name="banner"
                 inputRef={bannerPreview.inputRef}
@@ -460,7 +454,7 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
                   if (bannerPreview.previewUrl) bannerPreview.clear();
                   else setRemoveBanner(true);
                 }}
-                containerClassName="aspect-[3/1] rounded-2xl w-full"
+                containerClassName="w-full h-[220px] rounded-2xl"
                 label="Upload banner"
                 helperText="Recommended: 1600x530px"
               />
@@ -471,14 +465,14 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
         {/* Social links */}
         <div className="lg:col-span-6 border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-xl backdrop-blur-xl bg-white/50 dark:bg-zinc-950/50 space-y-5">
           <div className="flex items-center justify-between pb-3 border-b border-black/5 dark:border-white/5">
-            <h3 className="text-xl font-rezland font-bold text-black dark:text-white">Social Links</h3>
+            <h3 className="text-xl font-crenzo font-bold text-black/80 dark:text-white/80">Social Links</h3>
             <Button type="button" variant="secondary" size="sm" roundness="md" onClick={addSocialLink} className="flex items-center gap-1.5">
               <Plus className="h-3.5 w-3.5" /> Add
             </Button>
           </div>
 
           {socialLinks.length === 0 && (
-            <p className="text-xs text-zinc-400">No social links added yet.</p>
+            <p className="text-xs text-zinc-800 dark:text-zinc-400">No social links added yet.</p>
           )}
 
           <div className="space-y-3">
@@ -517,7 +511,7 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
 
         {/* Donation */}
         <div className="lg:col-span-6 border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-xl backdrop-blur-xl bg-white/50 dark:bg-zinc-950/50 space-y-5">
-          <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
+          <h3 className="text-xl font-crenzo font-bold text-black/80 dark:text-white/80 pb-3 border-b border-black/5 dark:border-white/5">
             Donation Details
           </h3>
           <Input label="Donation Website" value={donationWebsite} onChange={setDonationWebsite} placeholder="https://ko-fi.com/..." />
@@ -534,9 +528,13 @@ export default function FontAuthorForm({ initialData }: FontAuthorFormProps) {
 
         {/* Business info */}
         <div className="lg:col-span-12 border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-xl backdrop-blur-xl bg-white/50 dark:bg-zinc-950/50 space-y-5">
-          <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
-            Business Info <span className="text-xs font-normal text-zinc-400 normal-case">(optional — for authors selling commercial fonts)</span>
+        <div className="border-b border-black/5 dark:border-white/5 pb-3 ">
+
+          <h3 className="text-xl font-crenzo font-bold text-black/80 dark:text-white/80 ">
+            Business Info
           </h3>
+          <p className="text-xs font-normal text-zinc-800 dark:text-zinc-400 normal-case">(optional — for authors selling commercial fonts)</p>
+        </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input label="Company Name" value={companyName} onChange={setCompanyName} placeholder="Dalton Maag Ltd." />
             <Input label="VAT / Tax ID" value={vatId} onChange={setVatId} placeholder="IT01234567890" />

@@ -304,7 +304,7 @@ export default function LivePreview({
                 <div className="hidden md:block w-full">{groups}</div>
                 <BaseModal isOpen={isControlsModalOpen} onClose={() => setIsControlsModalOpen(false)} size="md">
                   <BaseModal.Header onClose={() => setIsControlsModalOpen(false)}>
-                    <h2 className="text-lg font-rezland text-black dark:text-white">Customize Preview</h2>
+                    <h2 className="text-lg text-black dark:text-white">Customize Preview</h2>
                   </BaseModal.Header>
                   <BaseModal.Body className="!p-4 !sm:p-6">
                     {groups}

@@ -92,7 +92,7 @@ export function ListHeaderHandlers({
     <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
 
       {/* Left: Search input */}
-      {showSearchBar && (
+      {showSearchBar && !isSelectionMode && (
         <div className="w-full xl:max-w-xs 2xl:max-w-md shrink-0">
           <Input
             id="list-search"
@@ -104,14 +104,12 @@ export function ListHeaderHandlers({
       )}
 
       {/* Right: Actions, Sort, Pagination, and Toggle */}
-      <div className="flex flex-wrap items-center gap-4 xl:justify-end w-full">
-
-        {/* Mass Actions (Visibili solo in selection mode) */}
-        {isSelectionMode ? (
-          <div className="flex items-center gap-4">
-            <span className="text-bluegray-900 dark:text-redgray-200  text-sm font-bold whitespace-nowrap">
-              {selectedCount} Selected
-            </span>
+      {isSelectionMode ? (
+        <div className="flex flex-row items-center justify-between gap-4 w-full flex-nowrap">
+          <span className="text-bluegray-900 dark:text-redgray-200 text-sm font-bold whitespace-nowrap ps-2">
+            {selectedCount} Selected
+          </span>
+          <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap justify-end">
             {massActions.map((action, idx) => (
               <Button
                 key={idx}
@@ -124,23 +122,33 @@ export function ListHeaderHandlers({
                 {action.label}
               </Button>
             ))}
+            {canMassAction && (
+              <Button
+                onClick={onToggleSelectionMode}
+                variant="outline"
+                size="md"
+                roundness="md"
+              >
+                Cancel
+              </Button>
+            )}
           </div>
-        ) : null}
+        </div>
+      ) : (
+        <div className="flex flex-wrap items-center gap-4 xl:justify-end w-full">
+          {/* Sort by */}
+          {sortOptions.length > 0 && (
+            <div className="flex items-center gap-2">
+              <Select
+                options={sortOptions}
+                value={currentSort}
+                onChange={(val) => updateQuery({ sort: val })}
+                className="min-w-[140px]"
+              />
+            </div>
+          )}
 
-        {/* Sort by (Nascosto in selection mode) */}
-        {!isSelectionMode && sortOptions.length > 0 && (
-          <div className="flex items-center gap-2">
-            <Select
-              options={sortOptions}
-              value={currentSort}
-              onChange={(val) => updateQuery({ sort: val })}
-              className="min-w-[140px]"
-            />
-          </div>
-        )}
-
-        {/* Show per page (Nascosto in selection mode) */}
-        {!isSelectionMode && (
+          {/* Show per page */}
           <div className="flex items-center gap-2">
             <Select
               options={[
@@ -153,13 +161,10 @@ export function ListHeaderHandlers({
               className="min-w-[80px]"
             />
           </div>
-        )}
 
-
-        {/* Selection toggle or Cancel */}
-        {canMassAction && (
-          <div className="flex items-center gap-3 shrink-0">
-            {!isSelectionMode ? (
+          {/* Selection toggle */}
+          {canMassAction && (
+            <div className="flex items-center gap-3 shrink-0">
               <Button
                 onClick={onToggleSelectionMode}
                 variant="outline"
@@ -168,22 +173,10 @@ export function ListHeaderHandlers({
               >
                 {buttonLabel}
               </Button>
-            ) : (
-              <div className="flex items-center gap-4">
-
-                <Button
-                  onClick={onToggleSelectionMode}
-                  variant="outline"
-                  size="md"
-                  roundness="md"
-                >
-                  Cancel
-                </Button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+            </div>
+          )}
+        </div>
+      )}
 
     </div>
   );

@@ -95,7 +95,7 @@ export default function ImageDropInput({
       {isCompressing && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white/80 dark:bg-black/80 z-20">
           <Loader2 className="h-6 w-6 animate-spin text-black dark:text-white" />
-          <p className="text-[9px] font-bold uppercase tracking-widest text-black/60 dark:text-white/60">Compressing...</p>
+          <p className="text-[9px] font-bold uppercase tracking-widest text-zinc-800 dark:text-zinc-400">Compressing...</p>
         </div>
       )}
 
@@ -129,12 +129,15 @@ export default function ImageDropInput({
         </>
       ) : (
         <div className="flex flex-col items-center justify-center gap-2 h-full py-8 px-4 text-center">
-          <div className="h-12 w-12 rounded-xl bg-black/5 dark:bg-white/10 flex items-center justify-center text-black/40 dark:text-white/40">
+          <div className="h-12 w-12 rounded-xl bg-black/5 dark:bg-white/10 flex items-center justify-center text-zinc-800 dark:text-zinc-400">
             <ImageIcon className="h-5 w-5" />
           </div>
-          <p className="text-xs font-bold text-black/60 dark:text-white/60">{label}</p>
-          <p className="text-[10px] text-zinc-400">Click or drag &amp; drop</p>
-          {helperText && <p className="text-[10px] text-zinc-400">{helperText}</p>}
+          <div>
+
+            <p className="text-xs font-bold text-zinc-800 dark:text-zinc-400 mb-2">{label}</p>
+            <p className="text-[10px] text-zinc-800 dark:text-zinc-400">Click or drag &amp; drop</p>
+            {helperText && <p className="text-[10px] text-zinc-800 dark:text-zinc-400">{helperText}</p>}
+          </div>
         </div>
       )}
     </div>

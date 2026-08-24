@@ -5,6 +5,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Search, Check, Tag as TagIcon, X, Loader2 } from "lucide-react";
 import BaseModal from "@/components/common/BaseModal";
 import { Button } from "@/components/common/Button";
+import { Input } from "@/components/common/Input";
 import InViewTrigger from "@/components/common/InViewTrigger";
 import { getTagsPage, getTagsByIds } from "@/lib/actions/tag";
 
@@ -148,23 +149,21 @@ export default function TagPicker({ label, tags, value, onChange, emptyLabel = "
       {isOpen && (
         <BaseModal isOpen={isOpen} onClose={() => setIsOpen(false)} size="lg">
           <BaseModal.Header onClose={() => setIsOpen(false)}>
-            <h3 className="text-lg font-rezland font-bold text-black dark:text-white">
+            <h3 className="text-2xl text-black dark:text-white">
               {label || "Select tags"}
             </h3>
           </BaseModal.Header>
           <BaseModal.Body>
             <div className="space-y-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400 pointer-events-none" />
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={selfFetching ? "Search tags by name..." : `Search ${tags!.length} tags by name...`}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
-                />
-              </div>
+              <Input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={setQuery}
+                placeholder={selfFetching ? "Search tags by name..." : `Search ${tags!.length} tags by name...`}
+                autoComplete="off"
+                leftIcon={<Search className="h-3.5 w-3.5" />}
+              />
 
               <div className="max-h-96 overflow-y-auto rounded-xl border border-black/10 dark:border-white/10 divide-y divide-black/5 dark:divide-white/5">
                 {visible.map((t, idx) => {

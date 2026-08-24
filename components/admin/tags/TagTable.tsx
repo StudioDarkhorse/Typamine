@@ -148,7 +148,7 @@ export default function TagTable({ tags }: TagTableProps) {
               <div className="p-2 rounded-xl bg-blue/10 dark:bg-red/10">
                 <TagIcon className="w-5 h-5 text-black dark:text-white" />
               </div>
-              <h2 className="text-2xl font-rezland text-black dark:text-white">
+              <h2 className="text-2xl text-black dark:text-white">
                 {editingTag ? "Edit Tag" : "Create New Tag"}
               </h2>
             </div>

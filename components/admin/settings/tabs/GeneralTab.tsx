@@ -11,7 +11,6 @@ import { SettingsSection, SettingsSubCard } from "@/components/admin/settings/Se
 import { SaveBar } from "@/components/admin/settings/SaveBar";
 import { useSettingsForm } from "@/components/admin/settings/useSettingsForm";
 import FontPicker from "@/components/common/FontPicker";
-import MultiFontPicker from "@/components/common/MultiFontPicker";
 import HexColorPickerPopover from "@/components/common/HexColorPickerPopover";
 import { saveGeneralSettings } from "@/lib/actions/adminSettings";
 import { getFontsByIds } from "@/lib/actions/font";
@@ -47,9 +46,10 @@ function HeroWordmarkFontsField({
 
   return (
     <div className="space-y-4">
-      <MultiFontPicker
+      <FontPicker
+        multiple
         label="Hero Wordmark Fonts"
-        values={ids}
+        value={ids}
         max={MAX_HERO_WORDMARK_FONTS}
         onChange={(newIds) => {
           const byId = new Map(value.map((r) => [r.fontId, r]));

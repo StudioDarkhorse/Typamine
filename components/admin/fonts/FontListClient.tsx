@@ -107,7 +107,7 @@ export default function FontListClient({ fonts, totalCount, canUpdate, canDelete
                     {font.symbol || GetSymbol({ fontName: font.name })}
                   </div>
                   <div className="min-w-0">
-                    <p className="font-rezland text-2xl text-black dark:text-white leading-tight truncate">
+                    <p className="font-haas text-2xl font-bold text-black dark:text-white leading-tight truncate">
                       {font.name}
                     </p>
                     <p className="text-[10px] text-blue-400 dark:text-red-400 font-bold uppercase tracking-widest mt-1 truncate">
@@ -120,7 +120,7 @@ export default function FontListClient({ fonts, totalCount, canUpdate, canDelete
             {
               key: "isVariable",
               header: "Is Variable",
-              className: "w-1/8 hidden sm:block",
+              className: "w-[12.5%] hidden sm:flex",
               render: (font: any) => (
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mt-1 truncate">
 
@@ -144,7 +144,8 @@ export default function FontListClient({ fonts, totalCount, canUpdate, canDelete
             {
               key: "variants",
               header: "Variants",
-              className: "w-1/8 hidden md:block",
+              align: "center",
+              className: "w-[12.5%] hidden md:flex",
               render: (font: any) => (
                 <div className={`px-3 py-1.5 rounded-md flex items-center gap-2 border shadow-sm text-xs max-w-fit mt-1 ${font?.variants?.length
                   ? "bg-white text-blue-800 dark:bg-redgray-800 dark:text-red-200 border-blue-800 dark:border-red-200"
@@ -160,7 +161,8 @@ export default function FontListClient({ fonts, totalCount, canUpdate, canDelete
             {
               key: "tags",
               header: "Tags",
-              className: "w-1/8 hidden lg:block",
+              align: "center",
+              className: "w-[12.5%] hidden lg:flex",
               render: (font: any) => (
                 <div
                   className={`px-3 py-1.5 rounded-md flex items-center gap-2 border shadow-sm text-xs max-w-fit mt-1 ${font.tags?.length
@@ -212,7 +214,7 @@ export default function FontListClient({ fonts, totalCount, canUpdate, canDelete
             <div className="p-2 rounded-xl bg-red/10">
               <AlertTriangle className="w-6 h-6 text-red" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white">Confirm Bulk Deletion</h2>
+            <h2 className="text-2xl text-black dark:text-white">Confirm Bulk Deletion</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>

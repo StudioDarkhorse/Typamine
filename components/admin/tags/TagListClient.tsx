@@ -170,7 +170,7 @@ export default function TagListClient({ tags, totalCount, canCreate, canUpdate, 
               render: (tag: any) => (
                 <div className="flex items-center gap-3 py-1">
                   <div>
-                    <p className="font-rezland text-2xl font-bold text-black dark:text-white leading-tight">
+                    <p className="font-haas text-bold text-2xl font-bold text-black dark:text-white leading-tight">
                       {tag.name}
                     </p>
                     {tag.description && (
@@ -221,7 +221,7 @@ export default function TagListClient({ tags, totalCount, canCreate, canUpdate, 
               <div className="p-2 rounded-xl bg-blue/10 dark:bg-red/10">
                 <TagIcon className="w-5 h-5 text-black dark:text-white" />
               </div>
-              <h2 className="text-2xl font-rezland text-black dark:text-white">
+              <h2 className="text-2xl text-black dark:text-white">
                 {editingTag ? "Edit Tag" : "Create New Tag"}
               </h2>
             </div>
@@ -294,7 +294,7 @@ export default function TagListClient({ tags, totalCount, canCreate, canUpdate, 
             <div className="p-2 rounded-xl bg-red/10">
               <AlertTriangle className="w-6 h-6 text-red" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white">Confirm Bulk Deletion</h2>
+            <h2 className="text-2xl text-black dark:text-white">Confirm Bulk Deletion</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>

@@ -133,7 +133,7 @@ export default function PostListClient({ postType, posts, totalCount, canUpdate,
             {
               key: "preview",
               header: "Preview",
-              className: "w-1/8 shrink-0",
+              className: "w-[6.25%] shrink-0",
               render: (p: any) => (
                 <div className="w-16 h-12 rounded-lg border border-black/10 dark:border-white/10 overflow-hidden bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center relative">
                   {p.thumbnailUrl || p.imageUrl ? (
@@ -151,7 +151,7 @@ export default function PostListClient({ postType, posts, totalCount, canUpdate,
               className: "w-1/4 min-w-0",
               render: (p: any) => (
                 <div className="min-w-0 w-full py-1">
-                  <p className="font-rezland text-2xl font-bold text-black dark:text-white leading-tight truncate" title={p.title}>
+                  <p className="font-haas text-md text-black dark:text-white leading-tight truncate" title={p.title}>
                     {p.title}
                   </p>
                   <p className="text-[10px] text-blue-400 dark:text-red-400 font-bold uppercase tracking-widest mt-1 truncate">
@@ -164,7 +164,8 @@ export default function PostListClient({ postType, posts, totalCount, canUpdate,
             {
               key: "author",
               header: "Author",
-              className: "w-1/8 min-w-0 hidden md:block",
+              className: "w-[12.5%] min-w-0 hidden md:flex",
+              align: "center",
               render: (p: any) => (
                 <span className="block text-xs font-bold text-black dark:text-white truncate">
                   {p.author?.name ? `${p.author.name} ${p.author.surname || ""}`.trim() : "Unknown"}
@@ -174,7 +175,8 @@ export default function PostListClient({ postType, posts, totalCount, canUpdate,
             {
               key: "published",
               header: "Status",
-              className: "w-1/8 shrink-0",
+              align: "center",
+              className: "w-[12.5%] shrink-0",
               render: (p: any) => (
                 <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider">
                   {p.published ? (
@@ -238,7 +240,7 @@ export default function PostListClient({ postType, posts, totalCount, canUpdate,
             <div className="p-2 rounded-xl bg-red/10">
               <AlertTriangle className="w-6 h-6 text-red" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white">Confirm Bulk Deletion</h2>
+            <h2 className="text-2xl text-black dark:text-white">Confirm Bulk Deletion</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>

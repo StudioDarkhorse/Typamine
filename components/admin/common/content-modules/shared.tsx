@@ -895,7 +895,7 @@ export function GranularBGColorPickerButton({ label, value = "", onChange, theme
       <BaseModal isOpen={isOpen} onClose={() => setIsOpen(false)} size="4xl">
         <BaseModal.Header onClose={() => setIsOpen(false)}>
           <div className="flex items-end justify-between w-full pr-4">
-            <span className="text-2xl font-rezland text-black dark:text-white">{label}</span>
+            <span className="text-2xl font-crenzo text-black dark:text-white">{label}</span>
             <div className="flex p-1 bg-black/5 dark:bg-white/5 rounded-xl w-64">
               <button
                 type="button"

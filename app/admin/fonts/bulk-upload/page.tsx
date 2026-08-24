@@ -784,18 +784,15 @@ export default function BulkUploadPage() {
                   <label className="text-[10px] text-bluegray-800 dark:text-redgray-200 uppercase tracking-widest block mb-1.5 font-black">
                     Family Name Lookup
                   </label>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400 pointer-events-none" />
-                    <Input
-                      id="modal-search"
-                      name="search"
-                      placeholder="Search by names (e.g. Inter, Space...)"
-                      value={searchQuery}
-                      onChange={setSearchQuery}
-                      autoComplete="off"
-                      className="pl-9"
-                    />
-                  </div>
+                  <Input
+                    id="modal-search"
+                    name="search"
+                    placeholder="Search by names (e.g. Inter, Space...)"
+                    value={searchQuery}
+                    onChange={setSearchQuery}
+                    autoComplete="off"
+                    leftIcon={<Search className="h-3.5 w-3.5" />}
+                  />
                 </div>
               )}
 
@@ -915,7 +912,7 @@ export default function BulkUploadPage() {
                   <FolderDown className="h-5 w-5 text-cyan-500" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">Batch Import</h3>
+                  <h3 className="text-2xl text-black dark:text-white leading-tight">Batch Import</h3>
                   <p className="text-[10px] uppercase tracking-widest font-bold text-ocragray-800 dark:text-zinc-200 mt-0.5">
                     Downloading &middot; Converting &middot; Saving
                   </p>

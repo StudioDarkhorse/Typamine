@@ -874,7 +874,7 @@ export default function PairingForm({ initialData, tags }: PairingFormProps) {
         {isCanvasModalOpen && (
           <BaseModal isOpen={isCanvasModalOpen} onClose={() => setIsCanvasModalOpen(false)} size="7xl">
             <BaseModal.Header onClose={() => setIsCanvasModalOpen(false)}>
-              <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">Canvas Generator</h3>
+              <h3 className="text-2xl text-black dark:text-white leading-tight">Canvas Generator</h3>
             </BaseModal.Header>
             <BaseModal.Body className="overflow-visible max-h-none">
               <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-6 items-start">

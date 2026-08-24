@@ -107,7 +107,7 @@ export default function FontAuthorListClient({ authors, totalCount, canUpdate, c
               header: "Avatar",
               className: "w-1/12 shrink-0",
               render: (a: any) => (
-                <div className="w-12 h-12 rounded-full border border-black/10 dark:border-white/10 overflow-hidden bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center">
+                <div className="w-12 h-12 border border-black/10 dark:border-white/10 overflow-hidden bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center">
                   {a.avatarUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={a.avatarUrl} alt={a.name} className="w-full h-full object-cover" />
@@ -124,7 +124,7 @@ export default function FontAuthorListClient({ authors, totalCount, canUpdate, c
               render: (a: any) => (
                 <div className="min-w-0 py-1 flex items-center gap-2">
                   <div>
-                    <p className="font-rezland text-xl text-black dark:text-white leading-tight truncate flex items-center gap-1.5">
+                    <p className="font-haas font-bold text-xl text-black dark:text-white leading-tight truncate flex items-center gap-1.5">
                       {a.name}
                       {a.isVerified && <ShieldCheck className="h-4 w-4 text-emerald-500 shrink-0" />}
                     </p>
@@ -136,30 +136,25 @@ export default function FontAuthorListClient({ authors, totalCount, canUpdate, c
               ),
             },
             {
-              key: "type",
-              header: "Type",
-              className: "w-1/6 hidden md:block",
-              render: (a: any) => (
-                <span className="text-xs font-bold uppercase tracking-wider text-black dark:text-white">{a.type}</span>
-              ),
-            },
-            {
               key: "fontCount",
               header: "Fonts",
-              className: "w-1/12 shrink-0 hidden sm:block",
+              align: "center",
+              className: "w-1/12 shrink-0 hidden sm:flex",
               render: (a: any) => (
-                <span className="text-sm font-rezland text-black dark:text-white">{a._count?.fonts ?? 0}</span>
+                <span className="text-sm  text-black dark:text-white">{a._count?.fonts ?? 0}</span>
               ),
             },
             {
               key: "email",
               header: "Email",
-              className: "w-1/4 hidden lg:block",
+              align: "center",
+              className: "w-1/4 hidden lg:flex",
               render: (a: any) => <span className="text-xs text-ocragray-800 dark:text-zinc-200 truncate">{a.email}</span>,
             },
             {
               key: "status",
               header: "Status",
+              align: "right",
               className: "w-1/6 shrink-0",
               render: (a: any) => (
                 <span
@@ -218,7 +213,7 @@ export default function FontAuthorListClient({ authors, totalCount, canUpdate, c
             <div className="p-2 rounded-xl bg-red/10">
               <AlertTriangle className="w-6 h-6 text-red" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white">Confirm Bulk Deletion</h2>
+            <h2 className="text-2xl text-black dark:text-white">Confirm Bulk Deletion</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>

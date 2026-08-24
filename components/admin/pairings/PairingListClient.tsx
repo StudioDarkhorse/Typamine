@@ -129,7 +129,7 @@ export default function PairingListClient({ pairings, totalCount, canUpdate, can
             {
               key: "preview",
               header: "Preview",
-              className: "w-1/8 shrink-0",
+              className: "w-[12.5%] shrink-0",
               render: (p: any) => (
                 <div className="w-16 h-12 rounded-lg border border-black/10 dark:border-white/10 overflow-hidden bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center relative">
                   {p.imageUrl ? (
@@ -147,7 +147,7 @@ export default function PairingListClient({ pairings, totalCount, canUpdate, can
               className: "w-1/4 min-w-0",
               render: (p: any) => (
                 <div className="min-w-0 py-1">
-                  <p className="font-rezland text-2xl text-black dark:text-white leading-tight truncate">
+                  <p className="font-haas text-xl font-bold text-black dark:text-white leading-tight truncate">
                     {p.name}
                   </p>
                   <p className="text-[10px] text-blue-400 dark:text-red-400 font-bold uppercase tracking-widest mt-1 truncate">
@@ -159,16 +159,16 @@ export default function PairingListClient({ pairings, totalCount, canUpdate, can
             {
               key: "fonts",
               header: "Paired Fonts",
-              className: "w-1/4 hidden md:block",
+              className: "w-1/4 hidden md:flex",
               render: (p: any) => (
                 <div className="text-xs font-bold text-black dark:text-white space-y-0.5">
                   <div className="flex items-center gap-1.5">
                     <span className="text-[10px] font-black uppercase text-blue-400 dark:text-red-400">Primary:</span>
-                    <span>{p.primaryFont?.name || "N/A"}</span>
+                    <span className="capitalize">{p.primaryFont?.name.replaceAll("_", " ") || "N/A"}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="text-[10px] font-black uppercase text-bluegray-400 dark:text-redgray-400">Secondary:</span>
-                    <span>{p.secondaryFont?.name || "N/A"}</span>
+                    <span className="capitalize">{p.secondaryFont?.name.replaceAll("_", " ") || "N/A"}</span>
                   </div>
                 </div>
               ),
@@ -176,7 +176,8 @@ export default function PairingListClient({ pairings, totalCount, canUpdate, can
             {
               key: "tags",
               header: "Tags",
-              className: "w-1/8 hidden lg:block",
+              align: "center",
+              className: "w-[12.5%] hidden lg:flex",
               render: (p: any) => (
                 <div
                   className={`px-3 py-1.5 rounded-md flex items-center gap-2 border shadow-sm text-xs max-w-fit mt-1 ${p.tags?.length
@@ -194,7 +195,8 @@ export default function PairingListClient({ pairings, totalCount, canUpdate, can
             {
               key: "published",
               header: "Status",
-              className: "w-1/8 shrink-0",
+              align: "center",
+              className: "w-[12.5%] shrink-0",
               render: (p: any) => (
                 <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider">
                   {p.published ? (
@@ -258,7 +260,7 @@ export default function PairingListClient({ pairings, totalCount, canUpdate, can
             <div className="p-2 rounded-xl bg-red/10">
               <AlertTriangle className="w-6 h-6 text-red" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white">Confirm Bulk Deletion</h2>
+            <h2 className="text-2xl text-black dark:text-white">Confirm Bulk Deletion</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>

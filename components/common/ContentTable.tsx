@@ -10,6 +10,7 @@ export interface ColumnDef<T> {
   header: React.ReactNode;
   render?: (item: T) => React.ReactNode;
   className?: string; // Tailwind classes for column alignment, visibility, etc.
+  align?: "left" | "center" | "right";
 }
 
 export interface ContentTableProps<T> {
@@ -59,41 +60,46 @@ export default function ContentTable<T>({
         // mantenendo py-4. items-center centrerà il contenuto in entrambi gli stati.
         "flex justify-between items-center py-4 min-h-[76px] px-8 border-b bg-bluegray-100 dark:bg-redgray-900/50  border-black/5 dark:border-white/5"
       )}>
-        {columns.map((column, idx) => (
+        {isSelectionMode && (
+          <div className="w-12 shrink-0 flex items-center justify-start">
+            <div
+              onClick={handleSelectAllToggle}
+              className="cursor-pointer animate-in fade-in duration-200"
+            >
+              {isAllSelected ? (
+                <SquareCheckBig className="w-5 h-5 text-blue dark:text-red animate-in zoom-in duration-200" />
+              ) : (
+                <Square className="w-5 h-5 text-zinc-500/40 dark:text-zinc-400/40 animate-in zoom-in duration-200" />
+              )}
+            </div>
+          </div>
+        )}
+
+        {columns.map((column) => (
           <div
             key={column.key}
             className={cn(
-              "text-[10px] font-bold uppercase tracking-widest text-bluegray-800 dark:text-redgray-200",
+              "text-[10px] font-bold uppercase tracking-widest text-bluegray-800 dark:text-redgray-200 min-w-0 flex items-center",
+              column.align === "center" && "justify-center",
+              column.align === "right" && "justify-end",
+              column.align === "left" && "justify-start",
               column.className || "flex-1"
             )}
           >
-            {/* Selezioniamo la prima colonna in selection mode */}
-            {isSelectionMode && idx === 0 ? (
-              <div
-                onClick={handleSelectAllToggle}
-                className="cursor-pointer animate-in fade-in duration-200 w-fit"
-              >
-                {isAllSelected ? (
-                  <div className="flex items-center gap-2 p-1 rounded-sm">
-                    <Badge icon={<SquareCheckBig />} variant="monochrome">{selectedIds.length} Selected</Badge>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 p-1 rounded-sm">
-                    {/* Corretto l'icona qui in Square */}
-                    <Badge icon={<Square />} variant="monochrome">Select All</Badge>
-                  </div>
-                )}
-              </div>
-            ) : (
-              // Mostra normalmente la label per tutte le altre colonne o se non siamo in selection mode
-              column.header
-            )}
+            <span className={cn(
+              "truncate",
+              column.align === "center" && "text-center",
+              column.align === "right" && "text-right",
+              column.align === "left" && "text-left"
+            )}>
+              {column.header}
+            </span>
           </div>
         ))}
 
         {/* Actions */}
         {rowActions && (
-          <div className=" text-[10px] font-bold uppercase tracking-widest text-bluegray-800 dark:text-redgray-200 text-right">
+          <div className="text-[10px] font-bold uppercase tracking-widest text-bluegray-800 dark:text-redgray-200 text-right w-36 shrink-0 flex items-center justify-end">
             Actions
           </div>
         )}
@@ -117,27 +123,34 @@ export default function ContentTable<T>({
                 isSelected && "bg-blue/5 dark:bg-red/10"
               )}
             >
+              {isSelectionMode && (
+                <div className="w-12 shrink-0 flex items-center justify-start cursor-pointer">
+                  {isSelected ? (
+                    <CheckCircle2 className="w-6 h-6 text-blue dark:text-red fill-blue/10 dark:fill-red/20 animate-in zoom-in duration-200" />
+                  ) : (
+                    <Circle className="w-6 h-6 text-zinc-500/40 dark:text-zinc-400/40 animate-in zoom-in fade-in duration-200" />
+                  )}
+                </div>
+              )}
+
               {/* Data Cells */}
-              {columns.map((column, idx) => (
+              {columns.map((column) => (
                 <div
                   key={column.key}
                   className={cn(
                     "min-w-0 flex items-center text-black dark:text-white",
+                    column.align === "center" && "justify-center",
+                    column.align === "right" && "justify-end",
+                    column.align === "left" && "justify-start",
                     column.className || "flex-1"
                   )}
                 >
-                  {/* Il Checkbox viene renderizzato DENTRO la prima colonna */}
-                  {isSelectionMode && idx === 0 && (
-                    <div className="mr-4 shrink-0 text-zinc-500/40 dark:text-zinc-400/40">
-                      {isSelected ? (
-                        <CheckCircle2 className="w-6 h-6 text-blue dark:text-red fill-blue/10 dark:fill-red/20 animate-in zoom-in duration-200" />
-                      ) : (
-                        <Circle className="w-6 h-6 animate-in zoom-in fade-in duration-200" />
-                      )}
-                    </div>
-                  )}
-
-                  <div className="truncate w-full min-w-0">
+                  <div className={cn(
+                    "truncate min-w-0",
+                    column.align === "center" && "text-center",
+                    column.align === "right" && "text-right",
+                    column.align === "left" && "text-left"
+                  )}>
                     {column.render
                       ? column.render(item)
                       : (item as any)[column.key] !== undefined
@@ -149,7 +162,7 @@ export default function ContentTable<T>({
 
               {/* Row Actions */}
               {rowActions && (
-                <div className="flex items-center justify-end gap-3">
+                <div className="flex items-center justify-end gap-3 w-36 shrink-0">
                   <div className="flex items-center gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 transform lg:translate-x-4 lg:group-hover:translate-x-0">
                     {rowActions(item)}
                   </div>

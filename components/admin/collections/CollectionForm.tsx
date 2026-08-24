@@ -212,7 +212,7 @@ export default function CollectionForm({ formula, fonts = [], tags = [] }: Colle
             <div className="p-2 bg-red-500/10 rounded-lg">
               <AlertCircle className="w-6 h-6 text-red-500" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white">Collection Save Failed</h2>
+            <h2 className="text-2xl text-black dark:text-white">Collection Save Failed</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>

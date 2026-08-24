@@ -305,7 +305,7 @@ export default function FontForm({ font, tags = [], authors = [] }: { font?: any
 
       <div className="bg-zinc-100/40 dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-2xl p-8 sm:p-10 shadow-2xl backdrop-blur-xl transition-all">
         <div className="flex flex-col justify-end mb-10 border-b border-black/5 dark:border-white/5 pb-6">
-          <h3 className="text-4xl font-rezland text-black dark:text-white">Font Infos {font?.id && ' / '}<span className="text-blue dark:text-red">{font?.name}</span></h3>
+          <h3 className="text-2xl font-crenzo text-black/80 dark:text-white/80">Font Infos {font?.id && ' / '}<span className="text-blue dark:text-red">{font?.name}</span></h3>
           <p className="text-[10px] ps-2 uppercase tracking-widest font-bold text-bluegray-800 dark:text-redgray-200 mt-1">Configure all the font informations</p>
         </div>
 
@@ -659,7 +659,7 @@ export default function FontForm({ font, tags = [], authors = [] }: { font?: any
             <div className="p-2 bg-red-500/10 rounded-lg">
               <AlertCircle className="w-6 h-6 text-red-500" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white">Font Save Failed</h2>
+            <h2 className="text-2xl text-black dark:text-white">Font Save Failed</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>
@@ -688,7 +688,7 @@ export default function FontForm({ font, tags = [], authors = [] }: { font?: any
             <div className="p-2 bg-blue/10 dark:bg-red/10 rounded-lg">
               <UserPlus className="w-6 h-6 text-blue dark:text-red" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white">New Font Author</h2>
+            <h2 className="text-2xl text-black dark:text-white">New Font Author</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>

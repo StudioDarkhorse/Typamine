@@ -64,7 +64,7 @@ export default function DeleteButton({
             <div className="p-2 bg-red/10 rounded-lg">
               <AlertTriangle className="w-6 h-6 text-red" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white">{confirmTitle}</h2>
+            <h2 className="text-2xl text-black dark:text-white">{confirmTitle}</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>

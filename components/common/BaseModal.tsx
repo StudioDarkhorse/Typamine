@@ -84,7 +84,10 @@ export default function BaseModal({
 // Structured Sub-components
 BaseModal.Header = function BaseModalHeader({ children, onClose, className }: { children: ReactNode, onClose?: () => void, className?: string }) {
   return (
-    <div className={cn("flex items-center justify-between bg-ocragray-100/50 dark:bg-ocragray-800/50 p-6 sm:p-8 border-b border-black/50 dark:border-white/50", className)}>
+    // I titoli dei modali sono tutti font-crenzo: imposto la regola qui una
+    // volta invece di ripetere la classe su ogni <h*> dei ~30 call site (e di
+    // doverla ricordare sui prossimi).
+    <div className={cn("flex items-center justify-between bg-ocragray-100/50 dark:bg-ocragray-800/50 p-6 sm:p-8 border-b border-black/50 dark:border-white/50 [&_h1]:font-crenzo [&_h2]:font-crenzo [&_h3]:font-crenzo [&_h4]:font-crenzo", className)}>
       <div className="flex-1">
         {typeof children === "string" ? (
           <h3 className="text-2xl font-crenzo text-black dark:text-white">

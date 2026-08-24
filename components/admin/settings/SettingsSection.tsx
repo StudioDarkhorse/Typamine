@@ -22,7 +22,7 @@ export function SettingsSection({ title, subtitle, right, children, className }:
     >
       <div className="flex items-end justify-between gap-4 mb-10 border-b border-black/5 dark:border-white/5 pb-6">
         <div className="flex flex-col justify-end">
-          <h3 className="text-4xl font-rezland text-black dark:text-white">{title}</h3>
+          <h3 className="text-4xl font-hass font-bold text-black dark:text-white">{title}</h3>
           {subtitle && (
             <p className="text-[10px] ps-2 uppercase tracking-widest font-bold text-bluegray-800 dark:text-redgray-200 mt-1">
               {subtitle}

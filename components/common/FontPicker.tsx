@@ -2,9 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { Search, Check, Type as TypeIcon, Loader2 } from "lucide-react";
+import { Search, Check, Type as TypeIcon, Loader2, Plus } from "lucide-react";
 import BaseModal from "@/components/common/BaseModal";
 import InViewTrigger from "@/components/common/InViewTrigger";
+import { Input } from "@/components/common/Input";
 import { getFontsPage, getFontsByIds } from "@/lib/actions/font";
 
 export interface FontPickerFont {
@@ -15,7 +16,7 @@ export interface FontPickerFont {
   variants?: { woff2Url?: string | null }[];
 }
 
-interface FontPickerProps {
+interface CommonProps {
   label?: string;
   /**
    * Lista statica già fetchata dal chiamante — comportamento legacy, filtro
@@ -24,22 +25,46 @@ interface FontPickerProps {
    * scrolla), consigliato per liste che possono crescere oltre poche decine.
    */
   fonts?: FontPickerFont[];
-  value: string;
-  onChange: (id: string) => void;
   placeholder?: string;
 }
+
+interface SingleProps extends CommonProps {
+  multiple?: false;
+  value: string;
+  onChange: (id: string) => void;
+  max?: never;
+}
+
+interface MultipleProps extends CommonProps {
+  multiple: true;
+  /** Font id selezionati, in ordine di scelta. */
+  value: string[];
+  onChange: (ids: string[]) => void;
+  /** Numero massimo di font selezionabili. */
+  max: number;
+}
+
+export type FontPickerProps = SingleProps | MultipleProps;
 
 const PAGE_SIZE = 30;
 const PREVIEW_LIMIT = 60; // solo modalità legacy (fonts fornito)
 
-export default function FontPicker({
-  label,
-  fonts,
-  value,
-  onChange,
-  placeholder = "Select a font...",
-}: FontPickerProps) {
+// Un solo picker per entrambi i casi d'uso: prima erano due componenti gemelli
+// (FontPicker e MultiFontPicker) identici a meno della singola vs multipla
+// selezione. `multiple` sceglie il comportamento:
+//   - single   → il modale si chiude alla scelta
+//   - multiple → resta aperto per selezionare più font in fila, con limite
+//                `max` e un bottone "Done" in footer
+export default function FontPicker(props: FontPickerProps) {
+  const { label, fonts, placeholder } = props;
+  const isMultiple = props.multiple === true;
   const selfFetching = fonts === undefined;
+
+  // Normalizzata a array così il resto del componente non si ramifica.
+  const selectedIds = useMemo(
+    () => (isMultiple ? (props.value as string[]) : props.value ? [props.value as string] : []),
+    [isMultiple, props.value]
+  );
 
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -101,14 +126,16 @@ export default function FontPicker({
 
   const visible = selfFetching ? fetchedItems : legacyVisible;
 
+  // Solo in single: il trigger mostra nome e categoria del font scelto, che
+  // può non essere in nessuna pagina già fetchata.
+  const singleValue = isMultiple ? "" : (props.value as string);
   const selectedFromList = selfFetching
-    ? fetchedItems.find((f) => f.id === value)
-    : fonts!.find((f) => f.id === value);
-
-  const needsSelectedLookup = selfFetching && !!value && !selectedFromList;
+    ? fetchedItems.find((f) => f.id === singleValue)
+    : fonts?.find((f) => f.id === singleValue);
+  const needsSelectedLookup = !isMultiple && selfFetching && !!singleValue && !selectedFromList;
   const selectedLookup = useQuery({
-    queryKey: ["font-by-id", value],
-    queryFn: () => getFontsByIds([value]),
+    queryKey: ["font-by-id", singleValue],
+    queryFn: () => getFontsByIds([singleValue]),
     enabled: needsSelectedLookup,
   });
   const selected = selectedFromList ?? selectedLookup.data?.[0];
@@ -123,6 +150,28 @@ export default function FontPicker({
       .join("\n");
   }, [visible]);
 
+  const max = isMultiple ? props.max : 1;
+  const atMax = isMultiple && selectedIds.length >= max;
+
+  const pick = (id: string) => {
+    if (!isMultiple) {
+      props.onChange(id);
+      setIsOpen(false);
+      return;
+    }
+    if (selectedIds.includes(id)) {
+      props.onChange(selectedIds.filter((v) => v !== id));
+    } else if (!atMax) {
+      props.onChange([...selectedIds, id]);
+    }
+  };
+
+  const triggerPlaceholder = placeholder ?? (isMultiple ? "Add a font..." : "Select a font...");
+
+  const searchPlaceholder = selfFetching
+    ? "Search fonts by name..."
+    : `Search ${fonts!.length} fonts by name, category or creator...`;
+
   return (
     <div className="w-full">
       {label && (
@@ -134,59 +183,83 @@ export default function FontPicker({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="flex items-center justify-between w-full bg-zinc-900/40 dark:bg-zinc-900/60 border border-bluegray-300 dark:border-redgray-700 hover:border-bluegray-400 dark:hover:border-redgray-600 rounded-lg px-3 py-2 transition-all text-left"
+        className="flex items-center justify-between w-full bg-bluegray-100 dark:bg-redgray-900/50 border border-bluegray-300 dark:border-redgray-700 hover:border-bluegray-400 dark:hover:border-redgray-600 rounded-lg px-3 py-2 transition-all text-left"
       >
-        <span className="min-w-0 truncate">
-          {selected ? (
-            <>
-              <span className="block text-sm font-bold text-black dark:text-white truncate">{selected.name}</span>
-              {selected.category && (
-                <span className="block text-[10px] text-zinc-500 uppercase tracking-wider">{selected.category}</span>
-              )}
-            </>
-          ) : (
-            <span className="text-sm text-zinc-500">{placeholder}</span>
-          )}
-        </span>
-        <TypeIcon className="h-4 w-4 text-zinc-400 shrink-0 ml-2" />
+        {isMultiple ? (
+          <span className="min-w-0 truncate text-sm text-zinc-500">
+            {selectedIds.length > 0 ? `${selectedIds.length} / ${max} fonts selected` : triggerPlaceholder}
+          </span>
+        ) : (
+          <span className="min-w-0 truncate">
+            {selected ? (
+              <>
+                <span className="block text-sm font-bold text-black dark:text-white font-x-typewriter truncate">
+                  {selected.name}
+                </span>
+                {selected.category && (
+                  <span className="block text-[10px] text-zinc-800 dark:text-zinc-200 uppercase tracking-wider">
+                    {selected.category}
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-sm text-zinc-500">{triggerPlaceholder}</span>
+            )}
+          </span>
+        )}
+        {isMultiple ? (
+          <Plus className="h-4 w-4 text-zinc-800 dark:text-zinc-200 shrink-0 ml-2" />
+        ) : (
+          <TypeIcon className="h-4 w-4 text-zinc-800 dark:text-zinc-200 shrink-0 ml-2" />
+        )}
       </button>
 
       {isOpen && (
         <BaseModal isOpen={isOpen} onClose={() => setIsOpen(false)} size="lg">
           <BaseModal.Header onClose={() => setIsOpen(false)}>
-            <h3 className="text-lg font-rezland font-bold text-black dark:text-white">
-              {label || "Select a font"}
-            </h3>
+            <div>
+              <h3 className="text-2xl text-black dark:text-white">
+                {label || (isMultiple ? "Select fonts" : "Select a font")}
+              </h3>
+              {isMultiple && (
+                <p className="text-[10px] uppercase tracking-wider text-zinc-500 mt-1">
+                  {selectedIds.length} / {max} selected
+                </p>
+              )}
+            </div>
           </BaseModal.Header>
+
           <BaseModal.Body>
             {fontFaceCss && <style>{fontFaceCss}</style>}
             <div className="space-y-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400 pointer-events-none" />
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={selfFetching ? "Search fonts by name..." : `Search ${fonts!.length} fonts by name, category or creator...`}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
-                />
-              </div>
+              <Input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={setQuery}
+                placeholder={searchPlaceholder}
+                autoComplete="off"
+                leftIcon={<Search className="h-3.5 w-3.5" />}
+              />
 
               <div className="max-h-96 overflow-y-auto rounded-xl border border-black/10 dark:border-white/10 divide-y divide-black/5 dark:divide-white/5">
                 {visible.map((f, idx) => {
-                  const isSelected = f.id === value;
+                  const isSelected = selectedIds.includes(f.id);
+                  const disabled = isMultiple && !isSelected && atMax;
                   const hasWoff2 = Boolean(f.variants?.[0]?.woff2Url);
 
                   const row = (
                     <button
                       type="button"
-                      onClick={() => {
-                        onChange(f.id);
-                        setIsOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between gap-4 px-4 py-3 text-left transition-colors ${isSelected ? "bg-blue/10 dark:bg-red/10" : "hover:bg-black/5 dark:hover:bg-white/5"
-                        }`}
+                      disabled={disabled}
+                      onClick={() => pick(f.id)}
+                      className={`w-full flex items-center justify-between gap-4 px-4 py-3 text-left transition-colors ${
+                        isSelected
+                          ? "bg-blue/10 dark:bg-red/10"
+                          : disabled
+                            ? "opacity-40 cursor-not-allowed"
+                            : "hover:bg-black/5 dark:hover:bg-white/5"
+                      }`}
                     >
                       <span className="min-w-0">
                         <span
@@ -239,8 +312,24 @@ export default function FontPicker({
                   {legacyHiddenCount} more font(s) hidden &mdash; refine your search to narrow the list.
                 </p>
               )}
+
+              {atMax && <p className="text-[10px] text-zinc-500 text-center">Maximum of {max} fonts reached.</p>}
             </div>
           </BaseModal.Body>
+
+          {/* In multipla il modale non si chiude da solo a ogni scelta: serve
+              un modo esplicito per uscire dalla selezione. */}
+          {isMultiple && (
+            <BaseModal.Footer>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="w-full flex items-center justify-center gap-2 bg-black dark:bg-white text-white dark:text-black font-bold text-xs uppercase tracking-wider rounded-lg px-4 py-2.5 hover:opacity-90 transition-opacity"
+              >
+                Done <TypeIcon className="h-3.5 w-3.5" />
+              </button>
+            </BaseModal.Footer>
+          )}
         </BaseModal>
       )}
     </div>

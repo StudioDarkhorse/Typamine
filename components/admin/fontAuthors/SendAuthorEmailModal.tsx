@@ -99,7 +99,7 @@ export default function SendAuthorEmailModal({ author, isOpen, onClose }: SendAu
             <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-2xl font-rezland text-black dark:text-white leading-tight">Send Email</h3>
+            <h3 className="text-2xl text-black dark:text-white leading-tight">Send Email</h3>
             <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 dark:text-zinc-400 mt-0.5 truncate">
               {author.name}
               {author.email ? ` · ${author.email}` : " · no email on file"}

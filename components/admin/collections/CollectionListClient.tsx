@@ -99,7 +99,7 @@ export default function CollectionListClient({ formulas, totalCount, canUpdate, 
               className: "w-1/4 min-w-0",
               render: (f: any) => (
                 <div className="min-w-0 py-1">
-                  <p className="font-rezland text-2xl font-bold text-black dark:text-white leading-tight truncate">
+                  <p className="font-haas text-2xl font-bold text-black dark:text-white leading-tight truncate">
                     {f.name}
                   </p>
                   <p className="text-[10px] text-blue-400 dark:text-red-400 font-bold uppercase tracking-widest mt-1 truncate">
@@ -112,7 +112,8 @@ export default function CollectionListClient({ formulas, totalCount, canUpdate, 
             {
               key: "fontCategory",
               header: "Category",
-              className: "w-1/8 hidden sm:block",
+              align: "center",
+              className: "w-[12.5%] hidden sm:flex",
               render: (f: any) => (
                 <div className="px-3 py-1.5 rounded-md flex items-center gap-2 border shadow-sm text-xs max-w-fit mt-1 bg-white text-blue-800 dark:bg-redgray-800 dark:text-red-200 border-blue-800 dark:border-red-200">
                   <span className="text-[10px] font-black uppercase tracking-tighter">{f.fontCategory}</span>
@@ -122,7 +123,8 @@ export default function CollectionListClient({ formulas, totalCount, canUpdate, 
             {
               key: "fonts",
               header: "Fonts",
-              className: "w-1/8 hidden md:block",
+              align: "center",
+              className: "w-[12.5%] hidden md:flex",
               render: (f: any) => (
                 <div
                   className={`px-3 py-1.5 rounded-md flex items-center gap-2 border shadow-sm text-xs max-w-fit mt-1 ${f.fonts?.length
@@ -140,7 +142,8 @@ export default function CollectionListClient({ formulas, totalCount, canUpdate, 
             {
               key: "tags",
               header: "Tags",
-              className: "w-1/8 hidden lg:block",
+              align: "center",
+              className: "w-[12.5%] hidden lg:flex",
               render: (f: any) => (
                 <div
                   className={`px-3 py-1.5 rounded-md flex items-center gap-2 border shadow-sm text-xs max-w-fit mt-1 ${f.tags?.length
@@ -193,7 +196,7 @@ export default function CollectionListClient({ formulas, totalCount, canUpdate, 
             <div className="p-2 rounded-xl bg-red/10">
               <AlertTriangle className="w-6 h-6 text-red" />
             </div>
-            <h2 className="text-2xl font-rezland text-black dark:text-white">Confirm Bulk Deletion</h2>
+            <h2 className="text-2xl text-black dark:text-white">Confirm Bulk Deletion</h2>
           </div>
         </BaseModal.Header>
         <BaseModal.Body>
