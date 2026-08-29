@@ -1,11 +1,24 @@
-// Import via `default` e non la cartella: un import relativo alla directory
-// salta la mappa `exports` del client generato e prende `main` (index.js),
-// cioe' l'engine Rust nativo, che nel Worker non esiste. `default.js` fa
-// `require('#main-entry-point')`, che passa dalla mappa condizionale: index.js
-// su Node in dev, wasm.js sotto la condizione `workerd` con cui OpenNext
-// bundla il server.
-import { PrismaClient } from '../prisma/generated-client/default'
+import type { PrismaClient } from '../prisma/generated-client'
 import { PrismaD1 } from '@prisma/adapter-d1'
+
+// Prisma genera due build del client: index.js usa l'engine Rust nativo,
+// wasm.js quello WebAssembly — e su workerd gira solo il secondo. La scelta
+// va fatta a mano: la mappa condizionale del client (`#main-entry-point`)
+// elenca "node" prima di "workerd", ed esbuild bundla il server con
+// `platform: node`, quindi soddisfa sempre "node" e qualunque import
+// condizionale ricade su index.js. Senza questo, ogni query nel Worker muore
+// con 'could not locate the Query Engine for runtime "debian-openssl-1.1.x"'.
+const isWorkerd =
+  typeof navigator !== 'undefined' && navigator.userAgent === 'Cloudflare-Workers';
+
+function loadPrismaCtor(): typeof PrismaClient {
+  if (isWorkerd) {
+    console.log('[Prisma] Loading WebAssembly client (workerd)');
+    return require('../prisma/generated-client/wasm').PrismaClient;
+  }
+  console.log('[Prisma] Loading native client (Node)');
+  return require('../prisma/generated-client').PrismaClient;
+}
 
 let prismaInstance: PrismaClient | null = null;
 
@@ -33,7 +46,7 @@ const getPrismaInstance = (): PrismaClient => {
   if (dbBinding) {
     console.log('[Prisma] Using Cloudflare D1 adapter');
     const adapter = new PrismaD1(dbBinding);
-    prismaInstance = new PrismaClient({ adapter });
+    prismaInstance = new (loadPrismaCtor())({ adapter });
     return prismaInstance;
   }
 
@@ -41,11 +54,11 @@ const getPrismaInstance = (): PrismaClient => {
     // Non mettere in cache: la prossima chiamata ritenterà il contesto Cloudflare
     // invece di restare bloccata su sqlite locale per tutta la vita del processo.
     console.log('[Prisma] Context unavailable (likely startup race) — using uncached local SQLite for this call only');
-    return new PrismaClient();
+    return new (loadPrismaCtor())();
   }
 
   console.log('[Prisma] Falling back to Local SQLite');
-  prismaInstance = new PrismaClient();
+  prismaInstance = new (loadPrismaCtor())();
   return prismaInstance;
 }
 

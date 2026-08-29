@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { Prisma } from "../../prisma/generated-client/default";
+
 import crypto from "crypto";
 
 let isMigrated = false;
@@ -438,9 +438,14 @@ export async function withSafeDbQuery<T>(run: () => Promise<T>): Promise<T> {
   try {
     return await run();
   } catch (err) {
+    // Check sul codice invece che `instanceof Prisma.PrismaClientKnownRequestError`:
+    // il client viene caricato in due build diverse (nativa su Node, wasm su
+    // workerd, vedi lib/prisma.ts) e le classi d'errore di una non sono
+    // istanze di quelle dell'altra, quindi l'instanceof fallirebbe in
+    // produzione lasciando passare gli errori di schema senza il retry.
+    const code = (err as { code?: unknown } | null)?.code;
     const isSchemaError =
-      err instanceof Prisma.PrismaClientKnownRequestError &&
-      (err.code === "P2021" || err.code === "P2022" || err.code === "P2032" || err.code === "P2011");
+      typeof code === "string" && ["P2021", "P2022", "P2032", "P2011"].includes(code);
 
     if (!isSchemaError) throw err;
 
