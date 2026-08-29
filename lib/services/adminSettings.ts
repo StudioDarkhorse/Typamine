@@ -216,7 +216,7 @@ async function resolveHeroWordmarkFonts(
 // ancora salvato niente dall'admin: in quel caso torniamo i default (tutto
 // disattivato) invece di null, così i consumer non devono gestire un caso
 // "settings assenti" a parte.
-export const getAdminSettings = unstable_cache(
+const getAdminSettingsCached = unstable_cache(
   async (): Promise<AdminSettings> => {
     const record = await withSafeDbQuery(() =>
       prisma.adminSettings.findUnique({ where: { id: ADMIN_SETTINGS_ID } })
@@ -232,3 +232,19 @@ export const getAdminSettings = unstable_cache(
   ["admin-settings-singleton"],
   { revalidate: 300, tags: [CACHE_TAGS.adminSettings] }
 );
+
+// Un errore di lettura qui non deve mai abbattere il sito pubblico: questa
+// chiamata sta nel layout di (public), quindi propagare l'eccezione
+// significherebbe una pagina di errore su OGNI rotta pubblica solo perche' il
+// DB e' momentaneamente irraggiungibile. I default sono gia' la risposta
+// prevista quando la riga non esiste — sono la stessa risposta giusta anche
+// quando la riga non e' leggibile. Il catch sta FUORI da unstable_cache, cosi'
+// il fallback non finisce mai in cache al posto dei valori reali.
+export async function getAdminSettings(): Promise<AdminSettings> {
+  try {
+    return await getAdminSettingsCached();
+  } catch (err) {
+    console.error("[AdminSettings] Read failed, serving defaults:", err);
+    return DEFAULT_ADMIN_SETTINGS;
+  }
+}

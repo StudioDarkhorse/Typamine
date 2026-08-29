@@ -22,9 +22,16 @@ export default async function PublicRootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const adminSettings = await getAdminSettings();
+  // headers() PRIMA di getAdminSettings, non dopo: e' la lettura che segnala a
+  // Next che questo layout e' dinamico. Leggendola per prima, il tentativo di
+  // prerender in fase di build esce qui e non arriva mai a toccare il DB —
+  // durante `next build` non esiste alcun contesto Cloudflare, quindi
+  // lib/prisma.ts ripiegherebbe su sqlite locale e fallirebbe l'intera build
+  // in CI, dove DATABASE_URL non e' definita (il DB di produzione e' il
+  // binding D1, non un file).
   const pathname = (await headers()).get("x-pathname") ?? "/";
   const isHome = pathname === "/";
+  const adminSettings = await getAdminSettings();
   // "every_page" copre tutto il sito, "homepage_top" solo "/" — stessa
   // striscia fissa sopra l'header in entrambi i casi (vedi MarqueeBar).
   // "homepage_banner" non passa da qui: è renderizzato in-flow dentro
