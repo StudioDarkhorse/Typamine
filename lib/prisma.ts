@@ -1,4 +1,10 @@
-import { PrismaClient } from '../prisma/generated-client'
+// Import via `default` e non la cartella: un import relativo alla directory
+// salta la mappa `exports` del client generato e prende `main` (index.js),
+// cioe' l'engine Rust nativo, che nel Worker non esiste. `default.js` fa
+// `require('#main-entry-point')`, che passa dalla mappa condizionale: index.js
+// su Node in dev, wasm.js sotto la condizione `workerd` con cui OpenNext
+// bundla il server.
+import { PrismaClient } from '../prisma/generated-client/default'
 import { PrismaD1 } from '@prisma/adapter-d1'
 
 let prismaInstance: PrismaClient | null = null;

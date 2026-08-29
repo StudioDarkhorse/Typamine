@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { Prisma } from "../../prisma/generated-client";
+import { Prisma } from "../../prisma/generated-client/default";
 import crypto from "crypto";
 
 let isMigrated = false;
