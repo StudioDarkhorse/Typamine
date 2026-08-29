@@ -1,4 +1,4 @@
-import { PrismaClient } from '../prisma/generated-client'
+import { PrismaClient } from 'typamine-prisma-client'
 import { PrismaD1 } from '@prisma/adapter-d1'
 
 // PrismaClient is attached to the `global` object in development to prevent

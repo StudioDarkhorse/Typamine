@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Il client Prisma deve restare fuori dal bundle di Turbopack: la build wasm
+  // arriva all'engine con un `import()` del .wasm, e Turbopack lo compila in
+  // un'istanza gia' pronta (export nominali, nessun `default`), mentre Prisma
+  // si aspetta un `WebAssembly.Module` da istanziare lui. Lasciandolo esterno
+  // la catena la risolve esbuild di OpenNext, che marca il .wasm external e lo
+  // passa a wrangler — l'unico percorso in cui `default` e' il modulo vero.
+  serverExternalPackages: ["typamine-prisma-client"],
   images: {
     remotePatterns: [
       {

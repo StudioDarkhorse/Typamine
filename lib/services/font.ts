@@ -1,6 +1,6 @@
 import { unstable_cache } from "next/cache";
 import prisma from "@/lib/prisma";
-import type { Prisma } from "../../prisma/generated-client";
+import type { Prisma } from "typamine-prisma-client";
 import { Ingredient, FontVariant, Tag } from "@/types";
 import { CACHE_TAGS } from "@/lib/cacheTags";
 

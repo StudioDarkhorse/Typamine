@@ -1,6 +1,9 @@
-import type { PrismaClient } from '../prisma/generated-client'
-import * as prismaNodeClient from '../prisma/generated-client'
-import * as prismaWasmClient from '../prisma/generated-client/wasm'
+import type { PrismaClient } from 'typamine-prisma-client'
+import * as prismaNodeClient from 'typamine-prisma-client'
+// `/wasm.js` e non `/wasm`: la mappa `exports` punta il subpath `./wasm` a un
+// `wasm.mjs` che il generatore Prisma non produce, quindi l'import ESM non
+// risolve. Il file reale e' CJS e passa dalla voce wildcard `"./*": "./*"`.
+import * as prismaWasmClient from 'typamine-prisma-client/wasm.js'
 import { PrismaD1 } from '@prisma/adapter-d1'
 
 // Prisma genera due build del client: index.js usa l'engine Rust nativo,

@@ -1,7 +1,11 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
-  output          = "./generated-client"
+  // Generato dentro node_modules invece che nel repo cosi' e' un pacchetto
+  // vero: solo un import per nome di pacchetto passa dalla mappa `exports`, ed
+  // e' l'unico modo per metterlo in `serverExternalPackages` e togliere il
+  // client a Turbopack (vedi next.config.mjs e lib/prisma.ts).
+  output          = "../node_modules/typamine-prisma-client"
 }
 
 datasource db {

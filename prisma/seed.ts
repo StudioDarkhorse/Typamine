@@ -1,4 +1,4 @@
-import { PrismaClient } from './generated-client'
+import { PrismaClient } from 'typamine-prisma-client'
 import bcrypt from 'bcrypt'
 
 const prisma = new PrismaClient()
