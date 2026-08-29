@@ -1,23 +1,32 @@
 import type { PrismaClient } from '../prisma/generated-client'
+import * as prismaNodeClient from '../prisma/generated-client'
+import * as prismaWasmClient from '../prisma/generated-client/wasm'
 import { PrismaD1 } from '@prisma/adapter-d1'
 
 // Prisma genera due build del client: index.js usa l'engine Rust nativo,
-// wasm.js quello WebAssembly — e su workerd gira solo il secondo. La scelta
-// va fatta a mano: la mappa condizionale del client (`#main-entry-point`)
-// elenca "node" prima di "workerd", ed esbuild bundla il server con
-// `platform: node`, quindi soddisfa sempre "node" e qualunque import
-// condizionale ricade su index.js. Senza questo, ogni query nel Worker muore
-// con 'could not locate the Query Engine for runtime "debian-openssl-1.1.x"'.
+// wasm.js quello WebAssembly — e su workerd gira solo il secondo. La scelta va
+// fatta a mano: la mappa condizionale del client (`#main-entry-point`) elenca
+// "node" prima di "workerd", ed esbuild bundla il server con `platform: node`,
+// quindi soddisfa sempre "node" e qualunque import condizionale ricade su
+// index.js. Senza questo ogni query nel Worker muore con 'could not locate the
+// Query Engine for runtime "debian-openssl-1.1.x"'.
+//
+// Entrambe importate staticamente, e non con un require() dentro la funzione:
+// wasm.js carica l'engine via `import('#wasm-engine-loader')` e da li' un
+// `import()` del .wasm, e quella catena la deve vedere il bundler in fase di
+// build (esbuild la marca external e la passa a wrangler). Con un require()
+// risolto a runtime il modulo wasm arriva vuoto e Prisma muore con 'The loaded
+// wasm module was unexpectedly `undefined` or `null`'.
 const isWorkerd =
   typeof navigator !== 'undefined' && navigator.userAgent === 'Cloudflare-Workers';
 
 function loadPrismaCtor(): typeof PrismaClient {
   if (isWorkerd) {
-    console.log('[Prisma] Loading WebAssembly client (workerd)');
-    return require('../prisma/generated-client/wasm').PrismaClient;
+    console.log('[Prisma] Using WebAssembly client (workerd)');
+    return prismaWasmClient.PrismaClient as unknown as typeof PrismaClient;
   }
-  console.log('[Prisma] Loading native client (Node)');
-  return require('../prisma/generated-client').PrismaClient;
+  console.log('[Prisma] Using native client (Node)');
+  return prismaNodeClient.PrismaClient;
 }
 
 let prismaInstance: PrismaClient | null = null;
