@@ -20,7 +20,7 @@ export default function AdminHeader({ session, dbSource }: { session: any; dbSou
             </div>
             <div className="text-left hidden sm:flex flex-col justify-center self-stretch gap-1">
               <div className="flex items-center">
-                <p className="text-2xl font-rezland text-black dark:text-white leading-none">{session.user.name}</p>
+                <p className="text-2xl font-haas text-bold text-black dark:text-white leading-none">{session.user.name}</p>
 
               </div>
 

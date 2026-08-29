@@ -12,6 +12,20 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["--prefix", "final-project", "run", "dev"],
       "port": 5173
+    },
+    {
+      "name": "hanuman-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "C:/Users/rober/Desktop/HANUMA~1",
+        "run",
+        "dev",
+        "--",
+        "-p",
+        "3311"
+      ],
+      "port": 3311
     }
   ]
 }

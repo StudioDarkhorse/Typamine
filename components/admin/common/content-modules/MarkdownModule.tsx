@@ -191,8 +191,8 @@ export default function MarkdownModule({ module, onChange }: MarkdownModuleProps
         />
 
         <p className="text-[10px] text-black/50 dark:text-white/50">
-          **grassetto** · *corsivo* · ~~barrato~~ · `codice` · # titolo · - lista · 1. lista
-          numerata · &gt; citazione · --- linea · [testo](url) · a capo singolo = &lt;br /&gt;
+          **bold** · *italic* · ~~strikethrough~~ · `code` · # heading · - list · 1. numbered
+          list · &gt; quote · --- line · [text](url) · single line break = &lt;br /&gt;
         </p>
       </div>
 

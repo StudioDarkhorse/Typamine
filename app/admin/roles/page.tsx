@@ -61,7 +61,7 @@ export default async function RoleListPage() {
 
             <CardBody className="pt-2 pb-6 flex-1 flex flex-col justify-between">
               <div className="pb-6">
-                <h3 className="text-4xl font-rezland text-black dark:text-white leading-tight line-clamp-2 h-24 overflow-hidden flex items-start">
+                <h3 className="text-4xl font-haas text-bold text-black dark:text-white leading-tight line-clamp-2 h-24 overflow-hidden flex items-start">
                   {role.name.replace(/_/g, " ")}
                 </h3>
               </div>

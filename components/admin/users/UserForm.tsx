@@ -145,17 +145,15 @@ export default function UserForm({ user, roles }: { user?: any, roles: any[] }) 
               </div>
             </div>
 
-            <div className="">
-              <label className="text-[10px] font-jakarta text-bluegray-800 dark:text-redgray-200 uppercase tracking-wider block mb-1">Biography</label>
-              <textarea
-                id="biography"
-                name="biography"
-                defaultValue={user?.biography}
-                placeholder="Write a short biography about the author..."
-                rows={5}
-                className="w-full bg-zinc-900/40 dark:bg-zinc-900/60 border border-bluegray-300 dark:border-redgray-700 focus:border-blue dark:focus:border-red rounded-lg px-3 py-2 text-foreground outline-none transition-colors resize-none min-h-[120px]"
-              />
-            </div>
+            <Input
+              id="biography"
+              name="biography"
+              label="Biography"
+              as="textarea"
+              defaultValue={user?.biography}
+              placeholder="Write a short biography about the author..."
+              rows={5}
+            />
           </div>
 
           <div className="flex flex-col gap-12">

@@ -80,7 +80,7 @@ export default async function UserListPage() {
 
               <CardBody className="space-y-5 pt-6">
                 <div>
-                  <h3 className="text-3xl font-rezland text-black dark:text-white leading-tight truncate">
+                  <h3 className="text-3xl font-haas text-bold text-black dark:text-white leading-tight truncate">
                     {user.name} {(user as any).surname}
                   </h3>
                   <div className="flex items-center gap-2 text-[10px] text-bluegray-800 dark:text-redgray-200 font-bold uppercase tracking-widest mt-1.5 truncate">

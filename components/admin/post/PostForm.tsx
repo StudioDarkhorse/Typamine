@@ -22,6 +22,8 @@ import FormActions from "@/components/admin/common/FormActions";
 import SavingOverlay from "@/components/admin/common/SavingOverlay";
 import { useFilePreview } from "@/components/admin/common/useFilePreview";
 import ImageDropInput from "@/components/admin/common/ImageDropInput";
+import { Input, Label } from "@/components/common/Input";
+import { Select } from "@/components/common/Select";
 import {
   Module,
   ModuleType,
@@ -191,17 +193,19 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
   };
 
   // Auto-slug generator
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
+  const generateSlug = (val: string) => {
+    return val
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  };
+
+  const handleTitleChange = (val: string) => {
     setTitle(val);
     if (autoSlug) {
-      const generatedSlug = val
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, "")
-        .replace(/[\s_-]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-      setSlug(generatedSlug);
+      setSlug(generateSlug(val));
     }
   };
 
@@ -339,90 +343,68 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
             {/* Card 1: Identity & Details (Left, 2/3 width) */}
             <div className="lg:col-span-8 relative z-10 border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-xl backdrop-blur-xl bg-white/50 dark:bg-zinc-950/50 space-y-5">
               <div>
-                <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
+                <h3 className="text-xl font-crenzo font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
                   {entityLabel} basic infos
                 </h3>
               </div>
 
               {/* Title */}
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">
-                  Title *
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  required
-                  value={title}
-                  onChange={handleTitleChange}
-                  placeholder="e.g. The Rise of Neo-Grotesque Typefaces"
-                  className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
-                />
-              </div>
+              <Input
+                label="Title *"
+                name="title"
+                required
+                value={title}
+                onChange={handleTitleChange}
+                placeholder="e.g. The Rise of Neo-Grotesque Typefaces"
+              />
 
               {/* Slug */}
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">
-                  Slug *
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    name="slug"
-                    required
-                    value={slug}
-                    onChange={(e) => {
-                      setSlug(e.target.value);
-                      setAutoSlug(false);
-                    }}
-                    placeholder="rise-of-neo-grotesque-typefaces"
-                    className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
-                  />
-                  {!autoSlug && (
+              <Input
+                label="Slug *"
+                name="slug"
+                required
+                value={slug}
+                onChange={(val) => {
+                  setSlug(val);
+                  setAutoSlug(false);
+                }}
+                placeholder="rise-of-neo-grotesque-typefaces"
+                rightIcon={
+                  !autoSlug ? (
                     <button
                       type="button"
                       onClick={() => {
                         setAutoSlug(true);
-                        handleTitleChange({ target: { value: title } } as any);
+                        setSlug(generateSlug(title));
                       }}
-                      className="p-2.5 border border-black/10 dark:border-white/10 rounded-lg text-xs font-bold hover:bg-black/5 dark:hover:bg-white/5"
+                      className="p-1 hover:bg-black/5 dark:hover:bg-white/5 rounded transition-colors text-bluegray-800 dark:text-redgray-200"
                       title="Auto-generate from Title"
                     >
                       <RefreshCw className="w-4 h-4" />
                     </button>
-                  )}
-                </div>
-              </div>
+                  ) : undefined
+                }
+              />
 
               {/* Caption */}
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">
-                  Caption
-                </label>
-                <input
-                  type="text"
-                  name="caption"
-                  value={caption}
-                  onChange={(e) => setCaption(e.target.value)}
-                  placeholder="Short deck / subtitle shown under the title"
-                  className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
-                />
-              </div>
+              <Input
+                label="Caption"
+                name="caption"
+                value={caption}
+                onChange={setCaption}
+                placeholder="Short deck / subtitle shown under the title"
+              />
 
               {/* Description */}
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  rows={3}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Short summary used in listings and previews..."
-                  className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
-                />
-              </div>
+              <Input
+                label="Description"
+                name="description"
+                as="textarea"
+                rows={3}
+                value={description}
+                onChange={setDescription}
+                placeholder="Short summary used in listings and previews..."
+              />
 
               {/* Thumbnail — usata nella grid preview card di /{publicRouteBase} */}
               <div>
@@ -456,7 +438,7 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
             {/* Card 2: Taxonomy & Visibility (Right, 1/3 width) */}
             <div className="lg:col-span-4 relative z-20 border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-xl backdrop-blur-xl bg-white/50 dark:bg-zinc-950/50 space-y-5">
               <div>
-                <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
+                <h3 className="text-sm font-crenzo font-bold text-black text-center dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
                   Taxonomy & Visibility
                 </h3>
               </div>
@@ -481,10 +463,10 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
               )}
 
               {/* Published Toggle */}
-              <div className="flex items-center justify-between p-4 border border-black/5 dark:border-white/5 rounded-xl bg-black/5 dark:bg-white/5">
+              <div className="flex items-start justify-between p-4 border border-black/5 dark:border-white/5 rounded-xl bg-black/5 dark:bg-white/5">
                 <div>
                   <p className="text-sm font-bold text-black dark:text-white">Publish Post</p>
-                  <p className="text-xs text-ocragray-800 dark:text-zinc-200">Make this post publicly visible on /{publicRouteBase}</p>
+                  <p className="mt-4 text-xs text-ocragray-800 dark:text-zinc-200">Make this post publicly visible on /{publicRouteBase}</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -496,6 +478,7 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
                   <div className="w-11 h-6 bg-zinc-300 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:peer-checked:after:border-zinc-800 peer-checked:bg-emerald-500"></div>
                 </label>
               </div>
+                
             </div>
 
             {/* Card 4: Hero Image — solo per Archive, Blog costruisce la propria
@@ -503,7 +486,7 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
             "basic infos" (Card 1), non serve più affiancarla qui. */}
             {postType !== "BLOG" && (
               <div className="lg:col-span-12 border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-xl backdrop-blur-xl bg-white/50 dark:bg-zinc-950/50 space-y-4">
-                <h3 className="text-xl font-rezland font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
+                <h3 className="text-xl font-crenzo font-bold text-black dark:text-white pb-3 border-b border-black/5 dark:border-white/5">
                   Hero Image
                 </h3>
                 <p className="text-[10px] text-ocragray-800 dark:text-zinc-200 -mt-2">Shown at the top of the post's detail page.</p>
@@ -530,19 +513,13 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
                   helperText="Recommended: 1200x630px"
                 />
 
-                <div>
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">
-                    Image Alt Text
-                  </label>
-                  <input
-                    type="text"
-                    name="imageAlt"
-                    value={imageAlt}
-                    onChange={(e) => setImageAlt(e.target.value)}
-                    placeholder="Describe the hero image for accessibility"
-                    className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
-                  />
-                </div>
+                <Input
+                  label="Image Alt Text"
+                  name="imageAlt"
+                  value={imageAlt}
+                  onChange={setImageAlt}
+                  placeholder="Describe the hero image for accessibility"
+                />
               </div>
             )}
 
@@ -555,7 +532,7 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
                       <FileText className="h-6 w-6" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-rezland font-bold text-black dark:text-white">{entityLabel} Insight Modules</h3>
+                      <h3 className="text-xl font-crenzo font-bold text-black dark:text-white">{entityLabel} Insight Modules</h3>
                       <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider mt-0.5">
                         Build the article body using {moduleOptions.map((o) => o.label).join(", ")} modules
                       </p>
@@ -716,65 +693,53 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white">
-                      Meta Title
-                    </label>
+                  <div className="flex items-center justify-between mb-0">
+                    <Label className="mb-0">Meta Title</Label>
                     <span className={`text-[10px] font-mono ${seoMetaTitle.length > 60 ? "text-red-500" : "text-zinc-400"}`}>
                       {seoMetaTitle.length}/60
                     </span>
                   </div>
-                  <input
-                    type="text"
+                  <Input
                     value={seoMetaTitle}
-                    onChange={(e) => setSeoMetaTitle(e.target.value)}
+                    onChange={setSeoMetaTitle}
                     placeholder={title || "Falls back to the post title if left empty"}
-                    className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">
-                    Canonical URL
-                  </label>
-                  <input
-                    type="text"
+                  <Input
+                    label="Canonical URL"
                     value={seoCanonicalUrl}
-                    onChange={(e) => setSeoCanonicalUrl(e.target.value)}
+                    onChange={setSeoCanonicalUrl}
                     placeholder={`https://typamine.com/${publicRouteBase}/...`}
-                    className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                    className="font-mono"
                   />
                 </div>
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white">
-                    Meta Description
-                  </label>
+                <div className="flex items-center justify-between mb-0">
+                  <Label className="mb-0">Meta Description</Label>
                   <span className={`text-[10px] font-mono ${seoMetaDescription.length > 160 ? "text-red-500" : "text-zinc-400"}`}>
                     {seoMetaDescription.length}/160
                   </span>
                 </div>
-                <textarea
+                <Input
+                  as="textarea"
                   rows={2}
                   value={seoMetaDescription}
-                  onChange={(e) => setSeoMetaDescription(e.target.value)}
+                  onChange={setSeoMetaDescription}
                   placeholder={description || "Falls back to the post description if left empty"}
-                  className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
+                  className="resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">
-                  Keywords
-                </label>
-                <input
-                  type="text"
+                <Input
+                  label="Keywords"
                   value={seoKeywords}
-                  onChange={(e) => setSeoKeywords(e.target.value)}
+                  onChange={setSeoKeywords}
                   placeholder="typography, type design, neo-grotesque (comma separated)"
-                  className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
                 />
               </div>
 
@@ -823,26 +788,23 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
                 helperText="Defaults to the Thumbnail if left unassigned"
               />
 
-              <input
-                type="text"
+              <Input
                 value={seoOgImageAlt}
-                onChange={(e) => setSeoOgImageAlt(e.target.value)}
+                onChange={setSeoOgImageAlt}
                 placeholder="OG image alt text"
-                className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
               />
-              <input
-                type="text"
+              <Input
                 value={seoOgTitle}
-                onChange={(e) => setSeoOgTitle(e.target.value)}
+                onChange={setSeoOgTitle}
                 placeholder={seoMetaTitle || title || "OG title override (optional)"}
-                className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
               />
-              <textarea
+              <Input
+                as="textarea"
                 rows={2}
                 value={seoOgDescription}
-                onChange={(e) => setSeoOgDescription(e.target.value)}
+                onChange={setSeoOgDescription}
                 placeholder={seoMetaDescription || description || "OG description override (optional)"}
-                className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
+                className="resize-none"
               />
             </div>
 
@@ -874,41 +836,34 @@ export default function PostForm({ postType, initialData, tags }: PostFormProps)
                 helperText="Defaults to the Thumbnail if left unassigned"
               />
 
-              <input
-                type="text"
+              <Input
                 value={seoTwitterImageAlt}
-                onChange={(e) => setSeoTwitterImageAlt(e.target.value)}
+                onChange={setSeoTwitterImageAlt}
                 placeholder="Twitter image alt text"
-                className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
               />
-              <input
-                type="text"
+              <Input
                 value={seoTwitterTitle}
-                onChange={(e) => setSeoTwitterTitle(e.target.value)}
+                onChange={setSeoTwitterTitle}
                 placeholder={seoOgTitle || seoMetaTitle || title || "Twitter title override (optional)"}
-                className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
               />
-              <textarea
+              <Input
+                as="textarea"
                 rows={2}
                 value={seoTwitterDescription}
-                onChange={(e) => setSeoTwitterDescription(e.target.value)}
+                onChange={setSeoTwitterDescription}
                 placeholder={seoOgDescription || seoMetaDescription || description || "Twitter description override (optional)"}
-                className="w-full px-4 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
+                className="resize-none"
               />
 
-              <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-black dark:text-white mb-1.5">
-                  Card Type
-                </label>
-                <select
-                  value={seoTwitterCard}
-                  onChange={(e) => setSeoTwitterCard(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-black dark:text-white text-sm"
-                >
-                  <option value="summary_large_image">Summary — Large Image</option>
-                  <option value="summary">Summary — Small Image</option>
-                </select>
-              </div>
+              <Select
+                label="Card Type"
+                value={seoTwitterCard}
+                onChange={setSeoTwitterCard}
+                options={[
+                  { label: "Summary — Large Image", value: "summary_large_image" },
+                  { label: "Summary — Small Image", value: "summary" },
+                ]}
+              />
             </div>
           </>
         )}

@@ -286,7 +286,7 @@ export default function IngredientDetailClient({ ingredient, hasPairings = false
 
       >
         <Link href={`/labs?ingredient=${ingredient.slug}`} className="inline-block">
-          <Button variant="secondary" >ENTER THE LABS</Button>
+           <Button variant="metallic" ringColor="ring-blue-200 dark:ring-red-200">Enter the Lab</Button>
         </Link>
       </Cta>
     </div>

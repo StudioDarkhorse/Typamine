@@ -125,7 +125,7 @@ export const Cta: React.FC<CtaProps> = ({
               {title}
             </h2>
             {subtitle && (
-              <p className="font-haas text-zinc-600 dark:text-zinc-400 text-sm sm:text-base mb-8">
+              <p className="font-haas text-zinc-800 dark:text-zinc-200 text-sm sm:text-base mb-8">
                 {subtitle}
               </p>
             )}
