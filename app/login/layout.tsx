@@ -7,8 +7,10 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: "Typamine - Admin",
-  description: "Typamine Admin Area",
+  title: "Sign in | Typamine",
+  description: "Typamine admin area.",
+  // Area riservata: fuori dall'indice, e nessun link seguito da qui.
+  robots: { index: false, follow: false },
 };
 
 export default function AdminRootLayout({

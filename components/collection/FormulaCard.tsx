@@ -5,6 +5,7 @@ import Link from "next/link";
 import { MoveRight, Sparkles } from "lucide-react";
 import { Formula } from "@/types";
 import { Badge } from "@/components/common/Badge";
+import { DynamicLogo } from "@/components/layout/DynamicLogo";
 
 interface FormulaCardProps {
   formula: Formula;
@@ -37,8 +38,13 @@ export const FormulaCard: React.FC<FormulaCardProps> = ({ formula, isCurated = f
   return (
     <Link
       href={`/formulas/${formula.slug}`}
-      className="border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-950 p-4 rounded-lg flex flex-col sm:flex-row sm:items-stretch justify-between gap-4 transition-all group hover:border-zinc-400 dark:hover:border-zinc-700 cursor-pointer"
+      className="relative border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-950 p-4 rounded-lg flex flex-col sm:flex-row sm:items-stretch justify-between gap-4 transition-all group hover:border-zinc-400 dark:hover:border-zinc-700 cursor-pointer"
     >
+      {isCurated && (
+        <div className="absolute top-3 right-3 block sm:hidden">
+          <DynamicLogo height={28} iconOnly squareGlow />
+        </div>
+      )}
       <div className="space-y-1 min-w-0 flex-1">
         <div className="flex items-center flex-wrap gap-2">
           <span className="font-haas text-[10px] bg-zinc-100 dark:bg-zinc-900 text-ocragray-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 px-1.5 py-0.5 rounded">
@@ -52,7 +58,7 @@ export const FormulaCard: React.FC<FormulaCardProps> = ({ formula, isCurated = f
 
       <div className="shrink-0 font-haas text-[10px] flex flex-col items-end justify-between border-t sm:border-t-0 border-zinc-200 dark:border-zinc-800 pt-2 sm:pt-0.5 sm:pb-1 gap-2 sm:gap-0">
         {isCurated ? (
-          <div className="pe-4">
+          <div className="pe-4 hidden sm:block">
             <Badge className="!text-[9px] !py-0.5" ping>
               Typamine Selection
             </Badge>

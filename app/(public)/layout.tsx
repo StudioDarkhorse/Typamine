@@ -9,12 +9,45 @@ import CookieBanner from "@/components/layout/CookieBanner";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { getAdminSettings } from "@/lib/services/adminSettings";
+import { BASE_KEYWORDS, OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL, TITLE_SEPARATOR } from "@/lib/seo";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  title: "TYPAMINE // Typographic Lab & Font Aggregator",
-  description: "A high-performance technical typographic playground and curated font laboratory. Test, pair, and formulate typography at the edge.",
+  // metadataBase risolve in assoluto ogni URL relativo dei metadati (OG image,
+  // canonical): senza, i crawler social ricevono "/logo.png" e non lo scaricano.
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    // Ogni pagina imposta solo il proprio titolo: il suffisso col separatore
+    // "|" lo aggiunge questo template (vedi anche withSiteName in lib/seo.ts,
+    // che fa lo stesso per og:title e twitter:title).
+    template: `%s ${TITLE_SEPARATOR} ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  keywords: BASE_KEYWORDS,
+  applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: "/",
+    siteName: SITE_NAME,
+    type: "website",
+    locale: "en_US",
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE.url],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+  },
 };
 
 export default async function PublicRootLayout({

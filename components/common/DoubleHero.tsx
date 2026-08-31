@@ -27,7 +27,7 @@ const DEFAULT_AURA = "right-0 top-0 w-96 h-96 bg-radial from-[#ff3131]/10 to-tra
 
 // Wrapper: nessuna altezza indovinata (niente piu' h-[400dvh]/h-[300dvh] a
 // caso per breakpoint). L'altezza totale e' quella REALE del flusso dei due
-// viewport figli (FirstViewport 100dvh + SecondViewport auto o fixedHeight):
+// viewport figli (FirstViewport 100dvh + SecondViewport auto o min-height):
 // il background, absolute inset-0 su QUESTO wrapper, la eredita per intero.
 // Zero rischio di sfondo tagliato o che eccede, qualunque sia l'altezza del
 // contenuto del secondo viewport.
@@ -94,29 +94,34 @@ interface DoubleHeroFirstViewportProps {
 // piega. Nessuna prop di altezza: il punto di questo viewport e' proprio
 // occupare l'intero schermo, non e' negoziabile per design.
 function DoubleHeroFirstViewport({ className = "", children }: DoubleHeroFirstViewportProps) {
-  return <div className={`w-full h-[100dvh] shrink-0 relative ${className}`}>{children}</div>;
+  return <div className={`w-full min-h-[100dvh] shrink-0 relative ${className}`}>{children}</div>;
 }
 
 interface DoubleHeroSecondViewportProps {
   className?: string;
-  /** Altezza fissa in dvh (es. 60 -> 60dvh). Se presente, vince su `grow`. */
-  fixedHeight?: number;
+  /**
+   * Altezza MINIMA in dvh (es. 140 -> min-height: 140dvh): riserva spazio
+   * quando il contenuto e' corto, ma non lo comprime mai. Se il contenuto e'
+   * piu' alto, il viewport cresce e scrolla la pagina.
+   */
+  minHeight?: number;
   /** Default true: altezza intrinseca, cresce/si adatta al contenuto (children). */
   grow?: boolean;
   children?: React.ReactNode;
 }
 
-// Con `grow` (default) l'altezza e' quella naturale del contenuto: nessun
-// min-height o margin negativo per "recuperare" spazio come nel vecchio
-// componente — qui semplicemente non serve, il contenuto scorre in flow
-// normale subito sotto al FirstViewport.
-function DoubleHeroSecondViewport({ className = "", fixedHeight, grow = true, children }: DoubleHeroSecondViewportProps) {
-  const useFixedHeight = typeof fixedHeight === "number";
-  const style = useFixedHeight ? { height: `${fixedHeight}dvh` } : undefined;
+// Nessuna altezza fissa + overflow interno: quello creava una scrollbar dentro
+// la scrollbar della pagina (UX rotta su mobile, dove il contenuto sfora
+// sempre). Qui l'altezza dichiarata e' solo un min-height: il contenuto che
+// eccede allunga il documento e scrolla con il comportamento nativo del
+// browser, senza nested scrolling.
+function DoubleHeroSecondViewport({ className = "", minHeight, grow = true, children }: DoubleHeroSecondViewportProps) {
+  const hasMinHeight = typeof minHeight === "number";
+  const style = hasMinHeight ? { minHeight: `${minHeight}dvh` } : undefined;
 
   return (
     <div
-      className={`relative w-full ${useFixedHeight ? "overflow-y-auto" : ""} ${!useFixedHeight && !grow ? "h-auto" : ""} ${className}`}
+      className={`relative w-full ${!hasMinHeight && !grow ? "h-auto" : ""} ${className}`}
       style={style}
     >
       {children}

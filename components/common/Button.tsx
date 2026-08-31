@@ -43,7 +43,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const base =
-    "inline-flex items-center justify-center gap-2 font-haas font-semibold uppercase tracking-wide text-black/80" +
+    "inline-flex items-center justify-center gap-2 font-haas font-semibold uppercase tracking-wide text-black/80 cursor-pointer " +
     "border transition-all duration-200 outline-none select-none " +
     // focus-visible invece di focus: il ring appare solo da tastiera, non ad ogni click del mouse
     "focus-visible:ring-2 focus-visible:ring-offset-2 " +
@@ -68,7 +68,7 @@ export const Button: React.FC<ButtonProps> = ({
     // l'estetica "hazard" già presente nel tema (vedi utility glow-red in globals.css).
     primary:
       "bg-red-500 text-black border-redgray-800 hover:bg-red-400 hover:glow-red " +
-      "dark:border-redgray-400 dark:hover:bg-red-400" +
+      "dark:border-redgray-400 dark:hover:bg-red-400 " +
       "focus-visible:ring-red-500 ring-offset-white dark:ring-offset-black",
 
     // SECONDARY — Chemical Cyan. Anche qui testo nero: sul cyan-500 il bianco crolla

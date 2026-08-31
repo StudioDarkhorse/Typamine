@@ -155,7 +155,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         {/* Header principale (Logo + ThemeToggle + Oreo Menu Button) */}
         <header
           ref={headerRef}
-          className={`staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between p-[2em] bg-transparent pointer-events-none z-20 transition-transform duration-300 ease-in-out ${
+          className={`staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between pt-8 px-16 pb-16 bg-transparent pointer-events-none z-20 transition-transform duration-300 ease-in-out ${
             headerHidden && !open ? '-translate-y-full' : 'translate-y-0'
           }`}
           aria-label="Main navigation header"
@@ -178,7 +178,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             )}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 mb-4">
             {headerExtra && <div className="flex items-center pointer-events-auto">{headerExtra}</div>}
 
             <button

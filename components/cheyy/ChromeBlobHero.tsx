@@ -509,7 +509,21 @@ export function ChromeBlobHero({
   const layerPosition = fixedBackground ? "fixed" : "absolute";
 
   return (
-    <div ref={containerRef} className={cn("relative flex", !fixedBackground && "overflow-hidden", heightClassName, className)}>
+    <div
+      ref={containerRef}
+      className={cn(
+        "relative flex",
+        // In modalita' wrapper-pagina niente overflow-hidden (il contenuto deve
+        // poter crescere in altezza), ma l'asse X va comunque tagliato: senza,
+        // un figlio piu' largo del viewport (tipico su mobile con tracking
+        // grandi) allarga il documento e crea scroll orizzontale di pagina.
+        // `clip` solo su X non crea uno scroll container, quindi il canvas
+        // position:fixed resta ancorato al viewport.
+        fixedBackground ? "overflow-x-clip" : "overflow-hidden",
+        heightClassName,
+        className,
+      )}
+    >
       <canvas ref={canvasRef} className={cn(layerPosition, "inset-0 w-full h-full -z-20")} />
 
       {overlayColorClassName && <div className={cn(layerPosition, "inset-0 -z-10 dyn-bg")} style={dynamicBgStyle(overlayColorClassName)} />}

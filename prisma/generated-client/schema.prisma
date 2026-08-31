@@ -1,0 +1,355 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  output          = "./generated-client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  image     Bytes?
+  imageUrl  String?
+  surname   String?
+  biography String?
+  posts     Post[]
+  roles     Role[]   @relation("UserRoles")
+}
+
+model Role {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  permissions Permission[] @relation("RolePermissions")
+  users       User[]       @relation("UserRoles")
+}
+
+model Permission {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  roles     Role[]   @relation("RolePermissions")
+}
+
+// Autore/fonderia di font. Entità standalone (nessuna relazione FK verso
+// Ingredient per ora) — i campi composti (donation, socialLinks, metrics,
+// businessInfo) sono oggetti/array JSON-serializzati in colonne TEXT, stesso
+// pattern già usato per `Prescription.insight`/`Post.insight` su D1/SQLite.
+model FontAuthor {
+  id               String       @id @default(uuid())
+  slug             String       @unique
+  name             String
+  type             String       @default("INDIVIDUAL")
+  email            String
+  supportEmail     String?
+  avatarUrl        String?
+  bannerUrl        String?
+  bio              String?
+  website          String?
+  // Pagina profilo dell'autore su dafont.com (es.
+  // https://www.dafont.com/mjtype.d10200) — popolata dalla key task
+  // "Scrape Author Dafont Profiles", che la ricava dalla PDP del primo font
+  // dell'autore invece che indovinare uno slug (dafont usa id numerici).
+  dafontProfileUrl String?
+  // Pagina profilo con i contatti dell'autore — quella da cui si estrae la
+  // sua email. NON è legata a una singola sorgente:
+  //   dafont     → dafont.com/profile.php?user=NNNN, raggiungibile solo
+  //                passando per `dafontProfileUrl` qui sopra (pagina autore);
+  //   1001fonts  → 1001fonts.com/users/<nome>/, letta già in fase di import
+  //                dalla pagina del font (nessun passaggio intermedio).
+  // Prima erano due colonne separate (dafontProfileInfoUrl /
+  // fonts1001ProfileUrl) che rappresentavano la stessa identica cosa: unite
+  // qui, con backfill in lib/services/dbMigration.ts.
+  profileInfoUrl   String?
+  donation         String?
+  nationality      String?
+  languagesSpoken  String?
+  isVerified       Boolean      @default(false)
+  socialLinks      String?
+  metrics          String?
+  businessInfo     String?
+  specialties      String?
+  status           String       @default("ACTIVE")
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now()) @updatedAt
+  fonts            Ingredient[]
+}
+
+// Entità SEO condivisa: un unico set di meta-tag riusabile da qualunque
+// contenuto pubblico (archive, blog article, prescription, ...) invece di
+// duplicare gli stessi campi su ogni modello. Relazione 1-a-1 opzionale:
+// il contenuto tiene la FK (seoId), qui sotto solo i campi back-relation
+// richiesti da Prisma per dichiarare l'altro lato della relazione.
+model SeoModule {
+  id                 String   @id @default(uuid())
+  metaTitle          String?
+  metaDescription    String?
+  keywords           String?
+  ogTitle            String?
+  ogDescription      String?
+  ogImageUrl         String?
+  ogImageAlt         String?
+  twitterCard        String   @default("summary_large_image")
+  twitterTitle       String?
+  twitterDescription String?
+  twitterImageUrl    String?
+  twitterImageAlt    String?
+  canonicalUrl       String?
+  noIndex            Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
+
+  post         Post?
+  prescription Prescription?
+}
+
+model FontVariant {
+  id             String     @id @default(uuid())
+  fontFamilyName String
+  weight         Int
+  style          String
+  woff2Url       String
+  label          String
+  ingredientId   String
+  ingredient     Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+}
+
+model Ingredient {
+  id                     String         @id @default(uuid())
+  name                   String
+  slug                   String         @unique
+  category               String
+  creator                String?
+  rating                 String
+  symbol                 String?
+  formula                String?
+  importedFrom           String?
+  licenseType            String?
+  isVariable             Boolean        @default(false)
+  userRating             Float?         @default(0)
+  userRatingsCount       Int?           @default(0)
+  authorId               String?
+  author                 FontAuthor?    @relation(fields: [authorId], references: [id])
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @default(now()) @updatedAt
+  variants               FontVariant[]
+  formulas               Formula[]      @relation("FormulaIngredients")
+  primaryPrescriptions   Prescription[] @relation("PrimaryFont")
+  secondaryPrescriptions Prescription[] @relation("SecondaryFont")
+  tags                   Tag[]          @relation("IngredientTags")
+  posts                  Post[]         @relation("PostFonts")
+}
+
+model Formula {
+  id           String       @id @default(uuid())
+  name         String
+  description  String?
+  slug         String       @unique
+  fontCategory String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now()) @updatedAt
+  fonts        Ingredient[] @relation("FormulaIngredients")
+  tags         Tag[]        @relation("FormulaTags")
+}
+
+model Prescription {
+  id              String     @id @default(uuid())
+  name            String
+  slug            String     @unique
+  description     String?
+  imageUrl        String?
+  insight         String?
+  published       Boolean    @default(false)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @default(now()) @updatedAt
+  primaryFontId   String
+  primaryFont     Ingredient @relation("PrimaryFont", fields: [primaryFontId], references: [id], onDelete: Cascade)
+  secondaryFontId String
+  secondaryFont   Ingredient @relation("SecondaryFont", fields: [secondaryFontId], references: [id], onDelete: Cascade)
+  tags            Tag[]      @relation("PrescriptionTags")
+  seoId           String?    @unique
+  seo             SeoModule? @relation(fields: [seoId], references: [id])
+}
+
+// Riga singleton di configurazione globale del sito, sempre con id fisso
+// "singleton" (get/upsert la cercano per quell'id, mai una findMany) — stesso
+// pattern di "una sola riga di stato condiviso" invece di introdurre una
+// tabella key-value generica. Per ora contiene solo i campi della homepage
+// marquee (vedi /admin/settings, tab "Promo Website Communication"); altri
+// campi della pagina Settings restano UI-only finché non serve persisterli.
+model AdminSettings {
+  id String @id @default("singleton")
+
+  // General — Site Identity
+  siteLanguage       String  @default("en")
+  siteTimezone       String  @default("UTC")
+  maintenanceActive  Boolean @default(false)
+  maintenanceMessage String?
+
+  // General — Brand Identity. letterTFontFamily holds an Ingredient.id (same
+  // convention as FontPicker elsewhere); resolved to an actual woff2/name at
+  // read time in lib/services/adminSettings.ts, never denormalized here so a
+  // renamed/deleted font can't leave stale data behind. letterTFontSizePercent
+  // scales the "T" relative to the rest of the wordmark's font-size (100 =
+  // same size, 200 = double) — applied as a CSS `%` font-size so it stays
+  // consistent between the header (DynamicLogo) and the footer (GlyphTypeface)
+  // despite their different base sizes. The two colors are raw hex (e.g.
+  // "#ff3131") for the small "chemistry square" indicator next to the
+  // wordmark (not the letter itself), not the combined light+dark token
+  // format the marquee pickers use, since each field already targets a
+  // single mode.
+  letterTFontFamily      String?
+  letterTFontSizePercent Int     @default(100)
+  logoLightModeColor     String?
+  logoDarkModeColor      String?
+
+  // Hero Wordmark Animation (see components/layout/HeroWordmark.tsx) — JSON
+  // array of up to 12 { fontId, fontSizePercent }, in cycle order. fontId
+  // references Ingredient.id (same convention as letterTFontFamily), resolved
+  // live at read time in lib/services/adminSettings.ts.
+  heroWordmarkFonts     String?
+  // true (default) = infinite loop; false = one full pass through all fonts,
+  // then the animation stops on the last one.
+  heroWordmarkLoop      Boolean @default(true)
+  // Animation speed, -5 (slowest) to 5 (fastest), 0.1 steps, 0 = normal
+  // (default). Converted to an intervalMs/flipDurationMs multiplier in
+  // HeroWordmark, keeping the flip/hold ratio.
+  heroWordmarkLoopSpeed Float   @default(0)
+
+  // Promo Website Communication — Homepage Marquee
+  marqueeActive    Boolean @default(false)
+  marqueeText      String?
+  marqueeType      String  @default("every_page")
+  marqueeTextColor String?
+  marqueeBgColor   String?
+
+  // Promo Website Communication — Homepage Popup. popupImageUrl only ever
+  // holds the R2 public URL — the file itself lives in the TYPAMINE_ASSETS
+  // bucket under settings/popups/images/, never in the DB.
+  popupActive        Boolean @default(false)
+  popupImageUrl      String?
+  popupHeadline      String?
+  popupMessage       String?
+  popupCtaLabel      String?
+  popupCtaLink       String?
+  popupFrequency     String  @default("first_visit")
+  popupFrequencyDays Int     @default(7)
+
+  // Admin Communication
+  emailProvider       String  @default("gmail_oauth2")
+  gmailClientId       String?
+  gmailClientSecret   String?
+  gmailSenderName     String?
+  gmailConnected      Boolean @default(false)
+  gmailConnectedEmail String?
+  // Refresh token OAuth2 ottenuto dopo il consenso Google (scope gmail.send)
+  // — mai esposto al client, letto solo server-side da lib/services/email.ts
+  // per ottenere un access token fresco ad ogni invio. Non fa parte del tipo
+  // pubblico AdminSettings in types/index.ts per lo stesso motivo.
+  gmailRefreshToken   String?
+
+  // Admin Communication — SMTP (nodemailer). Alternativa a Gmail OAuth2,
+  // selezionabile con emailProvider = "smtp". smtpPassword per Gmail è una
+  // "app password" (richiede la verifica in due passaggi attiva sull'account),
+  // non la password vera. smtpSecure = true implica porta 465 (TLS implicito),
+  // false = 587 con STARTTLS.
+  smtpHost              String?
+  smtpPort              Int     @default(587)
+  smtpUser              String?
+  smtpPassword          String?
+  smtpSecure            Boolean @default(false)
+  smtpFromEmail         String?
+  smtpFromName          String?
+  // "password" = app password (auth base), "oauth2" = XOAUTH2. Con oauth2 il
+  // campo smtpPassword è ignorato: nodemailer ricava da sé un access token
+  // dal refresh token, chiamando smtpOauthAccessUrl (endpoint token del
+  // provider — Google di default, per Microsoft va messo il suo).
+  smtpAuthType          String  @default("password")
+  smtpOauthClientId     String?
+  smtpOauthClientSecret String?
+  smtpOauthRefreshToken String?
+  smtpOauthAccessUrl    String?
+
+  // Admin Communication — Resend (emailProvider = "resend"). API HTTP pura,
+  // quindi a differenza di SMTP funziona anche sul runtime Cloudflare Workers.
+  // Il dominio del mittente va verificato nella dashboard Resend, altrimenti
+  // l'unico invio permesso è verso il proprio indirizzo da onboarding@resend.dev.
+  resendApiKey    String?
+  resendFromEmail String?
+  resendFromName  String?
+
+  // JSON array of {id, label, value} — generic API key/credential vault.
+  credentialsVault String?
+
+  // Integrations — JSON: { analytics, pixel, recaptcha, maps }, each
+  // { active, ...providerFields }. Kept as one JSON blob instead of a column
+  // per provider/field so new integrations don't need a schema migration.
+  integrationsConfig String?
+
+  // Notifications — JSON map of eventKey -> channel ("off"|"email"|"slack"|"both").
+  notificationChannels String?
+  slackWebhookUrl      String?
+
+  // Security & Access
+  require2fa            Boolean @default(false)
+  sessionTimeoutMinutes Int     @default(60)
+  ipAllowlist           String?
+  auditRetentionDays    Int     @default(90)
+
+  // Legal & Compliance
+  cookieBannerActive Boolean @default(true)
+  cookieBannerText   String?
+  privacyPolicyUrl   String?
+  termsOfServiceUrl  String?
+  gdprRequestEmail   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Tag {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  description   String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+  prescriptions Prescription[] @relation("PrescriptionTags")
+  ingredients   Ingredient[]   @relation("IngredientTags")
+  formulas      Formula[]      @relation("FormulaTags")
+  posts         Post[]         @relation("PostTags")
+}
+
+// Entità generica di contenuto editoriale: serve sia /archive (postType
+// "ARCHIVE") che /blog (postType "BLOG") — stessi campi, stesso editor di
+// content-module, l'unica differenza è la varietà di moduli offerta in admin.
+model Post {
+  id           String       @id @default(uuid())
+  postType     String       @default("ARCHIVE")
+  title        String
+  slug         String       @unique
+  caption      String?
+  description  String?
+  thumbnailUrl String?
+  imageUrl     String?
+  imageAlt     String?
+  insight      String?
+  published    Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now()) @updatedAt
+  authorId     String
+  author       User         @relation(fields: [authorId], references: [id])
+  tags         Tag[]        @relation("PostTags")
+  fonts        Ingredient[] @relation("PostFonts")
+  seoId        String?      @unique
+  seo          SeoModule?   @relation(fields: [seoId], references: [id])
+}

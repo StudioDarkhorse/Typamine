@@ -55,7 +55,13 @@ const getPrismaInstance = (): PrismaClient => {
 
   console.log('[Prisma] Initializing client... TYPAMINE_DB is present:', !!dbBinding);
 
-  if (dbBinding) {
+  // In development, only use the D1 adapter if DEV_REMOTE=true is explicitly set
+  // (to connect to the remote D1). Otherwise, bypass the D1 adapter and fall back
+  // to native Local SQLite (prisma/dev.db) which is extremely stable, avoids Miniflare/workerd
+  // internal errors/network loss on Windows, and contains the synced remote data.
+  const useD1Adapter = dbBinding && (process.env.NODE_ENV === 'production' || process.env.DEV_REMOTE === 'true');
+
+  if (useD1Adapter) {
     console.log('[Prisma] Using Cloudflare D1 adapter');
     const adapter = new PrismaD1(dbBinding);
     prismaInstance = new (loadPrismaCtor())({ adapter });
@@ -93,8 +99,10 @@ export const getDatabaseSource = () => {
     dbBinding = env?.TYPAMINE_DB;
   } catch (e) {}
 
-  console.log('[Prisma] getDatabaseSource called. TYPAMINE_DB is present:', !!dbBinding);
-  if (dbBinding) {
+  const isD1Used = dbBinding && (process.env.NODE_ENV === 'production' || process.env.DEV_REMOTE === 'true');
+
+  console.log('[Prisma] getDatabaseSource called. D1 database active:', !!isD1Used);
+  if (isD1Used) {
     return "Cloudflare D1 (Production/Remote)"
   }
   return "Local SQLite (dev.db)"

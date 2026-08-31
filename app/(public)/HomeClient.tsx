@@ -50,7 +50,7 @@ export default function HomeClient({ recentIngredients = [], recentPairings = []
 
         </DoubleHero.FirstViewport>
 
-        <DoubleHero.SecondViewport fixedHeight={140} className="pb-12 flex flex-col">
+        <DoubleHero.SecondViewport minHeight={140} className="pb-12 flex flex-col">
           <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12 mt-auto">
             {/* 3. FEATURED INGREDIENTS (FONT TILES) — unica sezione rimasta dentro
                 DoubleHero: Prescriptions e tutto il resto sono stati spostati fuori. */}
@@ -145,7 +145,7 @@ export default function HomeClient({ recentIngredients = [], recentPairings = []
             (stesso contenitore, nessun confine da attraversare): vedi nota lì. */}
         <div className="mt-[19rem] lg:mt-0">
           <Cta
-            title={<>Daily <span className="text-blue-600 dark:text-red px-2">Typographic</span> Pills</>}
+            title={<>Daily <span className="text-blue-600 dark:text-red px-2">Pills</span></>}
             subtitle="Subscribe to our blog for weekly doses of typographic inspiration, technical tutorials, and experimental font pairings directly to your console."
             align="center"
             useGrainient

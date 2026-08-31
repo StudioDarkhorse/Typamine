@@ -99,8 +99,8 @@ export const IngredientRow: React.FC<FontRowProps> = ({ font, idx, linklabel = "
 
       {/* Footer: autore + CTA */}
       <div className="pt-3 flex justify-between items-end border-t border-zinc-400/50 font-haas relative z-20 pointer-events-none">
-        <span className="text-xs text-ocragray-800 dark:text-zinc-200">
-          DESIGNED BY{" "}
+        <span className="text-xs text-ocragray-800 dark:text-zinc-200 mb-1">
+          <span className="hidden md:inline">DESIGNED </span>BY{" "}
           {isRealAuthor ? (
             <Link
               href={"/author/" + font.author!.slug}
@@ -122,7 +122,8 @@ export const IngredientRow: React.FC<FontRowProps> = ({ font, idx, linklabel = "
       {/* Range dimensione — sibling assoluto sopra il Link, non un suo
           discendente: nascosto finché non passi sopra la riga, e mai
           interpretabile como un click sulla card qualunque cosa tu ci faccia. */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-3 flex justify-center opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-30">
+      {/* Range dimensione — visibile SOLO su desktop con supporto hover reale */}
+      <div className="hidden [@media(hover:hover)]:flex absolute left-1/2 -translate-x-1/2 bottom-3 justify-center opacity-0 translate-y-1 pointer-events-none [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:translate-y-0 [@media(hover:hover)]:group-hover:pointer-events-auto transition-all duration-200 z-30">
         <div className="flex items-center gap-2.5 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-full px-3.5 py-1.5 shadow-lg">
           <span className="text-[10px] font-bold uppercase tracking-widest text-ocragray-800 dark:text-zinc-200">Size</span>
           <input

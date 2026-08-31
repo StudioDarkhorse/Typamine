@@ -3,8 +3,26 @@ import Link from "next/link";
 import { Code2, RefreshCw, ArrowRight, ShieldCheck } from "lucide-react";
 import { getIngredientBySlug } from "@/lib/services/font";
 import { ChromeBlobHero } from "@/components/cheyy/ChromeBlobHero";
+import { buildMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = buildMetadata({
+  path: "/labs",
+  title: "Free Typography Tools for Designers & Developers",
+  description:
+    "Free browser-based font tools: convert TTF and OTF to WOFF2, generate @font-face CSS, build a Tailwind font config, and check a typeface against WCAG accessibility rules.",
+  keywords: [
+    "font tools",
+    "typography tools",
+    "font converter",
+    "font face generator",
+    "web font tools",
+    "free online font tools",
+    "font accessibility checker",
+  ],
+});
 
 interface LabsPageProps {
   searchParams: Promise<{ ingredient?: string }>;
@@ -91,12 +109,12 @@ export default async function LabsPage({ searchParams }: LabsPageProps) {
           dell'hero — il resto della pagina segue subito sotto, sullo
           stesso sfondo animato (fixedBackground: il canvas resta ancorato
           al viewport mentre scrolli). */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 p-8 sm:p-16 pt-32 min-h-dvh">
-        <div className="bg-bluegray-200/20 dark:bg-redgray-800/40 backdrop-blur-md px-6 py-8 w-fit flex flex-col gap-y-4 items-center rounded-md border border-4 border-blue-800 dark:border-redgray-200 ">
-          <h1 className="font-crenzo text-3xl sm:text-5xl font-bold uppercase tracking-[1rem] text-blue-900 dark:text-redgray-200 max-w-5xl">
+      <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 px-4 py-8 sm:p-16 pt-32 min-h-dvh">
+        <div className="bg-bluegray-200/20 dark:bg-redgray-800/40 backdrop-blur-md px-4 sm:px-6 py-8 w-full max-w-full sm:w-fit flex flex-col gap-y-4 items-center rounded-md border border-4 border-blue-800 dark:border-redgray-200">
+          <h1 className="font-crenzo text-xl sm:text-5xl font-bold uppercase tracking-[0.15rem] sm:tracking-[1rem] text-blue-900 dark:text-redgray-200 max-w-full sm:max-w-5xl break-words">
             Tools designed for Creatives and Developers
           </h1>
-          <p className="text-zinc-700 dark:text-zinc-300 text-sm sm:text-base max-w-xl leading-relaxed font-x-typewriter font-bold">
+          <p className="text-zinc-700 dark:text-zinc-300 text-sm sm:text-base max-w-full sm:max-w-xl leading-relaxed font-x-typewriter font-bold break-words">
             {ingredient ? (
               <>
                 Technical utilities to process, package, and integrate font assets into modern web apps. Pre-loaded with{" "}

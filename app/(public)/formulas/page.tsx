@@ -4,10 +4,28 @@ import FormulasResults from "./FormulasResults";
 import { FormulaCardSkeleton } from "@/components/collection/skeletons/FormulaCardSkeleton";
 import { FormulaSort } from "@/lib/services/formula";
 import { getTags } from "@/lib/services/tag";
+import { buildMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
 const PER_PAGE = 12;
+
+export const metadata: Metadata = buildMetadata({
+  path: "/formulas",
+  title: "Font Collections: Curated Typeface Sets by Style",
+  description:
+    "Curated font collections grouped by style, mood and use case — brutalist, editorial, retro, technical. Compare the typefaces in each set and preview them side by side.",
+  keywords: [
+    "font collections",
+    "curated fonts",
+    "font sets",
+    "fonts by style",
+    "editorial fonts",
+    "display font collection",
+    "best fonts for branding",
+  ],
+});
 
 interface FormulasPageProps {
   searchParams: Promise<{

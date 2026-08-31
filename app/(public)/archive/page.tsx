@@ -3,11 +3,29 @@ import ArchiveClient from "@/app/(public)/archive/ArchiveClient";
 import ArchivePostsResults from "@/app/(public)/archive/ArchivePostsResults";
 import { FeaturedPostCardSkeleton } from "@/components/post/FeaturedPostCardSkeleton";
 import { getTags } from "@/lib/services/tag";
+import { buildMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
 import { PostSort } from "@/lib/services/post";
 
 export const dynamic = "force-dynamic";
 
 const PER_PAGE = 12;
+
+export const metadata: Metadata = buildMetadata({
+  path: "/archive",
+  title: "Vintage Type Archive: Historical Typography & Lettering",
+  description:
+    "A visual archive of historical typography: vintage posters, packaging, signage and lettering, catalogued as reference for designers looking for period-accurate type.",
+  keywords: [
+    "vintage typography",
+    "historical fonts",
+    "retro lettering",
+    "type specimens",
+    "vintage poster typography",
+    "typography reference",
+    "lettering archive",
+  ],
+});
 
 interface ArchivePageProps {
   searchParams: Promise<{

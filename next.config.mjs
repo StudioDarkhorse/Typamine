@@ -36,6 +36,7 @@ if (process.env.NODE_ENV === 'development') {
   // il fallback su sqlite locale per tutta la vita del processo.
   const { initOpenNextCloudflareForDev } = await import('@opennextjs/cloudflare');
   await initOpenNextCloudflareForDev({
+    remoteBindings: process.env.DEV_REMOTE === 'true',
     experimental: {
       remoteBindings: process.env.DEV_REMOTE === 'true'
     }

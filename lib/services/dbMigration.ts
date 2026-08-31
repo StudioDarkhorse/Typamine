@@ -4,9 +4,34 @@ import crypto from "crypto";
 
 let isMigrated = false;
 
+async function tableExists(table: string): Promise<boolean> {
+  try {
+    const result: any[] = await prisma.$queryRawUnsafe(
+      `SELECT name FROM sqlite_master WHERE type='table' AND name='${table}'`
+    );
+    return result.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+async function columnExists(table: string, col: string): Promise<boolean> {
+  try {
+    const columns: Array<{ name: string }> = await prisma.$queryRawUnsafe(`PRAGMA table_info(${table})`);
+    return columns.some(c => c.name === col);
+  } catch {
+    return false;
+  }
+}
+
 async function addCol(table: string, col: string, type: string) {
   try {
-    await prisma.$executeRawUnsafe(`ALTER TABLE ${table} ADD COLUMN ${col} ${type}`);
+    if (await tableExists(table)) {
+      const exists = await columnExists(table, col);
+      if (!exists) {
+        await prisma.$executeRawUnsafe(`ALTER TABLE ${table} ADD COLUMN ${col} ${type}`);
+      }
+    }
   } catch (err) {
     // Ignora errore di colonna già esistente
   }
@@ -19,10 +44,14 @@ async function addCol(table: string, col: string, type: string) {
 // via CREATE TABLE raw sopra, non da Prisma stesso.
 async function addJoinTableIndexes(table: string) {
   try {
-    await prisma.$executeRawUnsafe(`CREATE UNIQUE INDEX IF NOT EXISTS "${table}_AB_unique" ON "${table}"("A","B")`);
+    if (await tableExists(table)) {
+      await prisma.$executeRawUnsafe(`CREATE UNIQUE INDEX IF NOT EXISTS "${table}_AB_unique" ON "${table}"("A","B")`);
+    }
   } catch {}
   try {
-    await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "${table}_B_index" ON "${table}"("B")`);
+    if (await tableExists(table)) {
+      await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "${table}_B_index" ON "${table}"("B")`);
+    }
   } catch {}
 }
 
@@ -33,7 +62,9 @@ async function addJoinTableIndexes(table: string) {
 // (Fill Missing Authors/Licenses, AI Identity, Dafont scrape).
 async function addIndex(table: string, column: string) {
   try {
-    await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "${table}_${column}_idx" ON "${table}"("${column}")`);
+    if (await tableExists(table)) {
+      await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS "${table}_${column}_idx" ON "${table}"("${column}")`);
+    }
   } catch {}
 }
 
@@ -83,18 +114,20 @@ export async function ensureD1SchemaUpdated(force = false) {
     await addCol("Ingredient", "authorId", "TEXT");
     await addCol("Ingredient", "userRating", "REAL DEFAULT 0");
     await addCol("Ingredient", "userRatingsCount", "INTEGER DEFAULT 0");
-    try {
-      await prisma.$executeRawUnsafe(`UPDATE Ingredient SET userRating = 0 WHERE userRating IS NULL`);
-    } catch {}
-    try {
-      await prisma.$executeRawUnsafe(`UPDATE Ingredient SET userRatingsCount = 0 WHERE userRatingsCount IS NULL`);
-    } catch {}
-    try {
-      await prisma.$executeRawUnsafe(`UPDATE Ingredient SET createdAt = CURRENT_TIMESTAMP WHERE createdAt IS NULL`);
-    } catch {}
-    try {
-      await prisma.$executeRawUnsafe(`UPDATE Ingredient SET updatedAt = CURRENT_TIMESTAMP WHERE updatedAt IS NULL`);
-    } catch {}
+    if (await tableExists("Ingredient")) {
+      try {
+        await prisma.$executeRawUnsafe(`UPDATE Ingredient SET userRating = 0 WHERE userRating IS NULL`);
+      } catch {}
+      try {
+        await prisma.$executeRawUnsafe(`UPDATE Ingredient SET userRatingsCount = 0 WHERE userRatingsCount IS NULL`);
+      } catch {}
+      try {
+        await prisma.$executeRawUnsafe(`UPDATE Ingredient SET createdAt = CURRENT_TIMESTAMP WHERE createdAt IS NULL`);
+      } catch {}
+      try {
+        await prisma.$executeRawUnsafe(`UPDATE Ingredient SET updatedAt = CURRENT_TIMESTAMP WHERE updatedAt IS NULL`);
+      } catch {}
+    }
 
     // 4. Add columns safely to Prescription
     await addCol("Prescription", "slug", "TEXT");
@@ -127,20 +160,22 @@ export async function ensureD1SchemaUpdated(force = false) {
     await addCol("Formula", "slug", "TEXT");
     await addCol("Formula", "fontCategory", "TEXT");
     await addCol("Formula", "updatedAt", "DATETIME");
-    try {
-      // Nessuna logica di slugify disponibile in SQL puro: usiamo l'id come
-      // fallback univoco per le righe legacy, modificabile poi dall'admin.
-      await prisma.$executeRawUnsafe(`UPDATE Formula SET slug = id WHERE slug IS NULL`);
-    } catch {}
-    try {
-      await prisma.$executeRawUnsafe(`UPDATE Formula SET fontCategory = 'Uncategorized' WHERE fontCategory IS NULL`);
-    } catch {}
-    try {
-      await prisma.$executeRawUnsafe(`UPDATE Formula SET createdAt = CURRENT_TIMESTAMP WHERE createdAt IS NULL`);
-    } catch {}
-    try {
-      await prisma.$executeRawUnsafe(`UPDATE Formula SET updatedAt = CURRENT_TIMESTAMP WHERE updatedAt IS NULL`);
-    } catch {}
+    if (await tableExists("Formula")) {
+      try {
+        // Nessuna logica di slugify disponibile in SQL puro: usiamo l'id come
+        // fallback univoco per le righe legacy, modificabile poi dall'admin.
+        await prisma.$executeRawUnsafe(`UPDATE Formula SET slug = id WHERE slug IS NULL`);
+      } catch {}
+      try {
+        await prisma.$executeRawUnsafe(`UPDATE Formula SET fontCategory = 'Uncategorized' WHERE fontCategory IS NULL`);
+      } catch {}
+      try {
+        await prisma.$executeRawUnsafe(`UPDATE Formula SET createdAt = CURRENT_TIMESTAMP WHERE createdAt IS NULL`);
+      } catch {}
+      try {
+        await prisma.$executeRawUnsafe(`UPDATE Formula SET updatedAt = CURRENT_TIMESTAMP WHERE updatedAt IS NULL`);
+      } catch {}
+    }
     // Le colonne legacy href/code erano NOT NULL: su ambienti (D1) dove la
     // tabella esisteva da prima del rename, sono ancora lì e bloccano ogni
     // create() che non le popola più. Le rimuoviamo (no-op se già assenti,
@@ -150,15 +185,19 @@ export async function ensureD1SchemaUpdated(force = false) {
     try {
       await prisma.$executeRawUnsafe(`DROP INDEX IF EXISTS Formula_href_key`);
     } catch {}
-    try {
-      await prisma.$executeRawUnsafe(`ALTER TABLE Formula DROP COLUMN href`);
-    } catch {}
+    if (await columnExists("Formula", "href")) {
+      try {
+        await prisma.$executeRawUnsafe(`ALTER TABLE Formula DROP COLUMN href`);
+      } catch {}
+    }
     try {
       await prisma.$executeRawUnsafe(`DROP INDEX IF EXISTS Formula_code_key`);
     } catch {}
-    try {
-      await prisma.$executeRawUnsafe(`ALTER TABLE Formula DROP COLUMN code`);
-    } catch {}
+    if (await columnExists("Formula", "code")) {
+      try {
+        await prisma.$executeRawUnsafe(`ALTER TABLE Formula DROP COLUMN code`);
+      } catch {}
+    }
 
     // 7. Join table for the Formula <-> Tag many-to-many relation
     try {
@@ -177,15 +216,21 @@ export async function ensureD1SchemaUpdated(force = false) {
     // rinominiamo sul posto (rename atomico, nessuna copia/perdita dati) —
     // no-op silenzioso se ArchivePost non esiste più (già migrato) o non è
     // mai esistita (D1 nuovo, coperto dalla CREATE TABLE IF NOT EXISTS sotto).
-    try {
-      await prisma.$executeRawUnsafe(`ALTER TABLE ArchivePost RENAME TO Post`);
-    } catch {}
-    try {
-      await prisma.$executeRawUnsafe(`ALTER TABLE _ArchivePostTags RENAME TO _PostTags`);
-    } catch {}
-    try {
-      await prisma.$executeRawUnsafe(`ALTER TABLE _ArchivePostFonts RENAME TO _PostFonts`);
-    } catch {}
+    if (await tableExists("ArchivePost")) {
+      try {
+        await prisma.$executeRawUnsafe(`ALTER TABLE ArchivePost RENAME TO Post`);
+      } catch {}
+    }
+    if (await tableExists("_ArchivePostTags")) {
+      try {
+        await prisma.$executeRawUnsafe(`ALTER TABLE _ArchivePostTags RENAME TO _PostTags`);
+      } catch {}
+    }
+    if (await tableExists("_ArchivePostFonts")) {
+      try {
+        await prisma.$executeRawUnsafe(`ALTER TABLE _ArchivePostFonts RENAME TO _PostFonts`);
+      } catch {}
+    }
     try {
       await prisma.$executeRawUnsafe(`
         CREATE TABLE IF NOT EXISTS Post (
@@ -225,9 +270,11 @@ export async function ensureD1SchemaUpdated(force = false) {
     } catch {}
     await addJoinTableIndexes("_PostFonts");
     await addCol("Post", "postType", "TEXT");
-    try {
-      await prisma.$executeRawUnsafe(`UPDATE Post SET postType = 'ARCHIVE' WHERE postType IS NULL`);
-    } catch {}
+    if (await tableExists("Post")) {
+      try {
+        await prisma.$executeRawUnsafe(`UPDATE Post SET postType = 'ARCHIVE' WHERE postType IS NULL`);
+      } catch {}
+    }
 
     // 9. SeoModule — entità condivisa (archive/blog/prescription), relazione
     // 1-a-1 opzionale via colonna seoId sul contenuto.
@@ -298,23 +345,27 @@ export async function ensureD1SchemaUpdated(force = false) {
     await addCol("FontAuthor", "dafontProfileInfoUrl", "TEXT");
     await addCol("FontAuthor", "fonts1001ProfileUrl", "TEXT");
     await addCol("FontAuthor", "profileInfoUrl", "TEXT");
-    try {
-      await prisma.$executeRawUnsafe(
-        `UPDATE FontAuthor SET profileInfoUrl = COALESCE(NULLIF(dafontProfileInfoUrl, ''), NULLIF(fonts1001ProfileUrl, '')) WHERE profileInfoUrl IS NULL OR profileInfoUrl = ''`
-      );
-    } catch {}
+    if (await tableExists("FontAuthor")) {
+      try {
+        await prisma.$executeRawUnsafe(
+          `UPDATE FontAuthor SET profileInfoUrl = COALESCE(NULLIF(dafontProfileInfoUrl, ''), NULLIF(fonts1001ProfileUrl, '')) WHERE profileInfoUrl IS NULL OR profileInfoUrl = ''`
+        );
+      } catch {}
+    }
 
     // Righe di permesso fontAuthor:* — nessun seed script le crea (i permessi
     // in questo progetto vengono inseriti out-of-band), quindi le registriamo
     // qui in modo idempotente (name è UNIQUE). SUPERADMIN/ADMIN bypassano
     // comunque il check via ruolo, quindi funzionano da subito anche prima
     // che qualcuno le assegni a un ruolo custom da /admin/roles.
-    for (const action of ["read", "create", "update", "delete"]) {
-      try {
-        await prisma.$executeRawUnsafe(
-          `INSERT OR IGNORE INTO Permission (id, name, createdAt, updatedAt) VALUES ('${crypto.randomUUID()}', 'fontAuthor:${action}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`
-        );
-      } catch {}
+    if (await tableExists("Permission")) {
+      for (const action of ["read", "create", "update", "delete"]) {
+        try {
+          await prisma.$executeRawUnsafe(
+            `INSERT OR IGNORE INTO Permission (id, name, createdAt, updatedAt) VALUES ('${crypto.randomUUID()}', 'fontAuthor:${action}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`
+          );
+        } catch {}
+      }
     }
 
     // 11. AdminSettings — riga singleton di configurazione globale, un campo
@@ -410,12 +461,14 @@ export async function ensureD1SchemaUpdated(force = false) {
 
     // Stesso schema di bootstrap idempotente del blocco fontAuthor sopra —
     // resource 'setting' già dichiarata in lib/rbac.ts ma finora inutilizzata.
-    for (const action of ["read", "update"]) {
-      try {
-        await prisma.$executeRawUnsafe(
-          `INSERT OR IGNORE INTO Permission (id, name, createdAt, updatedAt) VALUES ('${crypto.randomUUID()}', 'setting:${action}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`
-        );
-      } catch {}
+    if (await tableExists("Permission")) {
+      for (const action of ["read", "update"]) {
+        try {
+          await prisma.$executeRawUnsafe(
+            `INSERT OR IGNORE INTO Permission (id, name, createdAt, updatedAt) VALUES ('${crypto.randomUUID()}', 'setting:${action}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`
+          );
+        } catch {}
+      }
     }
 
     // Indici su colonne FK/filtro di tabelle create a mano sopra — mai

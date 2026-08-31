@@ -61,4 +61,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.tsprisma/generated-client/
+next-env.d.ts
+prisma/generated-client/
+
+# dump del DB remoto: contiene i valori reali di AdminSettings (chiavi API)
+prisma/remote-dump.sql
+prisma/*-dump.sql

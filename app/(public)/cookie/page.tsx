@@ -1,11 +1,15 @@
 import { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { MoveLeft } from "lucide-react";
 import MinimalLink from "@/components/common/MinimalLink";
 
-export const metadata: Metadata = {
-  title: "Cookie Policy // Typamine",
-  description: "Cookie Policy explaining our use of cookies and tracking technologies on the Typamine platform.",
-};
+export const metadata: Metadata = buildMetadata({
+  path: "/cookie",
+  title: "Cookie Policy",
+  description:
+    "Which cookies and tracking technologies Typamine uses, what each one is for, how long they last and how to change your consent at any time.",
+  keywords: ["cookie policy", "cookies", "tracking technologies"],
+});
 
 export default function CookiePolicyPage() {
   return (

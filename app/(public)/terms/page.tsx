@@ -1,11 +1,15 @@
 import { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { MoveLeft } from "lucide-react";
 import MinimalLink from "@/components/common/MinimalLink";
 
-export const metadata: Metadata = {
-  title: "Terms of Service // Typamine",
-  description: "Terms and conditions for using the Typamine platform, tools, and services.",
-};
+export const metadata: Metadata = buildMetadata({
+  path: "/terms",
+  title: "Terms of Service",
+  description:
+    "The terms that govern use of Typamine: font downloads and licences, the free typography tools, user submissions and the limits of our liability.",
+  keywords: ["terms of service", "font licence terms", "usage terms"],
+});
 
 export default function TermsOfServicePage() {
   return (

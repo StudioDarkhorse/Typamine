@@ -9,6 +9,7 @@ import { Button } from "@/components/common/Button";
 import { SearchSortFilter } from "@/components/common/SearchSortFilter";
 import { useListScrollRestoration } from "@/lib/hooks/useListScrollRestoration";
 
+
 const SORT_OPTIONS = [
   { label: "NEWEST FIRST", value: "recent" },
   { label: "NAME (A-Z)", value: "name_asc" },
@@ -68,11 +69,16 @@ export default function FormulasClient({ tags, children }: FormulasClientProps) 
       {children}
 
       <Cta
-        title={<>Looking for <span className="text-blue-600 dark:text-red"> Inspirations?</span></>}
+        title={<>Looking for <span className="text-red-600 dark:text-red-400"> Inspirations?</span></>}
         subtitle="Check out our Prescriptions for expert typography pairings, or dive into our Vintage Archive to discover great examples from the past."
         align="right"
         bgImage="/images/formulas/cta-bg.png"
         useGlassmorphism
+        // In light mode il velo era piu' leggero che in dark (0.10): il backdrop
+        // del vetro risatura l'illustrazione sotto e il testo nero finiva su un
+        // fondo pieno di dettaglio. Qui serve piu' velo, non meno.
+        glassBackgroundOpacity={theme === "light" ? 0.6 : 0.3}
+        overlayClassName="bg-white/85 dark:bg-black/60"
       >
         <Link href="/prescriptions" className="inline-block">
           <Button variant="secondary">VIEW PRESCRIPTIONS</Button>

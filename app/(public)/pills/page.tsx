@@ -3,11 +3,29 @@ import PillsClient from "@/app/(public)/pills/PillsClient";
 import PillsResults from "@/app/(public)/pills/PillsResults";
 import { FeaturedPostCardSkeleton } from "@/components/post/FeaturedPostCardSkeleton";
 import { getTags } from "@/lib/services/tag";
+import { buildMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
 import { PostSort } from "@/lib/services/post";
 
 export const dynamic = "force-dynamic";
 
 const PER_PAGE = 12;
+
+export const metadata: Metadata = buildMetadata({
+  path: "/pills",
+  title: "Typography Blog: Font Guides, Tips & Type Design",
+  description:
+    "Articles and guides on typography: how to choose and pair fonts, web font performance, licensing, variable fonts and the craft behind type design.",
+  keywords: [
+    "typography blog",
+    "font guides",
+    "typography tips",
+    "type design articles",
+    "how to choose fonts",
+    "web typography",
+    "font licensing",
+  ],
+});
 
 interface PillsPageProps {
   searchParams: Promise<{

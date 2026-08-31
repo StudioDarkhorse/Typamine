@@ -54,11 +54,11 @@
 
 /* Default backgrounds wrapped in :where() to make them easily overridable by Tailwind utility classes */
 :where(.glass-surface--svg) {
-  background: hsl(0 0% 100% / var(--glass-frost, 0));
+  background: rgba(255, 255, 255, var(--glass-frost, 0));
 }
 
 :where(.dark .glass-surface--svg) {
-  background: hsl(0 0% 0% / var(--glass-frost, 0));
+  background: rgba(0, 0, 0, var(--glass-frost, 0));
 }
 
 /* --glass-satin: sfocatura extra applicata al backdrop OLTRE alla distorsione
@@ -93,7 +93,11 @@
 }
 
 :where(.glass-surface--fallback) {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, var(--glass-frost, 0.25));
+}
+
+:where(.dark .glass-surface--fallback) {
+  background: rgba(0, 0, 0, var(--glass-frost, 0.15));
 }
 
 .glass-surface--fallback::before {
@@ -112,7 +116,7 @@
 
 @media (prefers-color-scheme: dark) {
   :where(.glass-surface--fallback) {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, var(--glass-frost, 0.15));
   }
   .glass-surface--fallback::before {
     backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);

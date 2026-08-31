@@ -3,11 +3,29 @@ import PrescriptionsClient from "./PrescriptionsClient";
 import PrescriptionsResults from "./PrescriptionsResults";
 import { PrescriptionCardSkeleton } from "@/components/pairing/skeletons/PrescriptionCardSkeleton";
 import { getTags } from "@/lib/services/tag";
+import { buildMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
 import { PairingSort } from "@/lib/services/pairing";
 
 export const dynamic = "force-dynamic";
 
 const PER_PAGE = 12;
+
+export const metadata: Metadata = buildMetadata({
+  path: "/prescriptions",
+  title: "Font Pairings: Expert Typeface Combinations",
+  description:
+    "Font pairing ideas that actually work: heading and body typeface combinations with live previews, the reasoning behind each match, and links to download both fonts.",
+  keywords: [
+    "font pairings",
+    "font combinations",
+    "google font pairings",
+    "heading and body fonts",
+    "typeface pairing",
+    "typography combinations",
+    "what font goes with",
+  ],
+});
 
 interface PrescriptionsPageProps {
   searchParams: Promise<{

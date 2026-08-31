@@ -280,7 +280,7 @@ export function SearchSortFilter({
               {tags.length > 0 && (
                 <div>
                   <Label>Tags — select multiple, results include any match</Label>
-                  <div className="flex flex-wrap gap-2 p-3 border border-black/10 dark:border-white/10 rounded-lg bg-white/50 dark:bg-zinc-900/50 max-h-48 overflow-y-auto">
+                  <div className="flex flex-wrap gap-2 p-3 border border-black/10 dark:border-white/10 rounded-lg bg-white/50 dark:bg-zinc-900/50 max-h-[500px] overflow-y-auto">
                     {tags.map((t) => {
                       const isSelected = draftTagNames.includes(t.name);
                       return (

@@ -15,6 +15,7 @@ interface CtaProps {
   linearGradientClassName?: string;
   radialGradientClassName?: string;
   className?: string;
+  glassBackgroundOpacity?: number;
 }
 
 export const Cta: React.FC<CtaProps> = ({
@@ -30,6 +31,7 @@ export const Cta: React.FC<CtaProps> = ({
   linearGradientClassName = "bg-gradient-to-br from-zinc-200 to-zinc-50 dark:from-zinc-800 dark:to-zinc-950",
   radialGradientClassName = "bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-blue/20 via-transparent to-transparent dark:from-[#00cece]/40 dark:via-transparent dark:to-transparent",
   className = "",
+  glassBackgroundOpacity = 0.25,
 }) => {
   const alignStyles = {
     left: "items-start text-left",
@@ -38,7 +40,7 @@ export const Cta: React.FC<CtaProps> = ({
   };
 
   return (
-    <section className={`relative border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden py-16 px-6 sm:px-12 flex flex-col justify-center transition-all ${className}`}>
+    <section className={`relative border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden py-8 md:py-16 px-4 md:px-6 sm:px-12 flex flex-col justify-center transition-all ${className}`}>
       
       {/* Background Layer */}
       {useGrainient ? (
@@ -99,7 +101,7 @@ export const Cta: React.FC<CtaProps> = ({
             brightness={10}
             opacity={1.1}
             blur={25}
-            backgroundOpacity={0.12}
+            backgroundOpacity={glassBackgroundOpacity}
             satinBlur={3}
             className="p-6 md:p-10"
           >

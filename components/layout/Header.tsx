@@ -209,9 +209,9 @@ export const Header: React.FC<HeaderProps> = ({ letterTFont, letterTFontSizePerc
         menuButtonColor={isDark ? "#ffffff" : "#000000"}
         openMenuButtonColor={isDark ? "#ff3131" : "#000000"}
         logoSlot={
-          <Link href="/" className="flex items-center pointer-events-auto">
+          <Link href="/" className="flex items-center pointer-events-auto -translate-y-1.5">
             <DynamicLogo
-              height={80}
+              height={96}
               squareGlow
               letterTFont={letterTFont}
               letterTFontSizePercent={letterTFontSizePercent}

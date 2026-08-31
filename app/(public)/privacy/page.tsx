@@ -1,11 +1,15 @@
 import { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { MoveLeft } from "lucide-react";
 import MinimalLink from "@/components/common/MinimalLink";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy // Typamine",
-  description: "Privacy Policy explaining how we collect, use, and protect font creator/author details on the Typamine platform.",
-};
+export const metadata: Metadata = buildMetadata({
+  path: "/privacy",
+  title: "Privacy Policy",
+  description:
+    "How Typamine collects, uses and protects personal data, including font designer and foundry details listed in the catalogue, and how to exercise your data rights.",
+  keywords: ["privacy policy", "data protection", "gdpr"],
+});
 
 export default function PrivacyPolicyPage() {
   return (
