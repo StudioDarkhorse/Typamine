@@ -1,5 +1,9 @@
 import { PrismaClient } from 'typamine-prisma-client'
-import bcrypt from 'bcrypt'
+// bcryptjs, non bcrypt: quest'ultimo e' un addon nativo (.node) e su
+// Cloudflare Workers non esiste dlopen, quindi il modulo esplodeva in
+// produzione mentre in locale su Node funzionava. Stessa API, stesso
+// formato di hash ($2b$): nessuna password da rigenerare.
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 

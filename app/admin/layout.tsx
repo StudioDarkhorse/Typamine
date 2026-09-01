@@ -70,7 +70,7 @@ export default async function AdminLayout({
           <ThemeSync />
           <QueryProvider>
           <div className="flex h-[100dvh] transition-colors duration-300 overflow-hidden relative bg-cover bg-no-repeat"
-            style={{ backgroundImage: "url('/images/admin-bg/bg-admin-11.png')" }}
+        style={{ backgroundImage: "url('/images/admin/admin-bg.png')" }}
           >
             {/* Background elements moved to top and z-index fixed */}
             <div className="absolute inset-0 z-0 bg-linear-to-br from-blue-100/20 via-blue-200/40 to-bluegray-200/20 dark:from-ocragray-800/40 dark:via-redgray-400/40 dark:to-black/80 pointer-events-none" />

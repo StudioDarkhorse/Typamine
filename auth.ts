@@ -1,7 +1,11 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prisma from "@/lib/prisma";
-import bcrypt from "bcrypt";
+// bcryptjs, non bcrypt: quest'ultimo e' un addon nativo (.node) e su
+// Cloudflare Workers non esiste dlopen, quindi il modulo esplodeva in
+// produzione mentre in locale su Node funzionava. Stessa API, stesso
+// formato di hash ($2b$): nessuna password da rigenerare.
+import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { TOTP } from 'otpauth';
 import type { NextAuthOptions } from "next-auth";

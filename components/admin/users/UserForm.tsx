@@ -80,7 +80,7 @@ export default function UserForm({ user, roles }: { user?: any, roles: any[] }) 
               label="Email Address"
               defaultValue={user?.email}
               required
-              placeholder="admin@angkorfloat.com"
+              placeholder="admin@typamine.com"
               leftIcon={<Mail className="h-5 w-5" />}
               autoComplete="off"
             />

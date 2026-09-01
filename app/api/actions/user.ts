@@ -4,7 +4,22 @@ import prisma from "@/lib/prisma";
 import { getServerAuthSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import bcrypt from "bcrypt";
+// bcryptjs, non bcrypt: quest'ultimo e' un addon nativo (.node) e su
+// Cloudflare Workers non esiste dlopen, quindi il modulo esplodeva in
+// produzione mentre in locale su Node funzionava. Stessa API, stesso
+// formato di hash ($2b$): nessuna password da rigenerare.
+import bcrypt from "bcryptjs";
+
+// Ruoli che identificano un super admin. La vecchia protezione confrontava una
+// email hardcoded ("admin@angkorfloat.com") ereditata da un altro progetto: non
+// corrispondeva a nessun utente di Typamine, quindi proteggeva un account
+// inesistente e lasciava scoperto quello vero. Il ruolo regge anche se
+// l'indirizzo cambia.
+const PROTECTED_ROLES = ["SUPERADMIN", "ADMIN"];
+
+function isProtectedUser(user: { roles?: { name: string }[] } | null) {
+  return !!user?.roles?.some((role) => PROTECTED_ROLES.includes(role.name));
+}
 
 async function checkPermission(permission: string) {
   const session = await getServerAuthSession();
@@ -43,8 +58,8 @@ export async function deleteUser(id: string) {
     include: { roles: true }
   });
   
-  if (user?.email === 'admin@angkorfloat.com') {
-    throw new Error("Cannot delete the primary super admin.");
+  if (isProtectedUser(user)) {
+    throw new Error("Super admins cannot be deleted.");
   }
 
   // No Cloudflare R2 cleanup needed since we store as binary inside SQLite db
@@ -60,6 +75,18 @@ export async function saveUser(prevState: any, formData: FormData, id?: string) 
   try {
     if (id) {
       await checkPermission("user:update");
+
+      // Un super admin lo puo' modificare solo lui stesso: bloccarlo per
+      // chiunque, se stesso incluso, renderebbe impossibile cambiargli
+      // password o avatar e, con un solo admin, non ci sarebbe piu' modo di
+      // rientrare in possesso dell'account.
+      const target = await prisma.user.findUnique({
+        where: { id },
+        include: { roles: true },
+      });
+      if (isProtectedUser(target) && session.user.id !== id) {
+        return "Super admins can only be edited by themselves.";
+      }
     } else {
       await checkPermission("user:create");
     }

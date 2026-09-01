@@ -3,7 +3,11 @@
 
 
 import prisma from "@/lib/prisma";
-import bcrypt from "bcrypt";
+// bcryptjs, non bcrypt: quest'ultimo e' un addon nativo (.node) e su
+// Cloudflare Workers non esiste dlopen, quindi il modulo esplodeva in
+// produzione mentre in locale su Node funzionava. Stessa API, stesso
+// formato di hash ($2b$): nessuna password da rigenerare.
+import bcrypt from "bcryptjs";
 
 export async function adminPreCheck(formData: { email?: string; password?: string }) {
   const { email, password } = formData;
@@ -39,4 +43,4 @@ export async function adminPreCheck(formData: { email?: string; password?: strin
     throw error;
   }
 }
-
+
