@@ -1,0 +1,32 @@
+# Typamine
+
+> The ultimate typographic web application. A modern, high-performance platform to discover, test, convert, discover, and download fonts, font pairings, and web typography tools.
+
+Full content index available at: https://typamine.com/llms-full.txt
+
+## Primary Sections
+
+- [Free Fonts Catalog](https://typamine.com/ingredients): Comprehensive directory of free typefaces with live specimen previews, licensing info, variable font details, and direct downloads.
+- [Font Pairings](https://typamine.com/prescriptions): Expert heading + body font combinations with real copy previews and design notes.
+- [Font Formulas](https://typamine.com/formulas): Curated and algorithmic font collections grouped by mood, tag, category, and use-case.
+- [Typography Pills](https://typamine.com/pills): Educational articles, web typography guides, and design tips.
+- [Vintage Archive](https://typamine.com/archive): Historical type specimens and vintage lettering references.
+- [Font Designers & Foundries](https://typamine.com/author): Profiles of type designers and foundries behind the catalog.
+
+## Web Typography Tools (/labs)
+
+- [Font Converter](https://typamine.com/labs/font-converter): Client-side WebAssembly font format converter (WOFF2, TTF, OTF, WOFF).
+- [@font-face Generator](https://typamine.com/labs/font-face-generator): Generates cross-browser CSS @font-face rules and snippet downloads.
+- [Tailwind Config Generator](https://typamine.com/labs/tailwind-generator): Generates custom tailwind.config.js font-family and typography theme extensions.
+- [WCAG Contrast Checker](https://typamine.com/labs/wcag): Real-time web accessibility color contrast analyzer meeting WCAG 2.1 AA/AAA compliance.
+
+## Legal & Compliance
+
+- [Privacy Policy](https://typamine.com/privacy)
+- [Terms of Service](https://typamine.com/terms)
+- [Cookie Policy](https://typamine.com/cookie)
+
+## Index & Machine Metadata
+
+- Sitemap: https://typamine.com/sitemap.xml
+- Robots: https://typamine.com/robots.txt
