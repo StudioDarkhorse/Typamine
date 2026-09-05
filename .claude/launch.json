@@ -37,6 +37,17 @@
         "3311"
       ],
       "port": 3311
+    },
+    {
+      "name": "frame-api",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "C:/Users/rober/Desktop/Frame-website",
+        "run",
+        "dev"
+      ],
+      "port": 3000
     }
   ]
 }
